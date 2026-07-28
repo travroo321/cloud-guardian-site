@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How AI is Transforming IT Consulting Services | Cloud Guardian Blog</title>
+<meta name="description" content="AI is rapidly transforming IT consulting — from data-driven decision-making to automated workflows and adaptive cybersecurity." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --black:    #080c12;
+    --navy:     #0b1120;
+    --mid:      #111927;
+    --card:     #131d2e;
+    --border:   #1e3050;
+    --cyan:     #00d4ff;
+    --cyan2:    #00a8cc;
+    --gold:     #f0b429;
+    --white:    #e8f0fe;
+    --muted:    #7a9bbf;
+    --danger:   #ff4757;
+    --green:    #00e676;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.35;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(8,12,18,0.95);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 4%;
+    height: 74px;
+    gap: 0;
+  }
+  .nav-logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+  .nav-logo svg { height: 52px; width: auto; }
+  .nav-links {
+    display: flex; align-items: center; gap: 4px; margin-left: 20px;
+  }
+  .nav-links a {
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.78rem;
+    letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+    color: var(--muted); padding: 8px 12px;
+    border: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover { color: var(--white); border-color: var(--border); }
+  .nav-links a.active { color: var(--cyan); }
+  .has-dropdown { position: relative; }
+  .has-dropdown > a::after { content: ' ▾'; font-size: 0.6rem; opacity: 0.6; }
+  .nav-dropdown {
+    display: none; position: absolute; top: calc(100% + 8px); left: 0;
+    background: rgba(8,12,18,0.98); border: 1px solid var(--border);
+    min-width: 200px; z-index: 200;
+  }
+  .has-dropdown:hover .nav-dropdown { display: block; }
+  .nav-dropdown a {
+    display: block; padding: 10px 16px;
+    font-size: 0.75rem; border: none; border-bottom: 1px solid var(--border);
+    color: var(--muted); letter-spacing: 0.5px;
+  }
+  .nav-dropdown a:last-child { border-bottom: none; }
+  .nav-dropdown a:hover { color: var(--cyan); background: rgba(0,212,255,0.05); }
+  .nav-cta {
+    background: var(--cyan); color: var(--black);
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.75rem;
+    letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none;
+    padding: 10px 18px; flex-shrink: 0; margin-left: auto;
+    clip-path: polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+    transition: background .2s, transform .2s; white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--white); transform: translateY(-1px); }
+  @media (max-width: 860px) { .nav-links { display: none; } }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(0,212,255,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 10% 80%, rgba(0,168,204,0.05) 0%, transparent 60%),
+      var(--navy);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, black 30%, transparent 80%);
+  }
+  .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25);
+    padding: 6px 14px; margin-bottom: 24px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--cyan);
+  }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.95; letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+  h1 span { color: var(--cyan); display: block; }
+  .hero-sub {
+    font-size: 1.05rem; color: var(--muted); max-width: 520px; margin-bottom: 36px; line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--cyan); color: var(--black);
+    font-weight: 800; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase;
+    text-decoration: none; padding: 16px 32px;
+    clip-path: polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+    transition: all .25s; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--white); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid var(--border); color: var(--white);
+    font-weight: 600; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;
+    text-decoration: none; padding: 15px 28px;
+    transition: all .25s; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .hero-stats {
+    display: grid; grid-template-rows: repeat(3, 1fr); gap: 16px;
+  }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 20px 24px;
+    position: relative; overflow: hidden;
+    animation: fadeSlideIn .6s both;
+  }
+  .stat-card:nth-child(1) { animation-delay: .1s; }
+  .stat-card:nth-child(2) { animation-delay: .25s; }
+  .stat-card:nth-child(3) { animation-delay: .4s; }
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .stat-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--cyan);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem;
+    color: var(--cyan); line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.5px; margin-top: 4px; }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 90px 5%; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--cyan);
+    margin-bottom: 12px; display: block;
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    line-height: 1; letter-spacing: 2px; margin-bottom: 16px;
+  }
+  .lead { font-size: 1.05rem; color: var(--muted); max-width: 640px; line-height: 1.7; margin-bottom: 56px; }
+
+  /* ─── PROBLEM STRIP ─── */
+  .problem {
+    background: linear-gradient(135deg, #0f1a2d 0%, #0b1120 100%);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 70px 5%;
+  }
+  .problem-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .problem-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 24px; border: 1px solid var(--border);
+    background: rgba(255,71,87,0.04);
+  }
+  .problem-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .problem-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+  .problem-item p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── AIMS REQUIREMENTS ─── */
+  .usecases { background: var(--black); }
+  .uc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .uc-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 28px; position: relative; overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .uc-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+  .uc-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(0,212,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .uc-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    color: var(--cyan); letter-spacing: 2px; margin-bottom: 16px; display: block;
+  }
+  .uc-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 10px; }
+  .uc-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+
+  /* ─── WHY CERTIFY ─── */
+  .defense {
+    background: linear-gradient(180deg, var(--navy) 0%, #0c1825 100%);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .defense-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .defense-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .defense-list li {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 18px 20px; background: var(--card); border: 1px solid var(--border);
+    transition: border-color .25s;
+  }
+  .defense-list li:hover { border-color: var(--cyan); }
+  .defense-list li .di { font-size: 1.3rem; flex-shrink: 0; }
+  .defense-list li strong { display: block; font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+  .defense-list li span { font-size: 0.82rem; color: var(--muted); }
+
+  /* ─── OUR SERVICES ─── */
+  .automation { background: var(--black); }
+  .auto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .auto-card {
+    text-align: center; padding: 36px 24px;
+    background: var(--card); border: 1px solid var(--border);
+    position: relative; overflow: hidden; transition: all .3s;
+  }
+  .auto-card:hover { border-color: var(--gold); }
+  .auto-card:hover .auto-icon { transform: scale(1.1); }
+  .auto-icon { font-size: 2.4rem; display: block; margin-bottom: 16px; transition: transform .3s; }
+  .auto-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; }
+  .auto-card p { font-size: 0.82rem; color: var(--muted); }
+
+  /* ─── PACKAGES ─── */
+  .packages { background: var(--navy); }
+  .pkg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .pkg-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 36px 28px; display: flex; flex-direction: column;
+    position: relative; overflow: hidden; transition: transform .3s;
+  }
+  .pkg-card:hover { transform: translateY(-6px); }
+  .pkg-card.featured {
+    border-color: var(--cyan);
+    background: linear-gradient(160deg, #0e1e35 0%, var(--card) 100%);
+  }
+  .pkg-badge {
+    position: absolute; top: 0; right: 0;
+    background: var(--cyan); color: var(--black);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 14px;
+    clip-path: polygon(8px 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  .pkg-tier {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    letter-spacing: 3px; color: var(--cyan); margin-bottom: 8px;
+  }
+  .pkg-card h3 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .pkg-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+  .pkg-price {
+    display: flex; align-items: baseline; gap: 6px; margin-bottom: 28px;
+  }
+  .pkg-price .amount {
+    font-family: 'Bebas Neue', sans-serif; font-size: 3rem;
+    color: var(--white); line-height: 1;
+  }
+  .pkg-price .note { font-size: 0.78rem; color: var(--muted); }
+  .pkg-features { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; margin-bottom: 28px; }
+  .pkg-features li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.83rem; line-height: 1.5;
+  }
+  .pkg-features li .chk { color: var(--green); flex-shrink: 0; font-size: 0.9rem; }
+  .pkg-features li .x { color: var(--muted); flex-shrink: 0; }
+  .pkg-btn {
+    display: block; text-align: center; text-decoration: none;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--white); font-weight: 700; font-size: 0.82rem;
+    letter-spacing: 1.5px; text-transform: uppercase; padding: 14px;
+    transition: all .25s;
+  }
+  .pkg-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .pkg-card.featured .pkg-btn {
+    background: var(--cyan); color: var(--black); border-color: var(--cyan);
+  }
+  .pkg-card.featured .pkg-btn:hover { background: var(--white); border-color: var(--white); }
+
+  /* ─── PROCESS ─── */
+  .process { background: var(--black); }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0; }
+  .step {
+    padding: 32px 24px; border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); position: relative;
+  }
+  .step:last-child { border-right: none; }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem;
+    color: rgba(0,212,255,0.12); line-height: 1; margin-bottom: 12px;
+  }
+  .step h4 { font-size: 0.95rem; font-weight: 800; margin-bottom: 8px; }
+  .step p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── CAMPAIGN CALLOUT ─── */
+  .campaign {
+    background: linear-gradient(135deg, #0d1f35 0%, var(--black) 100%);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 70px 5%;
+  }
+  .campaign-inner {
+    max-width: 700px; margin: 0 auto;
+    display: block; text-align: center;
+  }
+  .campaign-inner .btn-primary { display: inline-block; }
+  .campaign h2 { margin-bottom: 16px; }
+  .campaign p { font-size: 0.95rem; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials { background: var(--navy); padding: 80px 5%; }
+  .test-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .test-card {
+    background: var(--card); border: 1px solid var(--border); padding: 28px;
+    position: relative;
+  }
+  .test-card::before {
+    content: '\201C';
+    font-family: 'Bebas Neue'; font-size: 5rem; color: rgba(0,212,255,0.1);
+    position: absolute; top: 10px; right: 20px; line-height: 1;
+  }
+  .test-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+  .test-meta strong { font-size: 0.9rem; }
+  .test-meta span { font-size: 0.78rem; color: var(--muted); display: block; }
+
+  /* ─── FAQ ─── */
+  .faq { background: var(--black); }
+  .faq-list { max-width: 800px; display: flex; flex-direction: column; gap: 0; }
+  details {
+    border-bottom: 1px solid var(--border); padding: 20px 0;
+  }
+  summary {
+    cursor: pointer; font-weight: 700; font-size: 0.95rem; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '+'; font-size: 1.4rem; color: var(--cyan); flex-shrink: 0; transition: transform .3s;
+  }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p {
+    font-size: 0.88rem; color: var(--muted); line-height: 1.7;
+    padding-top: 12px; padding-right: 40px;
+  }
+
+  /* ─── FINAL CTA ─── */
+  .final-cta {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,212,255,0.09) 0%, transparent 70%),
+      var(--navy);
+    border-top: 1px solid var(--border);
+    padding: 100px 5%; text-align: center;
+  }
+  .final-cta h2 { font-size: clamp(2.4rem, 5vw, 4.5rem); margin-bottom: 16px; }
+  .final-cta p { font-size: 1.05rem; color: var(--muted); max-width: 600px; margin: 0 auto 40px; }
+  .cta-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .phone-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1rem; color: var(--cyan); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(0,212,255,0.3); padding: 14px 24px;
+    transition: all .25s;
+  }
+  .phone-link:hover { border-color: var(--cyan); background: rgba(0,212,255,0.07); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black); border-top: 1px solid var(--border);
+    padding: 40px 5%; display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+  }
+  footer p { font-size: 0.8rem; color: var(--muted); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 0.8rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+  .footer-links a:hover { color: var(--cyan); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-rows: auto; grid-template-columns: repeat(3, 1fr); }
+    .defense-inner { grid-template-columns: 1fr; }
+    .campaign-inner { grid-template-columns: 1fr; }
+    .pkg-grid { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .step:nth-child(2) { border-right: none; }
+    footer { flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 560px) {
+    .hero-stats { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .step { border-right: none; }
+  }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── ADDITIONS: forms, blog, articles ─── */
+  .hero-single { max-width: 820px; margin: 0 auto; text-align: left; }
+  .form-card { background: var(--card); border: 1px solid var(--border); padding: 40px; max-width: 720px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .fld label { display:block; font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); margin-bottom:6px; }
+  .fld input, .fld select, .fld textarea {
+    width:100%; background:var(--navy); border:1px solid var(--border); color:var(--white);
+    font-family:'Syne',sans-serif; font-size:0.9rem; padding:12px 14px; outline:none;
+    transition:border-color .2s;
+  }
+  .fld input:focus, .fld select:focus, .fld textarea:focus { border-color: var(--cyan); }
+  .fld textarea { min-height: 140px; resize: vertical; }
+  .form-btn {
+    background: var(--cyan); color: var(--black); border: none; cursor: pointer;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:0.85rem; letter-spacing:1.5px;
+    text-transform:uppercase; padding:16px 40px; margin-top: 20px;
+    clip-path: polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+    transition: background .25s;
+  }
+  .form-btn:hover { background: var(--white); }
+  .form-note { font-size: 0.75rem; color: var(--muted); margin-top: 14px; }
+  @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } .form-card { padding: 24px; } }
+
+  /* ─── MOBILE MENU ─── */
+  .nav-burger {
+    display: none; background: none; border: 1px solid var(--border); color: var(--cyan);
+    font-size: 1.3rem; line-height: 1; padding: 8px 12px; cursor: pointer; margin-left: auto;
+  }
+  .nav-burger:hover { border-color: var(--cyan); }
+  .mobile-menu {
+    display: none; position: fixed; top: 74px; left: 0; right: 0; z-index: 99;
+    background: #080c12; border-bottom: 1px solid var(--border);
+    max-height: calc(100vh - 74px); overflow-y: auto;
+  }
+  .mobile-menu.open { display: block; }
+  .mobile-menu a {
+    display: block; padding: 14px 6%; text-decoration: none;
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.85rem;
+    letter-spacing: 1px; text-transform: uppercase; color: var(--white);
+    border-bottom: 1px solid var(--border);
+  }
+  .mobile-menu a:hover, .mobile-menu a.active { color: var(--cyan); }
+  .mobile-menu .mm-sub { padding-left: 12%; font-size: 0.78rem; color: var(--muted); text-transform: none; letter-spacing: 0.5px; }
+  .mobile-menu .mm-label { padding: 14px 6% 6px; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); }
+  @media (max-width: 860px) {
+    .nav-burger { display: block; }
+    nav .nav-cta { display: none; }
+  }
+
+  .blog-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+  .blog-card { background:var(--card); border:1px solid var(--border); padding:28px; display:flex; flex-direction:column; transition:border-color .3s, transform .3s; }
+  .blog-card:hover { border-color:var(--cyan); transform:translateY(-4px); }
+  .blog-date { font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:2px; color:var(--cyan); margin-bottom:12px; }
+  .blog-card h3 { font-size:1.15rem; font-weight:800; margin-bottom:12px; line-height:1.35; }
+  .blog-card p { font-size:0.85rem; color:var(--muted); line-height:1.65; flex:1; margin-bottom:18px; }
+  .blog-link { color:var(--cyan); text-decoration:none; font-family:'IBM Plex Mono',monospace; font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; }
+  .blog-link:hover { color:var(--white); }
+
+  .article { max-width: 780px; margin: 0 auto; }
+  .article h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin-top: 48px; }
+  .article h3 { font-size: 1.15rem; font-weight: 800; margin-top: 32px; margin-bottom: 10px; color: var(--white); }
+  .article p { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 18px; }
+  .article ul, .article ol { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin: 0 0 18px 22px; }
+  .article strong { color: var(--white); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/" aria-label="Cloud Guardian home">
+    <img src="data:image/png;base64,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" alt="Cloud Guardian" style="height:72px;width:auto;display:block;" />
+  </a>
+  <div class="nav-links">
+    <a href="/about/">About Us</a>
+    <div class="has-dropdown">
+      <a href="/services/itservices/">Services</a>
+      <div class="nav-dropdown">
+        <a href="/services/itservices/">Managed IT Services</a>
+        <a href="/services/small-business/">Small Business Plan</a>
+        <a href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
+        <a href="/services/it-consulting/">IT Cost Consulting</a>
+        <a href="/services/leap-software-it-support/">Law Firm IT — LEAP & PC Law</a>
+        <a href="/services/ai-support-agent/">AI Support Agent</a>
+        <a href="/services/iso-42001/">ISO/IEC 42001 AIMS</a>
+        <a href="/services/structured-cabling/">Structured Cabling</a>
+        <a href="/services/voip/">VoIP Phone Systems</a>
+        <a href="/services/wireless-site-survey/">Wireless Site Survey</a>
+      </div>
+    </div>
+    <a href="/contact/">Contact</a>
+    <a href="/free-assesment/">Free Assessment</a>
+    <a href="/blog/" class="active">Blog</a>
+  </div>
+  <a class="nav-cta" href="tel:7327435472">(732) 743-5472</a>
+  <button class="nav-burger" aria-label="Open menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">Home</a>
+  <a href="/about/">About Us</a>
+  <div class="mm-label">Services</div>
+  <a class="mm-sub" href="/services/itservices/">Managed IT Services</a>
+  <a class="mm-sub" href="/services/small-business/">Small Business Plan</a>
+  <a class="mm-sub" href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
+  <a class="mm-sub" href="/services/it-consulting/">IT Cost Consulting</a>
+  <a class="mm-sub" href="/services/leap-software-it-support/">Law Firm IT — LEAP & PC Law</a>
+  <a class="mm-sub" href="/services/ai-support-agent/">AI Support Agent</a>
+  <a class="mm-sub" href="/services/iso-42001/">ISO/IEC 42001 AIMS</a>
+  <a class="mm-sub" href="/services/structured-cabling/">Structured Cabling</a>
+  <a class="mm-sub" href="/services/voip/">VoIP Phone Systems</a>
+  <a class="mm-sub" href="/services/wireless-site-survey/">Wireless Site Survey</a>
+  <a href="/contact/">Contact</a>
+  <a href="/free-assesment/">Free Assessment</a>
+  <a href="/blog/" class="active">Blog</a>
+  <a href="tel:7327435472" style="color:var(--cyan)">📞 (732) 743-5472</a>
+</div>
+
+
+<section class="hero" style="min-height:auto; padding-bottom: 30px;">
+  <div class="hero-grid"></div>
+  <div class="hero-inner" style="grid-template-columns: 1fr;">
+    <div class="article">
+      <div class="hero-tag">Blog · May 20, 2026</div>
+      <h1 style="font-size: clamp(2.2rem, 4.5vw, 3.8rem);">HOW AI IS TRANSFORMING IT CONSULTING SERVICES</h1>
+    </div>
+  </div>
+</section>
+<section style="background: var(--black); padding-top: 30px;">
+  <div class="article">
+
+    <h2>Introduction to AI in IT Consulting</h2>
+    <p>Artificial Intelligence (AI) is rapidly transforming various industries, and IT consulting is no exception. By leveraging AI, consulting firms can deliver solutions that are more streamlined, more creative, and better matched to each client's needs.</p>
+    <h2>Enhancing Decision-Making</h2>
+    <p>AI algorithms can process extensive datasets at speeds no human team can match, surfacing insights that were previously unavailable. This allows consultants to formulate recommendations grounded in real data analysis — recommendations that better match client requirements and position businesses for where the market is going, not where it's been.</p>
+    <h2>Improving Efficiency and Productivity</h2>
+    <p>AI tools can automate routine tasks, freeing up consultants to focus on more complex issues. Automating standard processes reduces errors and accelerates workflows, enabling firms to expand their project capacity while upholding quality standards and decreasing expenses.</p>
+    <h2>Personalizing Client Solutions</h2>
+    <p>AI facilitates customization by examining client information to design targeted approaches. Scenario modeling powered by AI gives clients visibility into potential strategic directions before committing to one — strengthening the consulting relationship through demonstrated transparency.</p>
+    <h2>Enhancing Cybersecurity Measures</h2>
+    <p>AI helps identify security threats through real-time network analysis. Consultants can detect irregularities suggesting possible breaches and build adaptive protective frameworks that improve as threats evolve.</p>
+    <h2>Conclusion</h2>
+    <p>Embracing AI is no longer optional for IT consulting firms; it is a necessity to remain competitive and relevant in an ever-changing digital world.</p>
+
+    <p style="margin-top: 40px;"><a class="blog-link" href="/blog/">← Back to all articles</a></p>
+  </div>
+</section>
+
+<section class="final-cta">
+  <span class="section-tag" style="justify-content:center; display:block;">Talk To Us</span>
+  <h2>QUESTIONS ABOUT<br/><span style="color:var(--cyan)">YOUR ENVIRONMENT?</span></h2>
+  <p>Get a free assessment and see how this applies to your business.</p>
+  <div class="cta-group">
+    <a class="btn-primary" href="/free-assesment/">Get a Free Assessment</a>
+    <a class="phone-link" href="tel:7327435472">📞 (732) 743-5472</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Cloud Guardian · New Brunswick, NJ · All Rights Reserved</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/services/itservices/">Services</a>
+    <a href="/blog/">Blog</a>
+    <a href="/contact/">Contact</a>
+    <a href="tel:7327435472">(732) 743-5472</a>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
