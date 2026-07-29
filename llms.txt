@@ -1,0 +1,92 @@
+# Cloud Guardian
+
+> Cloud Guardian is a managed IT services provider (MSP) and managed security services provider (MSSP)
+> headquartered in New Brunswick, New Jersey. The company delivers onsite IT services throughout Central
+> and Northern New Jersey and the Tri-State area, and remote support nationwide, available 24/7.
+
+## Company Facts
+
+- **Name:** Cloud Guardian
+- **Location:** New Brunswick, New Jersey, United States (Middlesex County)
+- **Phone:** (732) 743-5472
+- **Email:** sales@cloud-guardian.com
+- **Website:** https://cloud-guardian.com
+- **Service model:** Onsite across the Tri-State area, remote support nationwide, 24/7 availability
+- **Business type:** Managed IT services, cybersecurity, IT consulting
+- **Founded because:** Businesses were overpaying underserving providers locked into legacy models with
+  no transparency, no strategy, and no accountability.
+
+## Services
+
+- **Managed IT Services** (https://cloud-guardian.com/services/itservices/): Proactive monitoring, patch
+  management, cloud management, disaster recovery planning, 24/7 managed support, IT infrastructure audits.
+- **Small Business Plan** (https://cloud-guardian.com/services/small-business/): $20 per user per month for
+  always-on baseline security coverage. Incident response billed at $90 per hour with no minimum hours and
+  no long-term lock-in.
+- **Cybersecurity Audit** (https://cloud-guardian.com/services/cybersecurity-audit/): Full external and
+  internal vulnerability scanning, firewall and endpoint review, compromised account detection, and a
+  prioritized ransomware remediation plan.
+- **IT Cost Consulting** (https://cloud-guardian.com/services/it-consulting/): Forensic audit of cloud
+  infrastructure spend, SaaS and license utilization, legacy overhead, and vendor contracts. Cloud Guardian
+  takes no vendor commissions or reseller kickbacks.
+- **Law Firm IT Support** (https://cloud-guardian.com/services/leap-software-it-support/): Managed IT for
+  law firms of 5 to 50 users. Supports PC Law, Leap, Clio, MyCase, PracticePanther, CosmoLex, Smokeball,
+  Actionstep, Filevine, NetDocuments, and Tabs3. Focus on trust accounting stability and case database integrity.
+- **AI Support Agent** (https://cloud-guardian.com/services/ai-support-agent/): Automated IT support that
+  diagnoses and applies approved fixes on approved systems 24/7, with all actions logged for audit.
+- **ISO/IEC 42001 AIMS Certification Support** (https://cloud-guardian.com/services/iso-42001/): Gap
+  assessment, implementation, and certification audit support for ISO/IEC 42001:2023, the first international
+  standard for an Artificial Intelligence Management System.
+- **Structured Cabling** (https://cloud-guardian.com/services/structured-cabling/): Cat6A and fiber
+  installation for offices and warehouses, supporting 10 Gbps over a full 100-meter run, terminated and
+  certified to ANSI/TIA-568 standards with complete documentation.
+- **VoIP Phone Systems** (https://cloud-guardian.com/services/voip/): Managed cloud phone systems with call
+  routing, voicemail to email, and video conferencing on carrier-grade platforms with 99.99% uptime SLAs.
+- **Wireless Site Survey** (https://cloud-guardian.com/services/wireless-site-survey/): Coverage and
+  interference analysis across 2.4, 5, and 6 GHz bands with floor-by-floor heatmaps, engineered to hold
+  signal strength above -67 dBm in every required coverage zone.
+- **Email and Cloud Migrations** (https://cloud-guardian.com/services/email-migrations/): Google Workspace
+  to Office 365, Office 365 to Google Workspace, on-premises Exchange to cloud, IMAP and legacy hosts,
+  tenant-to-tenant consolidation, and file and data migrations. Includes DNS, SPF, DKIM, and DMARC repointing.
+
+## Service Areas
+
+- New Brunswick, NJ (https://cloud-guardian.com/service-areas/new-brunswick-nj/) - headquarters
+- Edison, NJ (https://cloud-guardian.com/service-areas/edison-nj/) - warehouse and logistics networking
+- Princeton, NJ (https://cloud-guardian.com/service-areas/princeton-nj/) - pharma, finance, AI governance
+- Woodbridge, NJ (https://cloud-guardian.com/service-areas/woodbridge-nj/) - retail and multi-site
+- Somerset, NJ (https://cloud-guardian.com/service-areas/somerset-nj/) - corporate parks and life sciences
+- Jersey City, NJ (https://cloud-guardian.com/service-areas/jersey-city-nj/) - financial services and fintech
+- Counties covered onsite: Middlesex, Somerset, Mercer, Union, Essex, Hudson, Monmouth
+- Full coverage detail: https://cloud-guardian.com/service-areas/
+
+## Key Pages
+
+- Homepage: https://cloud-guardian.com/
+- About: https://cloud-guardian.com/about/
+- Contact: https://cloud-guardian.com/contact/
+- Free IT Assessment: https://cloud-guardian.com/free-assesment/
+- Blog: https://cloud-guardian.com/blog/
+- Sitemap: https://cloud-guardian.com/sitemap.xml
+
+## Common Questions
+
+**Is Cloud Guardian available outside business hours?** Yes. Support is available 24 hours a day, 7 days a
+week, including monitoring and incident response.
+
+**How long does onboarding take?** Most clients are fully onboarded within 30 to 60 days, depending on the
+size and complexity of the environment, which is assessed during a discovery phase.
+
+**Does Cloud Guardian require long-term contracts?** No. Agreements are structured to be fair to both
+parties, and contract terms are discussed transparently during the proposal process.
+
+**Does Cloud Guardian work with businesses that already have IT staff?** Yes. Cloud Guardian frequently works
+alongside internal IT resources, covering areas where they lack bandwidth or specialization.
+
+**What does small business IT support cost?** $20 per user per month for baseline security coverage, with
+incident response billed at $90 per hour. There are no minimum hours and no long-term lock-in. Fully managed
+IT is quoted after a free assessment.
+
+**How fast can Cloud Guardian get onsite?** Same business day is typical for Middlesex and Somerset County,
+often same hour for urgent issues. Mercer, Union, Hudson, and Monmouth County sites are usually same or next
+business day.
