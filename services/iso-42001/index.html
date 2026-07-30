@@ -563,6 +563,13 @@
     border-left: 3px solid var(--cyan); padding: 26px 30px; margin-bottom: 32px;
   }
   .answer-box p { font-size: 1rem; color: var(--white); line-height: 1.75; margin: 0; }
+
+  /* ─── PREFILLED FIELD FLASH ─── */
+  .fld.prefilled select { border-color: var(--cyan); box-shadow: 0 0 0 2px rgba(0,212,255,0.18); }
+  .fld.prefilled label::after {
+    content: ' ✓ preselected';
+    color: var(--green); letter-spacing: 1px; margin-left: 6px;
+  }
 </style>
 </head>
 <body>
@@ -830,7 +837,7 @@
           <li><span class="x" style="color:var(--border)">—</span> <span style="color:var(--muted)">Documentation Build-Out</span></li>
           <li><span class="x" style="color:var(--border)">—</span> <span style="color:var(--muted)">Certification Audit Support</span></li>
         </ul>
-        <a class="pkg-btn" href="/contact/?pkg=aims-readiness">Get Started →</a>
+        <a class="pkg-btn" href="/contact/?pkg=iso-42001&tier=Readiness%20Assessment">Get Started →</a>
       </div>
 
       <!-- IMPLEMENTATION (FEATURED) -->
@@ -852,7 +859,7 @@
           <li><span class="chk">✓</span> Certification Body Selection Support</li>
           <li><span class="chk">✓</span> Stage 1 Audit Preparation</li>
         </ul>
-        <a class="pkg-btn" href="/contact/?pkg=aims-implementation">Get Started →</a>
+        <a class="pkg-btn" href="/contact/?pkg=iso-42001&tier=Implementation">Get Started →</a>
       </div>
 
       <!-- CERTIFIED & MAINTAINED -->
@@ -873,7 +880,7 @@
           <li><span class="chk">✓</span> New AI System Onboarding to AIMS</li>
           <li><span class="chk">✓</span> Dedicated AIMS Consultant</li>
         </ul>
-        <a class="pkg-btn" href="/contact/?pkg=aims-maintained">Get Started →</a>
+        <a class="pkg-btn" href="/contact/?pkg=iso-42001&tier=Certified%20%26%20Maintained">Get Started →</a>
       </div>
 
     </div>
@@ -1071,6 +1078,69 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
   }, { threshold: 0.1 });
   reveals.forEach(el => io.observe(el));
+
+  // ── Prefill the service dropdown from ?pkg= (or ?service=) ──
+  (function () {
+    var MAP = {
+      'itservices': 'Managed IT Services',
+      'managed-it': 'Managed IT Services',
+      'managed-it-services': 'Managed IT Services',
+      'small-business': 'Small Business Plan',
+      'cybersecurity-audit': 'Cybersecurity Audit',
+      'cybersecurity': 'Cybersecurity Audit',
+      'security-audit': 'Cybersecurity Audit',
+      'it-consulting': 'IT Cost Consulting',
+      'cost-consulting': 'IT Cost Consulting',
+      'leap-software-it-support': 'Law Firm IT Support',
+      'law-firm': 'Law Firm IT Support',
+      'law-firm-it': 'Law Firm IT Support',
+      'email-migrations': 'Email & Cloud Migrations',
+      'email-migration': 'Email & Cloud Migrations',
+      'migrations': 'Email & Cloud Migrations',
+      'ai-support-agent': 'AI Support Agent',
+      'ai-agent': 'AI Support Agent',
+      'iso-42001': 'ISO/IEC 42001 AIMS Certification',
+      'aims': 'ISO/IEC 42001 AIMS Certification',
+      'aims-readiness': 'ISO/IEC 42001 AIMS Certification',
+      'aims-implementation': 'ISO/IEC 42001 AIMS Certification',
+      'aims-maintained': 'ISO/IEC 42001 AIMS Certification',
+      'structured-cabling': 'Structured Cabling',
+      'cabling': 'Structured Cabling',
+      'voip': 'VoIP Phone Systems',
+      'phones': 'VoIP Phone Systems',
+      'wireless-site-survey': 'Wireless Site Survey',
+      'wireless': 'Wireless Site Survey',
+      'wifi': 'Wireless Site Survey'
+    };
+    var sel = document.getElementById('services');
+    if (!sel) return;
+    var q = new URLSearchParams(window.location.search);
+    var raw = (q.get('pkg') || q.get('service') || '').toLowerCase().trim();
+    if (!raw) return;
+    var want = MAP[raw];
+    if (!want) return;
+    var matched = false;
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].text.replace(/&amp;/g, '&').trim() === want) {
+        sel.selectedIndex = i;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) return;
+    sel.dispatchEvent(new Event('change', { bubbles: true }));
+    var wrap = sel.closest('.fld');
+    if (wrap) wrap.classList.add('prefilled');
+    // tell the notification email which service this came from
+    var subj = document.querySelector('input[name="_subject"]');
+    if (subj) subj.value = subj.value + ' — ' + want;
+    var tier = q.get('tier');
+    var msg = document.getElementById('message');
+    if (msg && !msg.value) {
+      msg.setAttribute('placeholder', 'Tell us about your ' + want + ' needs…');
+    }
+    if (tier && msg && !msg.value) { msg.value = 'Interested in the ' + tier + ' tier. '; }
+  })();
 </script>
 </body>
 </html>
