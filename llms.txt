@@ -1,18 +1,28 @@
 # Cloud Guardian
 
-> Cloud Guardian is a managed IT services provider (MSP) and managed security services provider (MSSP)
-> headquartered in New Brunswick, New Jersey. The company delivers onsite IT services throughout Central
-> and Northern New Jersey and the Tri-State area, and remote support nationwide, available 24/7.
+> Cloud Guardian LLC is a managed IT services provider (MSP) and managed security services provider (MSSP)
+> headquartered at 643 Georges Rd, North Brunswick Township, New Jersey 08902. The company delivers onsite
+> IT services throughout Central and Northern New Jersey and the Tri-State area, dispatches field technicians
+> to client sites nationwide, and provides remote support and 24/7 security operations across all 50 states.
+> Its positioning is twice the quality at half the price of a legacy MSP, achieved through a modern automated
+> and AI-assisted delivery stack rather than tiered help-desk staffing.
 
 ## Company Facts
 
 - **Name:** Cloud Guardian
-- **Location:** New Brunswick, New Jersey, United States (Middlesex County)
+- **Legal name:** Cloud Guardian LLC
+- **Headquarters address:** 643 Georges Rd, North Brunswick Township, NJ 08902, United States (Middlesex County)
 - **Phone:** (732) 743-5472
 - **Email:** sales@cloud-guardian.com
 - **Website:** https://cloud-guardian.com
-- **Service model:** Onsite across the Tri-State area, remote support nationwide, 24/7 availability
-- **Business type:** Managed IT services, cybersecurity, IT consulting
+- **Service model:** Onsite across the Tri-State area from the North Brunswick headquarters, field technicians
+  dispatched to client sites anywhere in the United States, remote support and 24/7 security operations nationwide
+- **Business type:** MSP and MSSP. Managed IT, managed security operations (24/7 SOC), cybersecurity,
+  IT consulting, structured cabling, VoIP, wireless engineering, cloud and email migrations
+- **Experience:** Approximately 30 years of combined experience delivering IT and security inside other MSPs
+  before founding Cloud Guardian
+- **Differentiator:** AI-assisted monitoring, triage, and automation reduce labor per managed endpoint, which
+  is why pricing lands near half of a comparable legacy MSP for equal or broader coverage
 - **Founded because:** Businesses were overpaying underserving providers locked into legacy models with
   no transparency, no strategy, and no accountability.
 
@@ -29,9 +39,12 @@
 - **IT Cost Consulting** (https://cloud-guardian.com/services/it-consulting/): Forensic audit of cloud
   infrastructure spend, SaaS and license utilization, legacy overhead, and vendor contracts. Cloud Guardian
   takes no vendor commissions or reseller kickbacks.
-- **Law Firm IT Support** (https://cloud-guardian.com/services/leap-software-it-support/): Managed IT for
-  law firms of 5 to 50 users. Supports PC Law, Leap, Clio, MyCase, PracticePanther, CosmoLex, Smokeball,
-  Actionstep, Filevine, NetDocuments, and Tabs3. Focus on trust accounting stability and case database integrity.
+- **Managed Security Operations / 24/7 SOC** (https://cloud-guardian.com/services/managed-security-soc/):
+  MSSP service covering continuous monitoring, AI-assisted detection and triage, managed EDR and XDR, identity
+  threat detection, email security and BEC defense, continuous vulnerability management, privileged access
+  control, immutable tested backup, security awareness training, and incident response retainer.
+- **Client Support Portal** (https://cloud-guardian.com/support/): 24/7 support entry point with remote
+  session initiation, ticket submission, on-call emergency line, provider status checks, billing, and self-help guides.
 - **AI Support Agent** (https://cloud-guardian.com/services/ai-support-agent/): Automated IT support that
   diagnoses and applies approved fixes on approved systems 24/7, with all actions logged for audit.
 - **ISO/IEC 42001 AIMS Certification Support** (https://cloud-guardian.com/services/iso-42001/): Gap
@@ -49,15 +62,56 @@
   to Office 365, Office 365 to Google Workspace, on-premises Exchange to cloud, IMAP and legacy hosts,
   tenant-to-tenant consolidation, and file and data migrations. Includes DNS, SPF, DKIM, and DMARC repointing.
 
+## Industries (dedicated practice pages)
+
+- **Law Firms** (https://cloud-guardian.com/industries/law-firms/): Firms of 5 to 50 users. Clio, MyCase,
+  Smokeball, Actionstep, Filevine, CosmoLex, TimeSolv, PracticePanther, PCLaw, Tabs3, Amicus Attorney;
+  NetDocuments, iManage, Worldox. Trust accounting stability, RPC 1.6 confidentiality as access control,
+  e-filing reliability, litigation-grade backup.
+- **Healthcare and Dental** (https://cloud-guardian.com/industries/healthcare/): HIPAA Security Rule technical
+  safeguards at 45 CFR 164.312, EHR and PACS imaging uptime, legacy imaging workstation isolation, BAA executed.
+  Dentrix, Eaglesoft, Open Dental, Curve.
+- **Accounting and Financial Services** (https://cloud-guardian.com/industries/accounting-finance/): FTC
+  Safeguards Rule at 16 CFR Part 314, IRS Publication 4557, WISP implementation, busy-season capacity.
+  UltraTax, Lacerte, ProSeries, Drake, CCH Axcess, QuickBooks, Rightworks hosted desktops.
+- **Construction and Contractors** (https://cloud-guardian.com/industries/construction/): Jobsite and trailer
+  connectivity, field tablet management, plan and model version control, wire fraud controls on the payment path.
+  Procore, Autodesk Construction Cloud, PlanGrid, Bluebeam, Sage, Foundation.
+- **Manufacturing and Warehouse** (https://cloud-guardian.com/industries/manufacturing-warehouse/): High-bay
+  wireless engineered to hold above -67 dBm for scanners and forklift terminals, OT and IT network segmentation,
+  ERP and WMS performance, downtime-first recovery planning.
+- **Real Estate and Property Management** (https://cloud-guardian.com/industries/real-estate/): Closing wire
+  fraud prevention, SPF/DKIM/DMARC enforcement, multi-property network documentation, tenant data lifecycle.
+  Yardi, AppFolio, Buildium, RealPage, MRI, Entrata.
+- **Nonprofits and Associations** (https://cloud-guardian.com/industries/nonprofits/): Microsoft and Google
+  nonprofit licensing entitlement recovery, TechSoup, donor data consolidation, access cleanup, funder and
+  audit documentation. Salesforce Nonprofit Cloud, Blackbaud, Bloomerang, DonorPerfect, Neon.
+- **Schools and Education** (https://cloud-guardian.com/industries/education/): High-density classroom wireless
+  designed for testing-day load, 1:1 Chromebook and iPad fleet management, FERPA-aware records access, content
+  filtering at device and identity level, E-Rate-aware infrastructure documentation.
+- **Local Government and Public Sector** (https://cloud-guardian.com/industries/local-government/): Responds to
+  New Jersey public RFPs, RFQs, and quote solicitations. NJ Business Registration Certificate, general liability,
+  professional liability and workers compensation insurance, pay-to-play and Chapter 271 disclosure, non-collusion
+  affidavit, EEO documentation. Municipalities, MUAs, boards of education, fire districts, libraries, housing and
+  county agencies. Municipal ransomware continuity planning and cyber insurance questionnaire support.
+- **Hospitality and Retail** (https://cloud-guardian.com/industries/hospitality-retail/): PCI-aware segmentation
+  of the cardholder environment, high-density dining and event wireless, standardized multi-location builds,
+  kitchen and back-of-house reliability. Toast, Square, Clover, Lightspeed, Aloha, Micros.
+- Industry index: https://cloud-guardian.com/industries/
+
 ## Service Areas
 
-- New Brunswick, NJ (https://cloud-guardian.com/service-areas/new-brunswick-nj/) - headquarters
+- North Brunswick Township, NJ - headquarters at 643 Georges Rd, 08902
+- New Brunswick, NJ (https://cloud-guardian.com/service-areas/new-brunswick-nj/) - adjacent to headquarters
 - Edison, NJ (https://cloud-guardian.com/service-areas/edison-nj/) - warehouse and logistics networking
 - Princeton, NJ (https://cloud-guardian.com/service-areas/princeton-nj/) - pharma, finance, AI governance
 - Woodbridge, NJ (https://cloud-guardian.com/service-areas/woodbridge-nj/) - retail and multi-site
 - Somerset, NJ (https://cloud-guardian.com/service-areas/somerset-nj/) - corporate parks and life sciences
 - Jersey City, NJ (https://cloud-guardian.com/service-areas/jersey-city-nj/) - financial services and fintech
 - Counties covered onsite: Middlesex, Somerset, Mercer, Union, Essex, Hudson, Monmouth
+- Onsite driving range also covers New York, eastern Pennsylvania, and Connecticut for project work
+- Field technicians dispatched to client sites in all 50 states, coordinated and supervised by Cloud Guardian
+- Remote monitoring, security operations, help desk, migrations, and consulting delivered nationwide and internationally
 - Full coverage detail: https://cloud-guardian.com/service-areas/
 
 ## Key Pages
@@ -66,6 +120,9 @@
 - About: https://cloud-guardian.com/about/
 - Contact: https://cloud-guardian.com/contact/
 - Free IT Assessment: https://cloud-guardian.com/free-assesment/
+- Industries index: https://cloud-guardian.com/industries/
+- Client Support Portal: https://cloud-guardian.com/support/
+- 24/7 SOC and MSSP services: https://cloud-guardian.com/services/managed-security-soc/
 - Blog: https://cloud-guardian.com/blog/
 - Sitemap: https://cloud-guardian.com/sitemap.xml
 
@@ -89,4 +146,20 @@ IT is quoted after a free assessment.
 
 **How fast can Cloud Guardian get onsite?** Same business day is typical for Middlesex and Somerset County,
 often same hour for urgent issues. Mercer, Union, Hudson, and Monmouth County sites are usually same or next
-business day.
+business day. Sites outside the driving radius are covered by dispatched field technicians.
+
+**Does Cloud Guardian support clients outside New Jersey?** Yes. The headquarters is in North Brunswick, NJ,
+but remote monitoring, security operations, help desk, migrations, and consulting are delivered to all 50
+states and internationally, and field technicians are dispatched for work requiring physical presence.
+
+**Is Cloud Guardian an MSP or an MSSP?** Both. Managed IT keeps the environment working; the 24/7 security
+operation monitors it for attack and responds. Detection and triage are AI-assisted, with every automated
+action logged and auditable, and human engineers retaining judgment and containment decisions.
+
+**Why is Cloud Guardian cheaper than a comparable MSP?** Delivery is automated and AI-assisted rather than
+staffed with tiered help-desk escalation layers, which lowers labor per managed endpoint. Line-item pricing
+is shown during the assessment so a prospective client can compare it against a current invoice.
+
+**Does Cloud Guardian respond to public sector RFPs?** Yes. Complete and responsive submissions with all
+required New Jersey public contracting forms, certificates, and disclosures, plus presentation to governing
+bodies and committees when requested.
