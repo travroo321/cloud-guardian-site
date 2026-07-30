@@ -1,0 +1,13 @@
+﻿# Never publish credentials or local scratch files, even if they get copied
+# into the site folder by accident.
+Password.csv
+*password*.csv
+*Password*.csv
+*.env
+.env*
+credentials*
+secrets*
+*.pem
+*.key
+_private/
+cg-site-deploy.zip
