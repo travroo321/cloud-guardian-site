@@ -17,6 +17,25 @@ Allow: /
 User-agent: Slurp
 Allow: /
 
+# ── Independent indexes (not Google or Bing derived) ──
+# Brave states its main crawler does not advertise a distinct user agent, so the
+# wildcard rule above is what actually governs it. Bravebot is listed explicitly
+# because Brave now uses that token for crawls that also feed AI answer systems.
+User-agent: Bravebot
+Allow: /
+
+User-agent: MojeekBot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: SeznamBot
+Allow: /
+
+User-agent: Qwantify
+Allow: /
+
 # ── AI and generative engine crawlers: explicitly permitted ──
 # We want Cloud Guardian cited accurately in AI-generated answers.
 User-agent: GPTBot
