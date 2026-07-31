@@ -84,6 +84,188 @@
     });
   })();
 
+  // ── Scroll journey: sticky panel follows the step in view ──
+  (function () {
+    var wrap = document.getElementById('journey');
+    if (!wrap) return;
+    var steps = [].slice.call(wrap.querySelectorAll('.jr-step'));
+    var dots  = [].slice.call(wrap.querySelectorAll('.jr-dot'));
+    if (!steps.length) return;
+
+    // the sticky panel reads its copy from the steps, so there is one source of truth
+    var data = steps.map(function (s) {
+      return {
+        n: s.querySelector('.jr-step-n').textContent,
+        emoji: s.querySelector('.jr-step-emoji').textContent,
+        title: s.querySelector('.jr-step-head h3').textContent,
+        when: s.querySelector('.jr-step-when').textContent.split('·')[0].trim()
+      };
+    });
+
+    var elNum = document.getElementById('jr-num');
+    var elEmoji = document.getElementById('jr-emoji');
+    var elTitle = document.getElementById('jr-title');
+    var elWhen = document.getElementById('jr-when');
+    var elFill = document.getElementById('jr-fill');
+    var current = -1;
+
+    function show(i) {
+      if (i === current || !data[i]) return;
+      current = i;
+      var d = data[i];
+      if (!CG_REDUCED) {
+        elEmoji.style.transform = 'scale(.7)';
+        elEmoji.style.opacity = '0';
+        elTitle.style.opacity = '0';
+        setTimeout(function () {
+          elEmoji.textContent = d.emoji;
+          elTitle.textContent = d.title;
+          elEmoji.style.transform = '';
+          elEmoji.style.opacity = '1';
+          elTitle.style.opacity = '1';
+        }, 160);
+      } else {
+        elEmoji.textContent = d.emoji;
+        elTitle.textContent = d.title;
+      }
+      elNum.textContent = d.n;
+      elWhen.textContent = d.when;
+      elFill.style.width = Math.round(((i + 1) / data.length) * 100) + '%';
+      dots.forEach(function (dot, k) {
+        dot.classList.toggle('active', k === i);
+        dot.classList.toggle('done', k < i);
+      });
+      steps.forEach(function (s, k) { s.classList.toggle('in', k === i); });
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      steps.forEach(function (s) { s.classList.add('in'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      // pick the entry closest to the middle of the viewport
+      var best = null, bestDist = Infinity;
+      entries.forEach(function (e) { if (e.isIntersecting) trackVisible(e.target, true); else trackVisible(e.target, false); });
+      visible.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        var dist = Math.abs((r.top + r.height / 2) - window.innerHeight / 2);
+        if (dist < bestDist) { bestDist = dist; best = el; }
+      });
+      if (best) show(steps.indexOf(best));
+    }, { threshold: [0, 0.25, 0.5, 0.75, 1], rootMargin: '-15% 0px -25% 0px' });
+
+    var visible = [];
+    function trackVisible(el, isIn) {
+      var i = visible.indexOf(el);
+      if (isIn && i === -1) visible.push(el);
+      if (!isIn && i !== -1) visible.splice(i, 1);
+    }
+
+    steps.forEach(function (s) { io.observe(s); });
+
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function () {
+        var i = +dot.getAttribute('data-go');
+        if (steps[i]) steps[i].scrollIntoView({ behavior: CG_REDUCED ? 'auto' : 'smooth', block: 'center' });
+      });
+    });
+
+    show(0);
+  })();
+
+  // ── Instant estimate calculator (pricing page) ──
+  //    Rates are duplicated from pricing.py RATES. If you change one, change both.
+  (function () {
+    var el = document.getElementById('calc');
+    if (!el) return;
+
+    var RATES = {
+      essential_user: 20, managed_user: 65, mssp_user: 95,
+      workstation: 15, server: 85,
+      m365: 22, backup: 6, voip: 20
+    };
+    var BAND = 0.15;
+
+    var users = document.getElementById('c-users');
+    var ws    = document.getElementById('c-ws');
+    var srv   = document.getElementById('c-srv');
+    var tier  = 'managed';
+
+    function money(n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
+
+    function recalc() {
+      var u = +users.value, w = +ws.value, s = +srv.value;
+      document.getElementById('c-users-v').textContent = u;
+      document.getElementById('c-ws-v').textContent = w;
+      document.getElementById('c-srv-v').textContent = s;
+
+      var perUser = RATES[tier + '_user'];
+      var lines = [];
+      var total = 0;
+
+      var seat = u * perUser;
+      total += seat;
+      lines.push([u + ' user' + (u === 1 ? '' : 's') + ' at ' + money(perUser), seat]);
+
+      if (w > 0) {
+        var wsCost = w * RATES.workstation;
+        total += wsCost;
+        lines.push([w + ' workstation' + (w === 1 ? '' : 's') + ' at ' + money(RATES.workstation), wsCost]);
+      }
+      if (s > 0) {
+        var srvCost = s * RATES.server;
+        total += srvCost;
+        lines.push([s + ' server' + (s === 1 ? '' : 's') + ' at ' + money(RATES.server), srvCost]);
+      }
+      if (document.getElementById('a-m365').checked) {
+        var m = u * RATES.m365; total += m;
+        lines.push(['Microsoft 365 licensing', m]);
+      }
+      if (document.getElementById('a-backup').checked) {
+        var protectedCount = w + s;
+        var b = protectedCount * RATES.backup; total += b;
+        lines.push(['Immutable backup, ' + protectedCount + ' endpoint' + (protectedCount === 1 ? '' : 's'), b]);
+      }
+      if (document.getElementById('a-voip').checked) {
+        var v = u * RATES.voip; total += v;
+        lines.push(['Cloud VoIP, ' + u + ' extension' + (u === 1 ? '' : 's'), v]);
+      }
+
+      document.getElementById('calc-lo').textContent = money(total * (1 - BAND));
+      document.getElementById('calc-hi').textContent = money(total * (1 + BAND));
+
+      var html = '';
+      for (var i = 0; i < lines.length; i++) {
+        html += '<div class="calc-line"><span>' + lines[i][0] + '</span><span>' + money(lines[i][1]) + '</span></div>';
+      }
+      html += '<div class="calc-line calc-line-total"><span>Midpoint</span><span>' + money(total) + ' / month</span></div>';
+      if (u > 40 || w > 50) {
+        html += '<div class="calc-flag">Above 40 users this calculator stops being useful. At your size the number comes down per seat, so call and we will price it properly.</div>';
+      }
+      document.getElementById('calc-break').innerHTML = html;
+    }
+
+    [users, ws, srv].forEach(function (i) {
+      i.addEventListener('input', recalc);
+    });
+    ['a-m365', 'a-backup', 'a-voip'].forEach(function (id) {
+      document.getElementById(id).addEventListener('change', recalc);
+    });
+    [].forEach.call(document.querySelectorAll('.calc-tier'), function (b) {
+      b.addEventListener('click', function () {
+        [].forEach.call(document.querySelectorAll('.calc-tier'), function (x) { x.classList.remove('active'); });
+        b.classList.add('active');
+        tier = b.getAttribute('data-tier');
+        recalc();
+      });
+    });
+
+    recalc();
+  })();
+
   // ── Toast helper ──
   function cgToast(msg) {
     var t = document.getElementById('cgToast');

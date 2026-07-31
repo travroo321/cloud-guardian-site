@@ -598,6 +598,154 @@
 
 
   /* ══════════════════════════════════════════════════════════════
+     PRICING TIERS
+     ══════════════════════════════════════════════════════════════ */
+  .pr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; margin-top: 44px; align-items: start; }
+  .pr-card {
+    background: var(--card); border: 1px solid var(--border); padding: 32px 28px;
+    display: flex; flex-direction: column; position: relative;
+    transition: transform .3s cubic-bezier(.2,.7,.3,1), border-color .3s, box-shadow .3s;
+  }
+  .pr-card:hover { transform: translateY(-6px); border-color: var(--cyan); box-shadow: 0 16px 44px rgba(0,0,0,.45); }
+  .pr-featured { border-color: var(--cyan); box-shadow: 0 0 0 1px rgba(0,212,255,.25), 0 14px 40px rgba(0,0,0,.4); }
+  .pr-flag {
+    position: absolute; top: -11px; left: 28px; background: var(--cyan); color: var(--black);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; letter-spacing: 1.6px;
+    text-transform: uppercase; padding: 4px 12px; font-weight: 600;
+  }
+  .pr-emoji { font-size: 2rem; display: block; margin-bottom: 14px; filter: drop-shadow(0 2px 5px rgba(0,0,0,.65)); }
+  .pr-card h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--white); margin: 0 0 6px; }
+  .pr-tag { font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--cyan); margin: 0 0 22px; }
+  .pr-price { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pr-amount { font-family: 'Bebas Neue', sans-serif; font-size: 3.4rem; line-height: 1; color: var(--white); letter-spacing: 1px; }
+  .pr-unit { color: var(--muted); font-size: 0.8rem; }
+  .pr-line { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin: 0 0 22px; }
+  .pr-feats { list-style: none; padding: 0; margin: 0 0 26px; flex: 1; }
+  .pr-feats li {
+    color: var(--muted); font-size: 0.86rem; line-height: 1.55; padding: 7px 0 7px 24px;
+    position: relative; border-bottom: 1px solid rgba(255,255,255,.045);
+  }
+  .pr-feats li::before { content: "✓"; position: absolute; left: 0; color: var(--cyan); font-weight: 700; }
+  .pr-cta { text-align: center; width: 100%; }
+  .pr-note { color: var(--muted); font-size: 0.8rem; margin-top: 26px; line-height: 1.7; }
+  .pr-addon-price { color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; letter-spacing: 1px; margin: 0 0 10px; }
+
+  /* ══════════════════════════════════════════════════════════════
+     SCROLL JOURNEY
+     A sticky panel that advances as the reader scrolls the steps.
+     Falls back to a plain readable stack under reduced motion and
+     on narrow screens, where sticky positioning is a hindrance.
+     ══════════════════════════════════════════════════════════════ */
+  .journey { display: grid; grid-template-columns: 340px 1fr; gap: 56px; margin-top: 46px; align-items: start; }
+  @media (max-width: 900px) { .journey { grid-template-columns: 1fr; gap: 28px; } }
+
+  .jr-sticky { position: sticky; top: 120px; }
+  @media (max-width: 900px) { .jr-sticky { position: static; } }
+  .jr-eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem; letter-spacing: 1.8px;
+    text-transform: uppercase; color: var(--cyan); display: block; margin-bottom: 18px;
+  }
+  .jr-figure { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; }
+  .jr-emoji { font-size: 2.6rem; line-height: 1; filter: drop-shadow(0 2px 6px rgba(0,0,0,.7)); transition: transform .4s cubic-bezier(.2,.7,.3,1), opacity .3s; }
+  .jr-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 4.4rem; line-height: .9;
+    color: rgba(255,255,255,.13); letter-spacing: 2px; transition: color .35s;
+  }
+  .jr-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.75rem; color: var(--white); margin: 0 0 6px; transition: opacity .3s; }
+  .jr-when { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; letter-spacing: 1.2px; color: var(--cyan); margin: 0 0 22px; }
+  .jr-rail { height: 3px; background: var(--border); position: relative; overflow: hidden; }
+  .jr-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 20%; background: var(--cyan); transition: width .45s cubic-bezier(.2,.7,.3,1); }
+  .jr-dots { display: flex; gap: 9px; margin-top: 18px; }
+  .jr-dot {
+    width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--border);
+    background: transparent; padding: 0; cursor: pointer; transition: all .28s;
+  }
+  .jr-dot:hover { border-color: var(--cyan); transform: scale(1.25); }
+  .jr-dot.active { background: var(--cyan); border-color: var(--cyan); transform: scale(1.3); }
+  .jr-dot.done { background: rgba(0,212,255,.4); border-color: rgba(0,212,255,.4); }
+  .jr-foot { color: var(--muted); font-size: 0.78rem; line-height: 1.65; margin-top: 26px; }
+
+  .jr-steps { display: flex; flex-direction: column; gap: 18px; }
+  .jr-step {
+    background: var(--card); border: 1px solid var(--border); padding: 32px 30px;
+    opacity: .42; transition: opacity .45s, border-color .45s, transform .45s cubic-bezier(.2,.7,.3,1);
+  }
+  .jr-step.in { opacity: 1; border-color: rgba(0,212,255,.35); transform: translateX(4px); }
+  .jr-step-head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .jr-step-n {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1;
+    color: var(--cyan); letter-spacing: 1px;
+  }
+  .jr-step-emoji { font-size: 1.7rem; filter: drop-shadow(0 2px 5px rgba(0,0,0,.65)); }
+  .jr-step-head h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--white); margin: 0 0 3px; }
+  .jr-step-when { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 1.1px; color: var(--muted); text-transform: uppercase; }
+  .jr-lead { color: var(--white); font-size: 1rem; line-height: 1.65; margin: 0 0 12px; font-weight: 600; }
+  .jr-body { color: var(--muted); font-size: 0.9rem; line-height: 1.75; margin: 0 0 16px; }
+  .jr-you {
+    color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem;
+    letter-spacing: .6px; margin: 0; padding-top: 14px; border-top: 1px solid var(--border);
+  }
+  @media (prefers-reduced-motion: reduce) { .jr-step { opacity: 1 !important; transform: none !important; } }
+
+  /* ══════════════════════════════════════════════════════════════
+     INSTANT ESTIMATE CALCULATOR
+     ══════════════════════════════════════════════════════════════ */
+  .calc { display: grid; grid-template-columns: 1.15fr 1fr; gap: 32px; margin-top: 42px; align-items: start; }
+  @media (max-width: 900px) { .calc { grid-template-columns: 1fr; } }
+  .calc-inputs { background: var(--card); border: 1px solid var(--border); padding: 30px 28px; }
+  .calc-field { margin-bottom: 26px; }
+  .calc-field:last-child { margin-bottom: 0; }
+  .calc-field > label {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem;
+    color: var(--white); margin-bottom: 12px;
+  }
+  .calc-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; color: var(--cyan); line-height: 1; }
+  .calc-hint { display: block; color: var(--muted); font-size: 0.76rem; line-height: 1.5; margin-top: 8px; }
+  .calc-field input[type=range] {
+    width: 100%; -webkit-appearance: none; appearance: none; height: 4px;
+    background: var(--border); outline: none; cursor: pointer;
+  }
+  .calc-field input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 20px; height: 20px;
+    background: var(--cyan); cursor: pointer; border: 3px solid var(--black);
+    box-shadow: 0 0 0 1px var(--cyan); transition: transform .18s;
+  }
+  .calc-field input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  .calc-field input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; background: var(--cyan); cursor: pointer;
+    border: 3px solid var(--black); box-shadow: 0 0 0 1px var(--cyan);
+  }
+  .calc-tiers { display: flex; gap: 8px; flex-wrap: wrap; }
+  .calc-tier {
+    flex: 1; min-width: 96px; background: transparent; border: 1px solid var(--border);
+    color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.78rem;
+    padding: 11px 8px; cursor: pointer; transition: all .22s;
+  }
+  .calc-tier:hover { border-color: var(--cyan); color: var(--white); }
+  .calc-tier.active { background: var(--cyan); color: var(--black); border-color: var(--cyan); }
+  .calc-addons { display: flex; flex-direction: column; gap: 10px; }
+  .calc-check { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.86rem; cursor: pointer; }
+  .calc-check input { accent-color: #00d4ff; width: 16px; height: 16px; cursor: pointer; }
+  .calc-check:hover { color: var(--white); }
+
+  .calc-out {
+    background: linear-gradient(160deg, rgba(0,212,255,.09), var(--card) 55%);
+    border: 1px solid var(--cyan); padding: 32px 28px; position: sticky; top: 110px;
+  }
+  @media (max-width: 900px) { .calc-out { position: static; } }
+  .calc-out-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem; letter-spacing: 1.8px; text-transform: uppercase; color: var(--cyan); }
+  .calc-figure { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 10px 0 22px; }
+  .calc-figure span { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; line-height: 1; color: var(--white); letter-spacing: 1px; }
+  .calc-dash { font-size: 1rem !important; color: var(--muted) !important; font-family: 'Syne', sans-serif !important; }
+  .calc-break { border-top: 1px solid var(--border); padding-top: 16px; margin-bottom: 20px; }
+  .calc-line { display: flex; justify-content: space-between; gap: 14px; color: var(--muted); font-size: 0.82rem; padding: 6px 0; }
+  .calc-line-total { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 12px; color: var(--white); font-weight: 700; }
+  .calc-flag { color: var(--cyan); font-size: 0.78rem; line-height: 1.55; margin-top: 14px; padding: 10px 12px; background: rgba(0,212,255,.08); }
+  .calc-disclaimer { color: var(--muted); font-size: 0.76rem; line-height: 1.6; margin: 0 0 20px; }
+  .calc-cta { display: block; text-align: center; margin-bottom: 14px; }
+
+  /* ══════════════════════════════════════════════════════════════
      MOTION LAYER 2
      Entrance motion on load, and deliberate feedback on hover.
      Everything here is disabled by the prefers-reduced-motion block
