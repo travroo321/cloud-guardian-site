@@ -375,3 +375,125 @@
     }
     if (tier && msg && !msg.value) { msg.value = 'Interested in the ' + tier + ' tier. '; }
   })();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   INTRO SEQUENCE CONTROLLER
+   The overlay ships in the HTML so it paints on the first frame.
+   This decides whether it runs, and tears it down when it is done.
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  var el = document.getElementById('cgIntro');
+  if (!el) return;
+
+  var RAIL_MS = 8000;
+  var KEY = 'cg_intro_seen';
+  var WINDOW_MS = 8 * 60 * 60 * 1000;   /* one working day */
+  var html = document.documentElement;
+  var timer = null, running = false;
+
+  function reduced() {
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+    catch (e) { return false; }
+  }
+  /* localStorage with a timestamp rather than sessionStorage, because
+     sessionStorage is per tab: someone who middle-clicks a link into a new
+     tab would otherwise sit through the whole thing a second time. */
+  function seen() {
+    try {
+      var v = localStorage.getItem(KEY);
+      return !!v && (Date.now() - (+v)) < WINDOW_MS;
+    } catch (e) {
+      try { return sessionStorage.getItem(KEY) === '1'; } catch (e2) { return false; }
+    }
+  }
+  function mark() {
+    try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {
+      try { sessionStorage.setItem(KEY, '1'); } catch (e2) {}
+    }
+  }
+
+  function teardown() {
+    if (!running) return;
+    running = false;
+    clearTimeout(timer);
+    el.classList.add('cgi-out');
+    window.removeEventListener('keydown', onKey, true);
+    window.removeEventListener('wheel', end, { passive: true });
+    window.removeEventListener('touchmove', end, { passive: true });
+    setTimeout(function () {
+      html.classList.remove('cgi-lock', 'cgi-pending');
+      /* remove it outright so nothing is left covering the page */
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 620);
+  }
+  function end() { mark(); teardown(); }
+  function onKey(e) {
+    if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') end();
+  }
+
+  /* Replacing a node with its own clone is the only reliable way to restart
+     a CSS timeline without clobbering the inline animation-delay values that
+     stagger the mesh and the experience bar. On the very first autoplay we
+     skip it: those animations already started at parse time, which is exactly
+     what we want, and resetting them would show a visible hitch. */
+  var first = true;
+  function restart(sel) {
+    var n = el.querySelector(sel);
+    if (!n || !n.parentNode) return;
+    n.parentNode.replaceChild(n.cloneNode(true), n);
+  }
+
+  function play() {
+    if (running || reduced()) return;
+    running = true;
+    el.classList.remove('cgi-out');
+    el.hidden = false;
+    if (!first) { restart('.cgi-stage'); restart('.cgi-rail'); }
+    first = false;
+    html.classList.add('cgi-lock');
+    window.addEventListener('keydown', onKey, true);
+    window.addEventListener('wheel', end, { passive: true });
+    window.addEventListener('touchmove', end, { passive: true });
+    /* The CSS timeline starts at parse; this script starts after the load
+       event. On a slow connection those drift apart, so the end of the
+       sequence is driven by the progress rail finishing, not by a timer.
+       The timer below is only a backstop, and it is sized from how much of
+       the rail is actually left so a very late script does not leave anyone
+       staring at a finished overlay. */
+    var left = RAIL_MS;
+    try {
+      var ra = el.querySelector('.cgi-rail i').getAnimations()[0];
+      if (ra && typeof ra.currentTime === 'number') {
+        left = Math.max(0, RAIL_MS - ra.currentTime);
+      }
+    } catch (e) {}
+    timer = setTimeout(end, left + 900);
+  }
+
+  el.addEventListener('animationend', function (e) {
+    if (e.animationName === 'cgiRail') end();
+  });
+
+  el.addEventListener('click', end);
+  var skip = document.getElementById('cgiSkip');
+  if (skip) skip.addEventListener('click', function (e) { e.stopPropagation(); end(); });
+
+  /* replay triggers, wherever they appear */
+  document.querySelectorAll('[data-cgi-replay]').forEach(function (b) {
+    b.addEventListener('click', function () { play(); });
+  });
+
+  /* autoplay only where the page opted in, once per session */
+  if (el.dataset.auto === '1' && !seen() && !reduced()) {
+    mark();
+    play();
+  } else {
+    /* not playing: make sure nothing is locked or covering the page */
+    html.classList.remove('cgi-lock', 'cgi-pending');
+    if (el.dataset.auto === '1' && el.parentNode && !el.querySelector('[data-cgi-keep]')) {
+      /* keep the node only if a replay button exists somewhere on this page */
+      if (!document.querySelector('[data-cgi-replay]')) el.parentNode.removeChild(el);
+    }
+  }
+})();

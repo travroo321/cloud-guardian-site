@@ -1050,3 +1050,292 @@
     .reveal { opacity: 1 !important; transform: none !important; }
     .mq-track { animation: none !important; }
   }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   BREADCRUMB TRAIL
+   Sits at the top of the hero on every interior page. Mirrors the
+   BreadcrumbList JSON-LD, so the trail a person sees and the trail
+   Google parses are generated from the same data.
+   ═══════════════════════════════════════════════════════════════ */
+.crumbs {
+  /* the hero is a two column grid on most pages; the trail spans both so it
+     sits above the headline rather than becoming the first column */
+  grid-column: 1 / -1;
+  margin: 0 0 26px; padding: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .74rem; letter-spacing: .06em;
+  animation: crFade .55s ease both .08s;
+}
+@keyframes crFade { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+.crumbs .cr-in {
+  display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 8px 15px; border-radius: 999px;
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(6px);
+}
+.crumbs a {
+  color: rgba(255,255,255,.62); text-decoration: none;
+  padding: 2px 1px; border-bottom: 1px solid transparent;
+  transition: color .18s ease, border-color .18s ease;
+}
+.crumbs a:hover { color: var(--cyan); border-bottom-color: var(--cyan); }
+.crumbs a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 3px; }
+.crumbs .cr-sep { color: rgba(255,255,255,.28); }
+.crumbs .cr-here { color: #fff; font-weight: 500; }
+
+@media (max-width: 640px) {
+  .crumbs { font-size: .68rem; margin-bottom: 20px; }
+  .crumbs .cr-in { padding: 7px 12px; gap: 6px; }
+  /* on a phone the middle of a deep trail is noise; keep the ends */
+  .crumbs .cr-in a:not(:first-child) { display: none; }
+  .crumbs .cr-in .cr-sep:not(:first-of-type) { display: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   INTRO SEQUENCE
+   Vector animation overlay. Removed from the DOM when it finishes.
+   ═══════════════════════════════════════════════════════════════ */
+
+html.cgi-lock, html.cgi-lock body { overflow: hidden; }
+
+#cgIntro {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #05070d;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  /* system stack first so the words paint before the webfont lands */
+  font-family: 'Syne', 'Rajdhani', 'Segoe UI', system-ui, sans-serif;
+  contain: layout paint;
+}
+#cgIntro[hidden] { display: none; }
+#cgIntro.cgi-out { animation: cgiOut .58s ease forwards; }
+@keyframes cgiOut {
+  from { opacity: 1; clip-path: inset(0 0 0 0); }
+  to   { opacity: 0; clip-path: inset(50% 0 50% 0); }
+}
+
+/* ── backdrop: drifting grid + vignette + scanline ── */
+.cgi-grid {
+  position: absolute; inset: -20%;
+  background-image:
+    linear-gradient(rgba(0,212,255,.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,.10) 1px, transparent 1px);
+  background-size: 54px 54px;
+  transform: perspective(600px) rotateX(58deg);
+  transform-origin: 50% 100%;
+  animation: cgiGrid 9s linear infinite;
+  opacity: .95;
+}
+@keyframes cgiGrid { to { background-position: 0 540px; } }
+.cgi-vig {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 42%, transparent 22%, rgba(5,7,13,.86) 62%, #05070d 88%);
+}
+.cgi-scan {
+  position: absolute; inset: 0; pointer-events: none; opacity: .35;
+  background: repeating-linear-gradient(
+    to bottom, rgba(255,255,255,.035) 0 1px, transparent 1px 3px);
+}
+
+/* ── stage ── */
+.cgi-stage {
+  position: relative; z-index: 2; width: min(1080px, 92vw);
+  text-align: center; color: #fff;
+}
+.cgi-beat {
+  position: absolute; left: 0; right: 0; top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  animation-name: cgiBeat;
+  animation-timing-function: cubic-bezier(.22,.9,.3,1);
+  animation-fill-mode: both;
+}
+@keyframes cgiBeat {
+  0%   { opacity: 0; transform: translateY(calc(-50% + 22px)) scale(.965); filter: blur(6px); }
+  14%  { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0); }
+  80%  { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0); }
+  100% { opacity: 0; transform: translateY(calc(-50% - 18px)) scale(1.03); filter: blur(5px); }
+}
+
+.cgi-kick {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: clamp(.62rem, 1.4vw, .8rem);
+  letter-spacing: .42em; text-transform: uppercase;
+  color: #00d4ff; margin-bottom: 20px;
+}
+.cgi-line {
+  font-family: 'Bebas Neue', 'Syne', Impact, sans-serif;
+  font-size: clamp(2.3rem, 7.4vw, 6.2rem);
+  line-height: .94; letter-spacing: .012em; margin: 0;
+  text-transform: uppercase;
+}
+.cgi-line em { font-style: normal; color: #00d4ff; }
+.cgi-line b  { font-weight: inherit; color: #38f8a7; }
+.cgi-sub {
+  margin: 22px auto 0; max-width: 44ch;
+  font-size: clamp(.88rem, 1.7vw, 1.08rem);
+  line-height: 1.55; color: rgba(255,255,255,.72);
+}
+
+/* ── beat 1: the shield draws itself ── */
+.cgi-shield { width: clamp(96px, 15vw, 156px); height: auto; margin: 0 auto 26px; display: block; }
+.cgi-shield .sh-out {
+  fill: none; stroke: #00d4ff; stroke-width: 3.2; stroke-linejoin: round;
+  stroke-dasharray: 300; stroke-dashoffset: 300;
+  animation: cgiDraw 1.15s cubic-bezier(.5,0,.2,1) forwards;
+}
+.cgi-shield .sh-fill {
+  fill: rgba(0,212,255,.11); opacity: 0;
+  animation: cgiFade .5s ease .9s forwards;
+}
+.cgi-shield .sh-tick {
+  fill: none; stroke: #38f8a7; stroke-width: 4.2;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 60; stroke-dashoffset: 60;
+  animation: cgiDraw60 .46s cubic-bezier(.4,0,.2,1) 1.02s forwards;
+}
+@keyframes cgiDraw   { to { stroke-dashoffset: 0; } }
+@keyframes cgiDraw60 { to { stroke-dashoffset: 0; } }
+@keyframes cgiFade   { to { opacity: 1; } }
+
+/* ── beat 2: radar sweep ── */
+.cgi-radar {
+  position: relative; width: clamp(120px, 19vw, 182px); aspect-ratio: 1;
+  margin: 0 auto 24px; border-radius: 50%;
+  border: 1px solid rgba(0,212,255,.30);
+  box-shadow: inset 0 0 0 1px rgba(0,212,255,.10);
+}
+.cgi-radar::before {
+  content: ''; position: absolute; inset: 22%; border-radius: 50%;
+  border: 1px solid rgba(0,212,255,.22);
+}
+.cgi-radar::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(0,212,255,.55), rgba(0,212,255,0) 62deg);
+  animation: cgiSpin 1.5s linear infinite;
+}
+@keyframes cgiSpin { to { transform: rotate(360deg); } }
+.cgi-blip {
+  position: absolute; width: 9px; height: 9px; border-radius: 50%;
+  background: #38f8a7; box-shadow: 0 0 12px #38f8a7;
+  animation: cgiBlip 1.5s ease-in-out infinite;
+}
+@keyframes cgiBlip { 0%,100% { opacity: .15; transform: scale(.7); } 45% { opacity: 1; transform: scale(1); } }
+
+/* ── beat 3: correlation mesh ── */
+.cgi-mesh { width: clamp(180px, 30vw, 300px); height: auto; margin: 0 auto 22px; display: block; }
+.cgi-mesh line {
+  stroke: rgba(0,212,255,.55); stroke-width: 1.4;
+  stroke-dasharray: 120; stroke-dashoffset: 120;
+  animation: cgiDraw120 .85s ease forwards;
+}
+@keyframes cgiDraw120 { to { stroke-dashoffset: 0; } }
+.cgi-mesh circle {
+  fill: #00d4ff; opacity: 0;
+  transform-box: fill-box; transform-origin: center;
+  animation: cgiPop .5s cubic-bezier(.3,1.5,.5,1) forwards;
+}
+.cgi-mesh circle.hit { fill: #38f8a7; }
+@keyframes cgiPop {
+  from { opacity: 0; transform: scale(.2); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── beat 4: experience bar ── */
+.cgi-years {
+  width: min(520px, 78vw); height: 8px; margin: 0 auto 26px;
+  background: rgba(255,255,255,.09); border-radius: 99px; overflow: hidden;
+}
+.cgi-years i {
+  display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, #00d4ff, #38f8a7);
+  animation: cgiGrow 1.05s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes cgiGrow { to { width: 100%; } }
+
+/* ── beat 5: the slogan ──
+   The word HALF literally halves itself. An earlier draft struck the word
+   through, which read as "not half the price": the exact opposite of the
+   offer. Scaling it down says the right thing, and because transform does
+   not affect layout the rest of the line never moves. */
+.cgi-price { display: block; margin-top: 14px; }
+.cgi-half {
+  display: inline-block; color: #ff4d6d;
+  transform-origin: 50% 58%;
+  animation: cgiHalve .78s cubic-bezier(.25,1.35,.4,1) both;
+}
+@keyframes cgiHalve {
+  0%   { transform: scale(2.05); color: #ff4d6d; opacity: .5; }
+  55%  { opacity: 1; }
+  100% { transform: scale(1); color: #38f8a7; opacity: 1; }
+}
+
+/* ── chrome: skip button and progress rail ── */
+.cgi-skip {
+  position: absolute; z-index: 4; top: 22px; right: 22px;
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 11px 19px; border-radius: 999px; cursor: pointer;
+  background: rgba(255,255,255,.06); color: #fff;
+  border: 1px solid rgba(255,255,255,.20);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+  transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.cgi-skip:hover { background: rgba(0,212,255,.16); border-color: #00d4ff; transform: translateY(-1px); }
+.cgi-skip:focus-visible { outline: 2px solid #00d4ff; outline-offset: 3px; }
+.cgi-rail {
+  position: absolute; left: 0; bottom: 0; height: 3px; width: 100%;
+  background: rgba(255,255,255,.08); z-index: 4;
+}
+.cgi-rail i {
+  display: block; height: 100%; width: 0;
+  background: linear-gradient(90deg, #00d4ff, #38f8a7);
+  animation: cgiRail 8.0s linear forwards;
+}
+@keyframes cgiRail { to { width: 100%; } }
+.cgi-hint {
+  position: absolute; left: 0; right: 0; bottom: 22px; z-index: 4;
+  text-align: center; color: rgba(255,255,255,.38);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .66rem; letter-spacing: .22em; text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .cgi-skip { top: 14px; right: 14px; padding: 9px 14px; font-size: .64rem; }
+  .cgi-hint { display: none; }
+}
+
+/* ── the replay trigger that lives on About and Pricing ── */
+.cgi-replay {
+  display: inline-flex; align-items: center; gap: 11px;
+  padding: 13px 24px; border-radius: 999px; cursor: pointer;
+  background: rgba(0,212,255,.08); color: #fff;
+  border: 1px solid rgba(0,212,255,.42);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .74rem; letter-spacing: .16em; text-transform: uppercase;
+  transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.cgi-replay:hover {
+  background: rgba(0,212,255,.18); transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,212,255,.20);
+}
+.cgi-replay .rp-tri {
+  width: 0; height: 0; border-style: solid;
+  border-width: 6px 0 6px 10px; border-color: transparent transparent transparent #00d4ff;
+}
+.cgi-replay-wrap { text-align: center; padding: 46px 20px 6px; }
+
+/* ── anyone who asked for less motion gets none of this ── */
+@media (prefers-reduced-motion: reduce) {
+  #cgIntro { display: none !important; }
+  html.cgi-lock, html.cgi-lock body { overflow: auto !important; }
+}
+
+.cgi-b1 { animation-delay: 0.15s; animation-duration: 2.2s; }
+.cgi-b2 { animation-delay: 2.0s; animation-duration: 1.75s; }
+.cgi-b3 { animation-delay: 3.4s; animation-duration: 1.75s; }
+.cgi-b4 { animation-delay: 4.8s; animation-duration: 1.65s; }
+.cgi-b5 { animation-delay: 6.1s; animation-duration: 1.9000000000000004s; }
