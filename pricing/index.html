@@ -29,7 +29,7 @@
 </head>
 <body>
 
-<div id="cgIntro" role="dialog" aria-label="Cloud Guardian intro animation" hidden>
+<div id="cgIntro" role="dialog" aria-label="Cloud Guardian intro" hidden>
   <div class="cgi-grid" aria-hidden="true"></div>
   <div class="cgi-scan" aria-hidden="true"></div>
   <div class="cgi-vig" aria-hidden="true"></div>
@@ -38,21 +38,69 @@
 
   <div class="cgi-stage" aria-hidden="true">
 
-    <!-- 1. the shield draws itself -->
+    <!-- 1. an ordinary Tuesday -->
     <div class="cgi-beat cgi-b1">
-      <svg class="cgi-shield" viewBox="0 0 100 118" fill="none" aria-hidden="true">
-        <path class="sh-fill" d="M50 5 L92 21 V60 C92 88 72 105 50 113 C28 105 8 88 8 60 V21 Z" />
-        <path class="sh-out"  d="M50 5 L92 21 V60 C92 88 72 105 50 113 C28 105 8 88 8 60 V21 Z" />
-        <path class="sh-tick" d="M31 58 L45 72 L71 44" />
-      </svg>
-      <p class="cgi-kick">North Brunswick, New Jersey &middot; Est. 30 Years In The Field</p>
-      <h2 class="cgi-line">CLOUD <em>GUARDIAN</em></h2>
+      <div class="cgi-mail" aria-hidden="true">
+      <div class="cm-bar"><span class="cm-dot r"></span><span class="cm-dot y"></span><span class="cm-dot g"></span>
+        <span class="cm-title">Inbox &mdash; Accounts Payable</span></div>
+      <div class="cm-row old"><span class="cm-from">Verizon Business</span><span class="cm-sub">Your November statement</span></div>
+      <div class="cm-row old"><span class="cm-from">Shoprite Vendor Portal</span><span class="cm-sub">PO 44192 acknowledged</span></div>
+      <div class="cm-row new"><span class="cm-flag">NEW</span>
+        <span class="cm-from">David Whitmore</span><span class="cm-sub">Quick favour, are you at your desk?</span>
+        <span class="cm-time">9:14</span></div>
+      <div class="cm-row old"><span class="cm-from">ADP</span><span class="cm-sub">Payroll approved</span></div>
+    </div>
+      <p class="cgi-kick">9:14 &middot; Tuesday morning &middot; an ordinary week</p>
+      <h2 class="cgi-line">THE <em>CEO</em> NEEDS<br/>A QUICK FAVOUR.</h2>
+      <p class="cgi-sub">Your accounts payable clerk has no reason to think twice. The name is right, the tone is right, the timing is right.</p>
     </div>
 
-    <!-- 2. the SOC -->
+    <!-- 2. the email, and the thing nobody checks -->
     <div class="cgi-beat cgi-b2">
-      <div class="cgk-wrap" aria-hidden="true">
-        <span class="cgk-clock">03:41 AM</span>
+      <div class="cgi-msg" aria-hidden="true">
+      <div class="cg-msg-head">
+        <span class="cg-avatar">DW</span>
+        <span class="cg-who">
+          <strong>David Whitmore</strong>
+          <span class="cg-role">Chief Executive Officer</span>
+        </span>
+        <span class="cg-addr">
+          <span class="cg-addr-l">to me</span>
+          <span class="cg-addr-v">david.whitmore@<span class="cg-fake">whitrnore-group</span>.com</span>
+        </span>
+      </div>
+      <p class="cg-body">Are you at your desk? I am in back to back board meetings
+      and I need a wire out to a new supplier before close of business.
+      <strong>Do not loop in accounting yet</strong>, I will explain after.
+      Details attached. Confirm when it is sent.</p>
+      <p class="cg-sig">Sent from my iPhone</p>
+      <span class="cg-magnify">Real domain is whitmore-group.com. This one is an r and an n.</span>
+    </div>
+      <p class="cgi-kick">Except</p>
+      <h2 class="cgi-line">IT IS NOT<br/>FROM <span class="cgi-bad">THE CEO</span>.</h2>
+      <p class="cgi-sub">Look at the address. R N instead of M. Registered six days ago, purely to send this one email to this one person.</p>
+    </div>
+
+    <!-- 3. one click away -->
+    <div class="cgi-beat cgi-b3">
+      <div class="cgi-wire" aria-hidden="true">
+      <div class="cw-head">Outgoing wire <span class="cw-step">Step 2 of 3</span></div>
+      <div class="cw-line"><span>Beneficiary</span><b>NORTHGATE SUPPLY PARTNERS LLC</b></div>
+      <div class="cw-line"><span>Routing</span><b>0•• ••• 4471</b></div>
+      <div class="cw-line"><span>Account</span><b>•••• •••• 8802</b></div>
+      <div class="cw-line amt"><span>Amount</span><b>$<span id="cgiAmt">0</span></b></div>
+      <button class="cw-send" type="button" tabindex="-1">Send wire</button>
+      <span class="cw-cursor"></span>
+    </div>
+      <p class="cgi-kick">9:21, seven minutes later</p>
+      <h2 class="cgi-line">SHE IS <span class="cgi-bad">ONE CLICK</span><br/>FROM SENDING IT.</h2>
+      <p class="cgi-sub">She is not careless. She is doing exactly what she was asked to do by someone she believes is her boss. This is how most money actually leaves a business.</p>
+    </div>
+
+    <!-- 4. the turn -->
+    <div class="cgi-beat cgi-b4">
+      <div class="cgk-wrap">
+        <span class="cgk-clock">BLOCKED 9:14:02</span>
         
 <svg class="cgk" viewBox="0 0 300 300" role="img" aria-label="The Cloud Guardian intercepting an attack at three in the morning">
   <defs>
@@ -83,6 +131,16 @@
       <stop offset="0"   stop-color="#1f8fe0" />
       <stop offset="1"   stop-color="#0a4f96" />
     </linearGradient>
+    <linearGradient id="cgkWing" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0"   stop-color="#0d4f8f" />
+      <stop offset=".5"  stop-color="#8fb6d4" />
+      <stop offset="1"   stop-color="#eaf5ff" />
+    </linearGradient>
+    <linearGradient id="cgkWing2" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0"   stop-color="#093f75" />
+      <stop offset=".55" stop-color="#6f92ad" />
+      <stop offset="1"   stop-color="#cfe4f5" />
+    </linearGradient>
     <radialGradient id="cgkGlow">
       <stop offset="0"   stop-color="#00d4ff" stop-opacity=".42" />
       <stop offset=".65" stop-color="#0a63b8" stop-opacity=".12" />
@@ -91,6 +149,35 @@
   </defs>
 
   <circle class="cgk-halo" cx="152" cy="150" r="140" fill="url(#cgkGlow)" />
+
+
+  <!-- ══ wings: five feather blades a side, swept up and out ══ -->
+  <g class="cgk-wings" aria-hidden="true">
+    <g class="cgk-wing wing-l">
+      <path class="cgk-f f0" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-31.5 -1.7 Q-10.3 -76.7 30.0 -120.3 Q35.5 -49.9 24.4 12.3 Z" />
+      <path class="cgk-fr f0" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M0.5 -1.9 L27.0 -108.3" />
+      <path class="cgk-f f1" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-32.6 -11.2 Q13.7 -89.2 70.8 -127.7 Q54.0 -46.9 22.7 19.4 Z" />
+      <path class="cgk-fr f1" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.0 -1.7 L63.7 -114.9" />
+      <path class="cgk-f f2" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-27.2 -17.9 Q35.2 -78.9 97.3 -100.7 Q61.3 -30.3 15.6 23.4 Z" />
+      <path class="cgk-fr f2" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.4 -1.4 L87.5 -90.6" />
+      <path class="cgk-f f3" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-20.5 -21.4 Q45.9 -60.1 103.5 -64.7 Q58.7 -12.0 8.1 24.3 Z" />
+      <path class="cgk-fr f3" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.7 -1.1 L93.1 -58.2" />
+      <path class="cgk-f f4" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-13.8 -21.7 Q47.4 -40.6 94.6 -32.6 Q49.4 2.0 1.3 22.3 Z" />
+      <path class="cgk-fr f4" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.9 -0.7 L85.1 -29.3" />
+    </g>
+    <g class="cgk-wing wing-r">
+      <path class="cgk-f f0" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-31.5 -1.7 Q-10.3 -76.7 30.0 -120.3 Q35.5 -49.9 24.4 12.3 Z" />
+      <path class="cgk-fr f0" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M0.5 -1.9 L27.0 -108.3" />
+      <path class="cgk-f f1" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-32.6 -11.2 Q13.7 -89.2 70.8 -127.7 Q54.0 -46.9 22.7 19.4 Z" />
+      <path class="cgk-fr f1" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.0 -1.7 L63.7 -114.9" />
+      <path class="cgk-f f2" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-27.2 -17.9 Q35.2 -78.9 97.3 -100.7 Q61.3 -30.3 15.6 23.4 Z" />
+      <path class="cgk-fr f2" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.4 -1.4 L87.5 -90.6" />
+      <path class="cgk-f f3" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-20.5 -21.4 Q45.9 -60.1 103.5 -64.7 Q58.7 -12.0 8.1 24.3 Z" />
+      <path class="cgk-fr f3" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.7 -1.1 L93.1 -58.2" />
+      <path class="cgk-f f4" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-13.8 -21.7 Q47.4 -40.6 94.6 -32.6 Q49.4 2.0 1.3 22.3 Z" />
+      <path class="cgk-fr f4" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.9 -0.7 L85.1 -29.3" />
+    </g>
+  </g>
 
   <g class="cgk-figure">
   <!-- ══ plume: three lobes sweeping up and back over the left shoulder ══ -->
@@ -147,14 +234,14 @@
     <!-- brow ridge, the angry line -->
     <path fill="url(#cgkSteelDk)" stroke="#08131c" stroke-width="2.6" stroke-linejoin="round"
           d="M118 102 L166 84 L214 102 L210 122 L166 104 L122 122 Z" />
-    <!-- eye slits -->
+    <!-- eye slits: narrow, angled down toward the centre -->
     <g class="cgk-eyes">
-      <path d="M131 130 L158 122 L158 142 L132 142 Z" />
-      <path d="M201 130 L174 122 L174 142 L200 142 Z" />
+      <path d="M126 126 L157 118 L157 133 L127 138 Z" />
+      <path d="M206 126 L175 118 L175 133 L205 138 Z" />
     </g>
-    <!-- nasal keel -->
-    <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="2.2" stroke-linejoin="round"
-          d="M161 106 L171 106 L175 176 L157 176 Z" />
+    <!-- nasal keel: a thin raised ridge, not a slab across the face -->
+    <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="2"
+          d="M163 108 L169 108 L172 172 L160 172 Z" />
     <!-- breath vents -->
     <g fill="#08131c" opacity=".9">
       <rect x="140" y="152" width="6" height="30" rx="3" />
@@ -204,53 +291,44 @@
 </svg>
 
       </div>
-      <p class="cgi-kick">Beat 01</p>
-      <h2 class="cgi-line">SOMEONE IS <em>AWAKE</em><br />AT 3 A.M.</h2>
-      <p class="cgi-sub">A 24/7 security operations centre watches your network every hour of every day. Not a voicemail box that gets checked Monday morning.</p>
+      <p class="cgi-kick">Two seconds after it arrived</p>
+      <h2 class="cgi-line">IT NEVER<br/>REACHED <em>HER</em>.</h2>
+      <p class="cgi-sub">Quarantined before delivery. She never saw it, never replied, never opened the wire screen. There was nothing for her to get wrong.</p>
     </div>
 
-    <!-- 3. the AI layer -->
-    <div class="cgi-beat cgi-b3">
-      <svg class="cgi-mesh" viewBox="0 0 292 144" aria-hidden="true">
-        <line x1="24" y1="62" x2="78" y2="26" style="animation-delay:3.50s" />
-        <line x1="24" y1="62" x2="86" y2="96" style="animation-delay:3.56s" />
-        <line x1="78" y1="26" x2="146" y2="54" style="animation-delay:3.61s" />
-        <line x1="86" y1="96" x2="146" y2="54" style="animation-delay:3.67s" />
-        <line x1="86" y1="96" x2="152" y2="118" style="animation-delay:3.72s" />
-        <line x1="146" y1="54" x2="212" y2="30" style="animation-delay:3.77s" />
-        <line x1="146" y1="54" x2="222" y2="92" style="animation-delay:3.83s" />
-        <line x1="152" y1="118" x2="222" y2="92" style="animation-delay:3.88s" />
-        <line x1="212" y1="30" x2="268" y2="62" style="animation-delay:3.94s" />
-        <line x1="222" y1="92" x2="268" y2="62" style="animation-delay:4.00s" />
-        <circle cx="24" cy="62" r="5" style="animation-delay:3.62s" />
-        <circle cx="78" cy="26" r="5" style="animation-delay:3.67s" />
-        <circle cx="86" cy="96" r="5" style="animation-delay:3.72s" />
-        <circle cx="146" cy="54" r="7" class="hit" style="animation-delay:3.77s" />
-        <circle cx="152" cy="118" r="5" style="animation-delay:3.82s" />
-        <circle cx="212" cy="30" r="5" style="animation-delay:3.87s" />
-        <circle cx="222" cy="92" r="7" class="hit" style="animation-delay:3.92s" />
-        <circle cx="268" cy="62" r="5" style="animation-delay:3.97s" />
-      </svg>
-      <p class="cgi-kick">Beat 02</p>
-      <h2 class="cgi-line">AI CATCHES WHAT<br /><em>PEOPLE MISS</em></h2>
-      <p class="cgi-sub">Machine correlation across every endpoint, every login, every log line. It finds the pattern at 2 a.m. that a tired analyst would scroll straight past.</p>
-    </div>
-
-    <!-- 4. the experience -->
-    <div class="cgi-beat cgi-b4">
-      <div class="cgi-years" aria-hidden="true"><i style="animation-delay:4.98s"></i></div>
-      <p class="cgi-kick">Beat 03</p>
-      <h2 class="cgi-line">30 YEARS OF<br /><em>OTHER PEOPLE&rsquo;S</em> MISTAKES</h2>
-      <p class="cgi-sub">Three decades building and rescuing networks inside other MSPs. We already know how yours breaks, because we have fixed it before.</p>
-    </div>
-
-    <!-- 5. the offer -->
+    <!-- 5. how it knew -->
     <div class="cgi-beat cgi-b5">
-      <p class="cgi-kick">The whole idea</p>
+      <ul class="cgi-signals">
+        <li style="animation-delay:13.25s"><span class="cs-tick" aria-hidden="true">!</span><span class="cs-h">Lookalike domain</span><span class="cs-d">whitrnore-group.com registered 6 days ago</span></li>
+        <li style="animation-delay:13.49s"><span class="cs-tick" aria-hidden="true">!</span><span class="cs-h">Display name mismatch</span><span class="cs-d">Name says CEO, address does not</span></li>
+        <li style="animation-delay:13.73s"><span class="cs-tick" aria-hidden="true">!</span><span class="cs-h">First contact</span><span class="cs-d">This sender has never emailed you</span></li>
+        <li style="animation-delay:13.97s"><span class="cs-tick" aria-hidden="true">!</span><span class="cs-h">Urgency and secrecy</span><span class="cs-d">Do not loop in accounting</span></li>
+        <li style="animation-delay:14.21s"><span class="cs-tick" aria-hidden="true">!</span><span class="cs-h">Out of band payment</span><span class="cs-d">New beneficiary, no purchase order</span></li>
+      </ul>
+      <p class="cgi-kick">Five signals, under one second</p>
+      <h2 class="cgi-line">AI SAW IT.<br/>A <em>PERSON</em> CONFIRMED IT.</h2>
+      <p class="cgi-sub">Correlation across mail, identity and endpoint, then a 24/7 analyst who decides what happens next. Not a filter guessing on its own.</p>
+    </div>
+
+    <!-- 6. the outcome -->
+    <div class="cgi-beat cgi-b6">
+      <div class="cgi-saved" aria-hidden="true">
+        <span class="cs-amt">$84,000</span>
+        <span class="cs-lbl">never left the account</span>
+        <span class="cs-ring"></span>
+      </div>
+      <p class="cgi-kick">What it cost you</p>
+      <h2 class="cgi-line">ONE LINE IN<br/>A <em>REPORT</em>.</h2>
+      <p class="cgi-sub">No wire to claw back, no insurer to call, no conversation with a clerk who feels sick about it. The average business email compromise loss runs well into six figures. This one was a Tuesday.</p>
+    </div>
+
+    <!-- 7. the offer -->
+    <div class="cgi-beat cgi-b7">
+      <p class="cgi-kick">That is the whole job</p>
       <h2 class="cgi-line">TWICE THE <em>QUALITY</em>.
-        <span class="cgi-price"><span class="cgi-half" style="animation-delay:6.52s">HALF</span> THE PRICE.</span>
+        <span class="cgi-price"><span class="cgi-half" style="animation-delay:19.35s">HALF</span> THE PRICE.</span>
       </h2>
-      <p class="cgi-sub">Newer tooling and real automation, run by people who never stopped learning. That is the entire reason the number is lower.</p>
+      <p class="cgi-sub">Newer tooling, real automation, and thirty years of watching this exact thing happen to businesses that thought they were too small to bother with.</p>
     </div>
 
   </div>

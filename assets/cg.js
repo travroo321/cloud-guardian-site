@@ -399,7 +399,7 @@
   var el = document.getElementById('cgIntro');
   if (!el) return;
 
-  var RAIL_MS = 8000;
+  var RAIL_MS = 21600;
   var html = document.documentElement;
   var timer = null, running = false;
 
@@ -470,6 +470,26 @@
 
   el.addEventListener('animationend', function (e) {
     if (e.animationName === 'cgiRail') end();
+  });
+
+  /* The wire amount ticks up while beat three is on screen. Driven off
+     animationstart rather than a timer, so it stays locked to the CSS
+     timeline even when this script executes late on a slow connection. */
+  el.addEventListener('animationstart', function (e) {
+    if (e.animationName !== 'cgiBeat') return;
+    var amt = e.target.querySelector && e.target.querySelector('#cgiAmt');
+    if (!amt || amt.dataset.ran) return;
+    amt.dataset.ran = '1';
+    if (reduced()) { amt.textContent = '84,000'; return; }
+    var target = 84000, t0 = null, dur = 1500;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur);
+      var eased = 1 - Math.pow(1 - k, 3);
+      amt.textContent = Math.round(target * eased).toLocaleString('en-US');
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   });
 
   el.addEventListener('click', end);
