@@ -246,6 +246,19 @@
         html += '<div class="calc-flag">Above 40 users this calculator stops being useful. At your size the number comes down per seat, so call and we will price it properly.</div>';
       }
       document.getElementById('calc-break').innerHTML = html;
+
+      // Hand the result to /next-steps/. The estimate is the reason someone
+      // is ready for the next step, so it travels with them.
+      var range = money(total * (1 - BAND)) + ' to ' + money(total * (1 + BAND)) + ' / month';
+      try { sessionStorage.setItem('cg_estimate', range); } catch (e) {}
+      var ho = document.getElementById('calcNext');
+      if (ho) {
+        ho.classList.add('on');
+        var link = document.getElementById('calcNextLink');
+        if (link) link.href = '/next-steps/?est=' + encodeURIComponent(range);
+        var lbl = document.getElementById('calcNextVal');
+        if (lbl) lbl.textContent = range;
+      }
     }
 
     [users, ws, srv].forEach(function (i) {
@@ -478,5 +491,190 @@
       /* keep the node only if a replay button exists somewhere on this page */
       if (!document.querySelector('[data-cgi-replay]')) el.parentNode.removeChild(el);
     }
+  }
+})();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   NEXT STEPS JOURNEY
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  var fork = document.getElementById('fork');
+  if (!fork) return;
+
+  var branch  = document.getElementById('branch');
+  var book    = document.getElementById('book');
+  var rail    = document.getElementById('jrRail');
+  var railF   = document.getElementById('jrRailFill');
+  var carry   = document.getElementById('jrCarry');
+  var carryV  = document.getElementById('jrCarryVal');
+  var recapUl = document.getElementById('jrRecapList');
+  var fSit    = document.getElementById('fSituation');
+  var fEst    = document.getElementById('fEstimate');
+  var chosen  = null;
+
+  var LABELS = {};
+  [].forEach.call(document.querySelectorAll('.jf-card'), function (c) {
+    LABELS[c.dataset.pick] = c.querySelector('strong').textContent.trim();
+  });
+
+  /* ── 1. the estimate carried over from /pricing/ ── */
+  function readEstimate() {
+    var q = new URLSearchParams(location.search).get('est');
+    if (q) return decodeURIComponent(q);
+    try { return sessionStorage.getItem('cg_estimate') || ''; } catch (e) { return ''; }
+  }
+  var est = readEstimate();
+  if (est) {
+    carryV.textContent = est;
+    carry.hidden = false;
+    if (fEst) fEst.value = est;
+  }
+
+  /* ── 2. the fork ── */
+  function choose(key, scroll) {
+    chosen = key;
+    [].forEach.call(branch.querySelectorAll('[data-path]'), function (sec) {
+      sec.hidden = (sec.dataset.path !== key);
+    });
+    [].forEach.call(document.querySelectorAll('.jf-card'), function (c) {
+      var on = c.dataset.pick === key;
+      c.classList.toggle('picked', on);
+      c.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    book.hidden = false;
+    if (fSit) fSit.value = LABELS[key] || key;
+    buildRecap();
+    observePanels();
+    if (rail) rail.classList.add('on');
+    try { history.replaceState(null, '', '#path-' + key); } catch (e) {}
+    if (scroll !== false) {
+      var target = branch.querySelector('[data-path="' + key + '"]');
+      if (target) {
+        var y = target.getBoundingClientRect().top + window.pageYOffset - 84;
+        window.scrollTo({ top: y, behavior: CG_PREFERS_STILL() ? 'auto' : 'smooth' });
+      }
+    }
+  }
+  function CG_PREFERS_STILL() {
+    try { return matchMedia('(prefers-reduced-motion: reduce)').matches; }
+    catch (e) { return false; }
+  }
+
+  [].forEach.call(document.querySelectorAll('.jf-card'), function (c) {
+    c.setAttribute('aria-pressed', 'false');
+    c.addEventListener('click', function () { choose(c.dataset.pick, true); });
+  });
+
+  /* deep link straight to a path */
+  var h = (location.hash || '').replace('#path-', '');
+  if (h && branch.querySelector('[data-path="' + h + '"]')) choose(h, false);
+
+  /* ── 3. the running brief ── */
+  function buildRecap() {
+    if (!recapUl) return;
+    var items = [];
+    if (chosen) items.push(['Situation', LABELS[chosen]]);
+    if (est) items.push(['Estimated monthly', est]);
+    var svc = [].filter.call(
+      document.querySelectorAll('.jf-chip input:checked'),
+      function () { return true; }).map(function (i) { return i.value; });
+    if (svc.length) items.push(['Wants covered', svc.join(', ')]);
+    var day = document.getElementById('f-day');
+    var slot = document.getElementById('f-slot');
+    if (day && day.value && slot && slot.value) {
+      items.push(['Meeting', day.value + ', ' + slot.value]);
+    }
+    recapUl.innerHTML = items.map(function (kv) {
+      return '<li><span>' + kv[0] + '</span><strong></strong></li>';
+    }).join('');
+    /* set text rather than interpolating, so user input can never be markup */
+    [].forEach.call(recapUl.querySelectorAll('li'), function (li, i) {
+      li.querySelector('strong').textContent = items[i][1];
+    });
+  }
+  document.addEventListener('change', function (e) {
+    if (e.target.closest && e.target.closest('.jr-form')) buildRecap();
+  });
+
+  /* ── 4. panels assemble as they enter the frame ── */
+  var seen = new WeakSet();
+  function observePanels() {
+    if (CG_PREFERS_STILL()) {
+      [].forEach.call(document.querySelectorAll('.jp-panel'), function (p) {
+        p.classList.add('in');
+      });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting && !seen.has(en.target)) {
+          seen.add(en.target);
+          en.target.classList.add('in');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+    [].forEach.call(document.querySelectorAll('.jp-panel:not(.in)'), function (p) {
+      io.observe(p);
+    });
+  }
+
+  /* ── 5. progress rail across the chosen path ── */
+  function railTick() {
+    if (!railF || !chosen) return;
+    var sec = branch.querySelector('[data-path="' + chosen + '"]');
+    if (!sec || sec.hidden) return;
+    var start = sec.offsetTop - 120;
+    var stop  = book.offsetTop + book.offsetHeight - window.innerHeight;
+    var p = (window.pageYOffset - start) / Math.max(1, stop - start);
+    railF.style.width = (Math.min(1, Math.max(0, p)) * 100).toFixed(1) + '%';
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { railTick(); ticking = false; });
+  }, { passive: true });
+
+  /* ── 6. the meeting date must be a real future weekday ── */
+  var day = document.getElementById('f-day');
+  if (day) {
+    var d = new Date();
+    d.setDate(d.getDate() + 1);
+    while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1);
+    var iso = function (x) {
+      return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') +
+             '-' + String(x.getDate()).padStart(2, '0');
+    };
+    day.min = iso(d);
+    var max = new Date(); max.setDate(max.getDate() + 90);
+    day.max = iso(max);
+    day.value = iso(d);
+    day.addEventListener('change', function () {
+      var picked = new Date(day.value + 'T12:00:00');
+      var hint = document.getElementById('dayHint');
+      if (picked.getDay() === 0 || picked.getDay() === 6) {
+        hint.textContent = 'That is a weekend. We will call to arrange a weekday slot, or sooner if it is urgent.';
+        hint.classList.add('warn');
+      } else {
+        hint.textContent = 'Weekdays only. We confirm by phone within one business hour.';
+        hint.classList.remove('warn');
+      }
+    });
+  }
+
+  /* ── 7. submit ── */
+  var form = document.getElementById('jrForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      if (!chosen) {
+        e.preventDefault();
+        document.getElementById('fork').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (window.cgToast) window.cgToast('Pick your situation first, it takes one click.');
+        return;
+      }
+      var btn = form.querySelector('.jr-submit');
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending your brief...'; }
+    });
   }
 })();
