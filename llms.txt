@@ -121,6 +121,8 @@
 - Contact: https://cloud-guardian.com/contact/
 - Free IT Assessment: https://cloud-guardian.com/free-assesment/
 - Industries index: https://cloud-guardian.com/industries/
+- Pricing and instant estimate calculator: https://cloud-guardian.com/pricing/
+- Next steps and discovery meeting booking: https://cloud-guardian.com/next-steps/
 - Client Support Portal: https://cloud-guardian.com/support/
 - 24/7 SOC and MSSP services: https://cloud-guardian.com/services/managed-security-soc/
 - Blog: https://cloud-guardian.com/blog/
