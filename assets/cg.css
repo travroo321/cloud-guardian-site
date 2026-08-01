@@ -1093,145 +1093,6 @@
   .crumbs .cr-in .cr-sep:not(:first-of-type) { display: none; }
 }
 
-
-/* ═══════════════════════════════════════════════════════════════
-   INTRO SEQUENCE
-   Vector animation overlay. Removed from the DOM when it finishes.
-   ═══════════════════════════════════════════════════════════════ */
-
-html.cgi-lock, html.cgi-lock body { overflow: hidden; }
-
-#cgIntro {
-  position: fixed; inset: 0; z-index: 99999;
-  background: #05070d;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  /* system stack first so the words paint before the webfont lands */
-  font-family: 'Syne', 'Rajdhani', 'Segoe UI', system-ui, sans-serif;
-  contain: layout paint;
-}
-#cgIntro[hidden] { display: none; }
-#cgIntro.cgi-out { animation: cgiOut .58s ease forwards; }
-@keyframes cgiOut {
-  from { opacity: 1; clip-path: inset(0 0 0 0); }
-  to   { opacity: 0; clip-path: inset(50% 0 50% 0); }
-}
-
-/* ── backdrop: drifting grid + vignette + scanline ── */
-.cgi-grid {
-  position: absolute; inset: -20%;
-  background-image:
-    linear-gradient(rgba(0,212,255,.10) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,.10) 1px, transparent 1px);
-  background-size: 54px 54px;
-  transform: perspective(600px) rotateX(58deg);
-  transform-origin: 50% 100%;
-  animation: cgiGrid 9s linear infinite;
-  opacity: .95;
-}
-@keyframes cgiGrid { to { background-position: 0 540px; } }
-.cgi-vig {
-  position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse at 50% 42%, transparent 22%, rgba(5,7,13,.86) 62%, #05070d 88%);
-}
-.cgi-scan {
-  position: absolute; inset: 0; pointer-events: none; opacity: .35;
-  background: repeating-linear-gradient(
-    to bottom, rgba(255,255,255,.035) 0 1px, transparent 1px 3px);
-}
-
-/* ── stage ── */
-.cgi-stage {
-  position: relative; z-index: 2; width: min(1080px, 92vw);
-  text-align: center; color: #fff;
-}
-.cgi-beat {
-  position: absolute; left: 0; right: 0; top: 50%;
-  transform: translateY(-50%);
-  opacity: 0;
-  animation-name: cgiBeat;
-  animation-timing-function: cubic-bezier(.22,.9,.3,1);
-  animation-fill-mode: both;
-}
-@keyframes cgiBeat {
-  0%   { opacity: 0; transform: translateY(calc(-50% + 22px)) scale(.965); filter: blur(6px); }
-  9%   { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0); }
-  88%  { opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0); }
-  100% { opacity: 0; transform: translateY(calc(-50% - 18px)) scale(1.03); filter: blur(5px); }
-}
-
-.cgi-kick {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: clamp(.62rem, 1.4vw, .8rem);
-  letter-spacing: .42em; text-transform: uppercase;
-  color: #00d4ff; margin-bottom: 20px;
-}
-.cgi-line {
-  font-family: 'Bebas Neue', 'Syne', Impact, sans-serif;
-  font-size: clamp(2.3rem, 7.4vw, 6.2rem);
-  line-height: .94; letter-spacing: .012em; margin: 0;
-  text-transform: uppercase;
-}
-.cgi-line em { font-style: normal; color: #00d4ff; }
-.cgi-line b  { font-weight: inherit; color: #38f8a7; }
-.cgi-sub {
-  margin: 22px auto 0; max-width: 44ch;
-  font-size: clamp(.88rem, 1.7vw, 1.08rem);
-  line-height: 1.55; color: rgba(255,255,255,.72);
-}
-
-/* ── beat 5: the slogan ──
-   The word HALF literally halves itself. An earlier draft struck the word
-   through, which read as "not half the price": the exact opposite of the
-   offer. Scaling it down says the right thing, and because transform does
-   not affect layout the rest of the line never moves. */
-.cgi-price { display: block; margin-top: 14px; }
-.cgi-half {
-  display: inline-block; color: #ff4d6d;
-  transform-origin: 50% 58%;
-  animation: cgiHalve .78s cubic-bezier(.25,1.35,.4,1) both;
-}
-@keyframes cgiHalve {
-  0%   { transform: scale(2.05); color: #ff4d6d; opacity: .5; }
-  55%  { opacity: 1; }
-  100% { transform: scale(1); color: #38f8a7; opacity: 1; }
-}
-
-/* ── chrome: skip button and progress rail ── */
-.cgi-skip {
-  position: absolute; z-index: 4; top: 22px; right: 22px;
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 11px 19px; border-radius: 999px; cursor: pointer;
-  background: rgba(255,255,255,.06); color: #fff;
-  border: 1px solid rgba(255,255,255,.20);
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
-  transition: background .2s ease, border-color .2s ease, transform .2s ease;
-}
-.cgi-skip:hover { background: rgba(0,212,255,.16); border-color: #00d4ff; transform: translateY(-1px); }
-.cgi-skip:focus-visible { outline: 2px solid #00d4ff; outline-offset: 3px; }
-.cgi-rail {
-  position: absolute; left: 0; bottom: 0; height: 3px; width: 100%;
-  background: rgba(255,255,255,.08); z-index: 4;
-}
-.cgi-rail i {
-  display: block; height: 100%; width: 0;
-  background: linear-gradient(90deg, #00d4ff, #38f8a7);
-  animation: cgiRail 4.6s linear forwards;
-}
-@keyframes cgiRail { to { width: 100%; } }
-.cgi-hint {
-  position: absolute; left: 0; right: 0; bottom: 22px; z-index: 4;
-  text-align: center; color: rgba(255,255,255,.38);
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .66rem; letter-spacing: .22em; text-transform: uppercase;
-}
-
-@media (max-width: 640px) {
-  .cgi-skip { top: 14px; right: 14px; padding: 9px 14px; font-size: .64rem; }
-  .cgi-hint { display: none; }
-}
-
 /* ── the replay trigger that lives on About and Pricing ── */
 .cgi-replay {
   display: inline-flex; align-items: center; gap: 11px;
@@ -1292,151 +1153,6 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
   .cgi-replay-lg { animation: none; }
 }
 
-/* ── anyone who asked for less motion gets none of this ── */
-@media (prefers-reduced-motion: reduce) {
-  #cgIntro { display: none !important; }
-  html.cgi-lock, html.cgi-lock body { overflow: auto !important; }
-}
-
-.cgi-b1 { animation-delay: 0.1s; animation-duration: 3.55s; }
-.cgi-b2 { animation-delay: 3.25s; animation-duration: 1.65s; }
-
-
-/* ═══════════════════════════════════════════════════════════════
-   INTRO: THE GUARDIAN CUTS THREE STRIKES OUT OF THE AIR
-   ═══════════════════════════════════════════════════════════════ */
-.cgb-arena {
-  position: relative; width: min(560px, 84vw); aspect-ratio: 1;
-  margin: 0 auto; display: grid; place-items: center;
-}
-
-/* the mascot lands, wings snapping open */
-.cgb-hero { width: 74%; position: relative; z-index: 3; }
-.cgb-hero .cgk { animation: cgbLand .62s cubic-bezier(.16,1.2,.3,1) .18s both; }
-@keyframes cgbLand {
-  0%   { opacity: 0; transform: scale(.62) translateY(34px); filter: blur(9px); }
-  70%  { opacity: 1; filter: blur(0); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-.cgb-hero .cgk-wings {
-  transform-origin: 166px 210px;
-  animation: cgbSpread .72s cubic-bezier(.16,1.25,.3,1) .34s both;
-}
-@keyframes cgbSpread {
-  0%   { opacity: 0; transform: translateX(18px) scaleX(.12) scaleY(.5); }
-  100% { opacity: 1; transform: translateX(18px) scaleX(1) scaleY(1); }
-}
-/* the sword swings on each cut */
-.cgb-hero .cgk-sword { animation: cgbSwing 1.2s cubic-bezier(.3,.9,.3,1) 1.0s 3; }
-@keyframes cgbSwing {
-  0%   { transform: rotate(0deg); }
-  14%  { transform: rotate(-46deg); }
-  30%  { transform: rotate(24deg); }
-  55%  { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
-}
-
-/* His own idle loop (the drifting darts, the sparks, the barrier flash) is
-   noise against the bolts, so it is muted for the length of the intro. */
-.cgb-hero .cgk-attacks, .cgb-hero .cgk-barrier { display: none; }
-
-/* the strikes */
-.cgb-strike {
-  position: absolute; width: 17%; z-index: 5;
-  transform: rotate(var(--rot));
-}
-.cgb-bolt { width: 100%; height: auto; display: block; overflow: visible; }
-.cgb-bolt path {
-  fill: #ff2d55;
-  filter: drop-shadow(0 0 14px rgba(255,45,85,.95)) drop-shadow(0 0 40px rgba(255,45,85,.55));
-  animation: cgbStrike .46s cubic-bezier(.2,1,.3,1) var(--tin) both,
-             cgbCut .2s ease var(--tcut) forwards;
-}
-@keyframes cgbStrike {
-  0%   { opacity: 0; transform: translateY(-140px) scaleY(.25); }
-  38%  { opacity: 1; }
-  50%  { opacity: .3; }
-  64%  { opacity: 1; transform: translateY(0) scaleY(1); }
-  100% { opacity: 1; transform: translateY(0) scaleY(1); }
-}
-@keyframes cgbCut {
-  0%   { opacity: 1; }
-  40%  { opacity: 1; filter: drop-shadow(0 0 30px #fff) brightness(4); }
-  100% { opacity: 0; }
-}
-
-/* the sword stroke that lands on it: short, fast, local to the bolt */
-.cgb-cut {
-  position: absolute; left: 50%; top: 46%; z-index: 6;
-  width: 230%; height: 5px; border-radius: 4px;
-  transform: translate(-50%, -50%) rotate(var(--cut)) scaleX(0);
-  transform-origin: 50% 50%;
-  background: linear-gradient(90deg, transparent, #fff 18%, #fff 82%, transparent);
-  box-shadow: 0 0 16px #7fe9ff, 0 0 38px rgba(0,212,255,.8);
-  opacity: 0;
-  animation: cgbCutSweep .3s cubic-bezier(.25,0,.2,1) var(--tcut) forwards;
-}
-@keyframes cgbCutSweep {
-  0%   { opacity: 0; transform: translate(-50%,-50%) rotate(var(--cut)) scaleX(0); }
-  18%  { opacity: 1; }
-  55%  { opacity: 1; transform: translate(-50%,-50%) rotate(var(--cut)) scaleX(1); }
-  100% { opacity: 0; transform: translate(-50%,-50%) rotate(var(--cut)) scaleX(1.25); }
-}
-
-/* the fragments it leaves */
-.cgb-shard {
-  position: absolute; left: 50%; top: 46%; z-index: 6;
-  width: 9px; height: 3px; border-radius: 2px; background: #ff6b85;
-  box-shadow: 0 0 10px rgba(255,45,85,.9);
-  opacity: 0;
-  animation: cgbShard .62s cubic-bezier(.15,.75,.3,1) var(--sd) forwards;
-}
-@keyframes cgbShard {
-  0%   { opacity: 0; transform: translate(-50%,-50%) rotate(var(--sr)) scale(.5); }
-  14%  { opacity: 1; }
-  100% { opacity: 0;
-         transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)))
-                    rotate(calc(var(--sr) + 180deg)) scale(.35); }
-}
-
-.cgb-burst {
-  position: absolute; left: 50%; top: 46%; width: 150%; aspect-ratio: 1;
-  transform: translate(-50%,-50%); border-radius: 50%; opacity: 0; z-index: 4;
-  background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,209,102,.5) 32%, rgba(255,45,85,.2) 55%, transparent 72%);
-  animation: cgbBurst .45s cubic-bezier(.2,.8,.3,1) var(--tcut) forwards;
-}
-@keyframes cgbBurst {
-  0%   { opacity: 0; transform: translate(-50%,-50%) scale(.15); }
-  20%  { opacity: 1; transform: translate(-50%,-50%) scale(.8); }
-  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.6); }
-}
-
-/* the all clear */
-.cgb-shock {
-  position: absolute; inset: 14%; border-radius: 50%; opacity: 0; z-index: 1;
-  border: 3px solid rgba(0,212,255,.85);
-  box-shadow: 0 0 60px rgba(0,212,255,.5), inset 0 0 60px rgba(0,212,255,.25);
-  animation: cgbShock .95s cubic-bezier(.2,.8,.3,1) 2.55s forwards;
-}
-@keyframes cgbShock {
-  0%   { opacity: 0; transform: scale(.25); }
-  25%  { opacity: 1; }
-  100% { opacity: 0; transform: scale(1.85); }
-}
-
-.cgb-tag { margin-top: 22px !important; margin-bottom: 0 !important; letter-spacing: .3em; }
-
-@media (max-width: 640px) {
-  .cgb-arena { width: 92vw; }
-  .cgb-hero { width: 84%; }
-  .cgb-strike { width: 16%; }
-}
-
-/* Nothing here is information, so under reduced motion the whole intro is
-   suppressed by the existing rule and this never runs at all. */
-@media (prefers-reduced-motion: reduce) {
-  .cgb-arena *, .cgb-strike, .cgb-burst, .cgb-shock { animation: none !important; }
-}
 
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1948,10 +1664,15 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 26px 4%;
   opacity: 0; visibility: hidden; transform: translateY(18px) scale(.985);
-  transition: opacity .55s cubic-bezier(.2,.9,.3,1),
-              transform .55s cubic-bezier(.2,.9,.3,1), visibility .55s;
+  /* the outgoing scene clears before the incoming one arrives, so two
+     scenes are never both legible at the same moment */
+  transition: opacity .26s ease-in, transform .26s ease-in, visibility .26s;
 }
-.wu-scene.on { opacity: 1; visibility: visible; transform: none; }
+.wu-scene.on {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity .42s cubic-bezier(.2,.9,.3,1) .2s,
+              transform .5s cubic-bezier(.2,.9,.3,1) .2s, visibility 0s;
+}
 
 /* ── the play button ── */
 .wu-play {
@@ -2182,8 +1903,12 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
 .wu-caps { position: relative; margin-top: 22px; min-height: 116px; }
 .wu-cap { position: absolute; inset: 0; margin: 0; opacity: 0; visibility: hidden;
   color: rgba(255,255,255,.82); font-size: clamp(1rem, 1.9vw, 1.16rem); line-height: 1.72;
-  max-width: 84ch; transition: opacity .45s ease, visibility .45s; }
-.wu-cap.on { opacity: 1; visibility: visible; }
+  max-width: 84ch;
+  /* same handoff as the scenes: the old line clears before the new arrives,
+     otherwise two paragraphs sit on top of each other mid transition */
+  transition: opacity .22s ease-in, visibility .22s; }
+.wu-cap.on { opacity: 1; visibility: visible;
+  transition: opacity .4s ease .2s, visibility 0s; }
 
 .wu-after { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: 44px; }
 
@@ -2488,7 +2213,20 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
 @keyframes ctPop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
 .ct-saved .ct-amt-l { display: block; margin-top: 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: .66rem; letter-spacing: .24em; text-transform: uppercase; color: rgba(56,248,167,.85); }
-.ct-relief { width: clamp(120px, 17vw, 180px); margin: 0 auto 6px; }
+.ct-relief { width: clamp(110px, 15vw, 160px); margin: 0 auto 4px; }
+
+/* what did NOT happen, which is the part a business owner actually buys */
+.ct-outcomes { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin-top: 20px; }
+.ct-out {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 15px; border-radius: 999px; font-size: .82rem;
+  background: rgba(56,248,167,.08); border: 1px solid rgba(56,248,167,.34);
+  color: rgba(255,255,255,.86); opacity: 0;
+}
+.ct-out b { color: #38f8a7; font-weight: 400; }
+.wu-scene.on .ct-out { animation: ctSig .45s cubic-bezier(.2,.9,.3,1) both;
+  animation-delay: calc(1.5s + var(--i) * .55s); }
+@media (max-width: 600px) { .ct-out { font-size: .74rem; padding: 7px 12px; } }
 
 @media (max-width: 860px) {
   .ol-body { grid-template-columns: 1fr; min-height: 0; }
