@@ -387,8 +387,6 @@
   if (!el) return;
 
   var RAIL_MS = 8000;
-  var KEY = 'cg_intro_seen';
-  var WINDOW_MS = 8 * 60 * 60 * 1000;   /* one working day */
   var html = document.documentElement;
   var timer = null, running = false;
 
@@ -396,22 +394,8 @@
     try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
     catch (e) { return false; }
   }
-  /* localStorage with a timestamp rather than sessionStorage, because
-     sessionStorage is per tab: someone who middle-clicks a link into a new
-     tab would otherwise sit through the whole thing a second time. */
-  function seen() {
-    try {
-      var v = localStorage.getItem(KEY);
-      return !!v && (Date.now() - (+v)) < WINDOW_MS;
-    } catch (e) {
-      try { return sessionStorage.getItem(KEY) === '1'; } catch (e2) { return false; }
-    }
-  }
-  function mark() {
-    try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {
-      try { sessionStorage.setItem(KEY, '1'); } catch (e2) {}
-    }
-  }
+  /* No frequency gate. The intro runs on every load of the homepage, by
+     design. Skip stays one click, one keypress or one scroll away. */
 
   function teardown() {
     if (!running) return;
@@ -427,7 +411,7 @@
       if (el.parentNode) el.parentNode.removeChild(el);
     }, 620);
   }
-  function end() { mark(); teardown(); }
+  function end() { teardown(); }
   function onKey(e) {
     if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') end();
   }
@@ -484,9 +468,8 @@
     b.addEventListener('click', function () { play(); });
   });
 
-  /* autoplay only where the page opted in, once per session */
-  if (el.dataset.auto === '1' && !seen() && !reduced()) {
-    mark();
+  /* autoplay on every load of any page that opted in */
+  if (el.dataset.auto === '1' && !reduced()) {
     play();
   } else {
     /* not playing: make sure nothing is locked or covering the page */
