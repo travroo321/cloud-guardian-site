@@ -600,7 +600,11 @@
   var replay  = document.getElementById('wuReplay');
   var playBtn = document.getElementById('wuPlay');
   var audio   = document.getElementById('wuAudio');
-  var amt     = document.getElementById('ctAmt');
+  /* the bank screen appears in three shots, so there are three copies of
+     the amount. an id would only ever have found the first one, and the
+     other two sat at zero for the rest of the scene. */
+  var amts    = [].slice.call(stage.querySelectorAll('.ct-amt-live'));
+  var amt     = amts[0];
 
   var t = 0, last = 0, raf = null, playing = false, current = -1;
   var haveAudio = false, muted = false;
@@ -661,10 +665,45 @@
     return 0;
   }
 
+  /* the shots of every scene, resolved once. paintShots runs on every frame
+     and used to hit querySelectorAll each time, which forces a style pass. */
+  var SHOTS = scenes.map(function (s) {
+    return [].slice.call(s.querySelectorAll('.ct-shot'));
+  });
+  SHOTS.forEach(function (list, i) {
+    var d = ((CH[i][1] - CH[i][0]) / Math.max(1, list.length));
+    list.forEach(function (sh) { sh.style.setProperty('--shot', d + 's'); });
+  });
+
+  /* A parked scene is skipped by the renderer: no layout, no paint, no style
+     resolution for several hundred SVG nodes. The scene about to play is
+     always unparked one scene early, so the work of laying it out never
+     lands on the frame where the cut happens. */
+  var parkT = null;
+  function stageScenes(i) {
+    scenes[i].classList.remove('parked');
+    if (scenes[i + 1]) scenes[i + 1].classList.remove('parked');
+    clearTimeout(parkT);
+    parkT = setTimeout(function () {
+      scenes.forEach(function (s, k) {
+        if (k !== i && k !== i + 1) s.classList.add('parked');
+      });
+    }, 700);
+  }
+
   function showChapter(i) {
     if (i === current) return;
     current = i;
+    stageScenes(i);
     scenes.forEach(function (s, k) { s.classList.toggle('on', k === i); });
+    /* Every shot outside the live scene is released. The outgoing one keeps
+       dissolving under the incoming scene's first shot rather than being cut
+       off mid fade, and nothing is left holding visibility:visible inside a
+       hidden parent, which is the one way a stale frame can survive a cut. */
+    for (var k = 0; k < SHOTS.length; k++) {
+      if (k === i) continue;
+      for (var j = 0; j < SHOTS[k].length; j++) SHOTS[k][j].classList.remove('on');
+    }
     caps.forEach(function (c, k) { c.classList.toggle('on', k === i); });
     dots.forEach(function (d, k) {
       d.classList.toggle('now', k === i);
@@ -681,14 +720,15 @@
   function countUp() {
     if (counted) return;
     counted = true;
-    var target = 84000, t0 = null, dur = 1600;
+    var target = 84000, t0 = null, dur = 1050;
+    function put(v) { for (var i = 0; i < amts.length; i++) amts[i].textContent = v; }
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      amt.textContent = '84,000'; return;
+      put('84,000'); return;
     }
     function step(ts) {
       if (t0 === null) t0 = ts;
       var k = Math.min(1, (ts - t0) / dur);
-      amt.textContent = Math.round(target * (1 - Math.pow(1 - k, 3))).toLocaleString('en-US');
+      put(Math.round(target * (1 - Math.pow(1 - k, 3))).toLocaleString('en-US'));
       if (k < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -698,24 +738,39 @@
      the picture keeps moving while a single narration line is being read. */
   var shotOf = -1;
   function paintShots(sceneIdx, time) {
-    var sc = scenes[sceneIdx];
-    if (!sc) return;
-    var shots = sc.querySelectorAll('.ct-shot');
-    if (!shots.length) return;
+    var shots = SHOTS[sceneIdx];
+    if (!shots || !shots.length) return;
     var a = CH[sceneIdx][0], b = CH[sceneIdx][1];
     var k = Math.min(shots.length - 1,
                      Math.floor((time - a) / ((b - a) / shots.length)));
     var key = sceneIdx * 100 + k;
     if (key === shotOf) return;
     shotOf = key;
-    for (var i = 0; i < shots.length; i++) shots[i].classList.toggle('on', i === k);
+    /* only two writes per cut rather than one per shot: the frame that
+       changes a class is the frame the browser has to restyle */
+    for (var i = 0; i < shots.length; i++) {
+      var want = (i === k);
+      if (shots[i].classList.contains('on') !== want) {
+        shots[i].classList.toggle('on', want);
+      }
+    }
   }
 
+  /* Everything below runs sixty times a second, so anything that is not
+     visibly different from the previous frame does not get written. Writing
+     the clock label and the aria value only when the whole second changes
+     removes two style invalidations per frame. */
+  var lastSec = -1, lastPct = -1, TOTAL = fmt(RUNTIME);
   function paint() {
     var p = Math.min(1, t / RUNTIME);
-    fill.style.width = (p * 100) + '%';
-    timeL.textContent = fmt(t) + ' / ' + fmt(RUNTIME);
-    track.setAttribute('aria-valuenow', Math.round(t));
+    var pct = Math.round(p * 1000) / 10;
+    if (pct !== lastPct) { lastPct = pct; fill.style.width = pct + '%'; }
+    var sec = Math.round(t);
+    if (sec !== lastSec) {
+      lastSec = sec;
+      timeL.textContent = fmt(t) + ' / ' + TOTAL;
+      track.setAttribute('aria-valuenow', sec);
+    }
     var ci = chapterAt(t);
     showChapter(ci);
     paintShots(ci, t);
@@ -762,6 +817,7 @@
     t = Math.max(0, Math.min(RUNTIME, time));
     counted = (t < CH[2][0]) ? false : counted;
     if (haveAudio) audio.currentTime = t; else hush();
+    lastSec = -1; lastPct = -1;
     paint();
   }
 
