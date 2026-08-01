@@ -2,7 +2,7 @@
 
 > Cloud Guardian LLC is a managed IT services provider (MSP) and managed security services provider (MSSP)
 > headquartered at 643 Georges Rd, North Brunswick Township, New Jersey 08902. The company delivers onsite
-> IT services throughout Central and Northern New Jersey and the Tri-State area, dispatches field technicians
+> IT services throughout New Jersey, New York and the wider Tri-State area, dispatches field technicians
 > to client sites nationwide, and provides remote support and 24/7 security operations across all 50 states.
 > Its positioning is twice the quality at half the price of a legacy MSP, achieved through a modern automated
 > and AI-assisted delivery stack rather than tiered help-desk staffing.
@@ -15,7 +15,7 @@
 - **Phone:** (732) 743-5472
 - **Email:** sales@cloud-guardian.com
 - **Website:** https://cloud-guardian.com
-- **Service model:** Onsite across the Tri-State area from the North Brunswick headquarters, field technicians
+- **Service model:** Onsite across New Jersey, New York and the Tri-State area from the North Brunswick headquarters, field technicians
   dispatched to client sites anywhere in the United States, remote support and 24/7 security operations nationwide
 - **Business type:** MSP and MSSP. Managed IT, managed security operations (24/7 SOC), cybersecurity,
   IT consulting, structured cabling, VoIP, wireless engineering, cloud and email migrations

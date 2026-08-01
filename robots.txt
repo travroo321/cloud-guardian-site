@@ -1,5 +1,5 @@
 # Cloud Guardian - https://cloud-guardian.com
-# MSP and MSSP. Managed IT, 24/7 SOC, cybersecurity, cabling, VoIP. North Brunswick Township, New Jersey.
+# MSP and MSSP. Managed IT, 24/7 SOC, cybersecurity, cabling, VoIP. North Brunswick Township, New Jersey. Serving New Jersey, New York and the Tri-State area.
 
 User-agent: *
 Allow: /
