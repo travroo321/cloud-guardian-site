@@ -516,48 +516,375 @@ var n=document.getElementById('cgIntro');if(n&&n.parentNode)n.parentNode.removeC
   <div class="section-inner">
     <span class="section-tag reveal">Why Choose Us</span>
     <h2 class="reveal">THE MORNING<br/>NOTHING HAPPENED.</h2>
-    <p class="lead reveal">A real attack, start to finish, in about forty seconds. This is the one that
-    empties bank accounts, and it does not involve a virus, an alarm, or anything your staff would
+    <p class="lead reveal">Forty seconds, start to finish. This is the attack that actually empties
+    business bank accounts, and it involves no virus, no alarm, and nothing your staff would
     recognise as a threat.</p>
 
-    <div class="wu-stage reveal" id="wuStage" data-runtime="39.0">
+    <div class="wu-stage reveal" id="wuStage" data-runtime="40.0">
       <div class="wu-screen">
 
-        <div class="wu-scene" data-scene="0"><div class="wu-mail">
-      <div class="wu-bar"><span class="wu-dot r"></span><span class="wu-dot y"></span><span class="wu-dot g"></span>
-        <span class="wu-bar-t">Inbox &mdash; Accounts Payable</span></div>
-      <div class="wu-row old"><span class="wu-from">Verizon Business</span><span class="wu-sub">Your November statement</span><span class="wu-time">8:02</span></div>
-      <div class="wu-row old"><span class="wu-from">Vendor Portal</span><span class="wu-sub">PO 44192 acknowledged</span><span class="wu-time">8:47</span></div>
-      <div class="wu-row new"><span class="wu-from">David Whitmore</span><span class="wu-sub">Quick favour, are you at your desk?</span><span class="wu-time">9:14</span></div>
-      <div class="wu-row old"><span class="wu-from">ADP</span><span class="wu-sub">Payroll approved</span><span class="wu-time">9:05</span></div>
-    </div></div>
-        <div class="wu-scene" data-scene="1"><div class="wu-msg">
-      <div class="wu-msg-head">
-        <span class="wu-avatar">DW</span>
-        <span class="wu-who"><strong>David Whitmore</strong><span>Chief Executive Officer</span></span>
-        <span class="wu-addr"><span class="wu-addr-l">to me</span>
-          <span class="wu-addr-v">david.whitmore@<span class="wu-fake">whitrnore-group</span>.com</span></span>
+        <!-- 1. wide shot, the inbox -->
+        <div class="wu-scene" data-scene="0">
+          <div class="ct-stage">
+          <div class="ct-cam" style="--cam:scale(1); --cam-from:scale(.9)">
+            <div class="ct-wide">
+              <div class="ct-figure">
+<svg class="ct-person" data-mood="neutral" viewBox="0 0 200 260" aria-hidden="true">
+  <defs>
+    <linearGradient id="ctHair" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b3a26" /><stop offset="1" stop-color="#3a2417" />
+    </linearGradient>
+    <linearGradient id="ctTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f6fae" /><stop offset="1" stop-color="#1f4f80" />
+    </linearGradient>
+  </defs>
+
+  <!-- chair back -->
+  <path class="ct-chair" d="M46 196 h108 a10 10 0 0 1 10 10 v54 h-128 v-54 a10 10 0 0 1 10 -10 z" />
+
+  <!-- torso -->
+  <path class="ct-torso" fill="url(#ctTop)"
+        d="M62 260 v-52 c0-22 17-38 38-38 s38 16 38 38 v52 z" />
+  <path class="ct-collar" d="M86 172 l14 16 l14 -16 l-6 -5 h-16 z" />
+
+  <!-- arms, posed toward the desk -->
+  <g class="ct-arm ct-arm-l">
+    <path d="M66 194 q-22 16 -24 40" stroke-linecap="round" />
+    <circle class="ct-hand" cx="42" cy="238" r="9" />
+  </g>
+  <g class="ct-arm ct-arm-r">
+    <path d="M134 194 q24 14 28 38" stroke-linecap="round" />
+    <circle class="ct-hand" cx="162" cy="234" r="9" />
+  </g>
+
+  <!-- neck and head -->
+  <rect class="ct-skin" x="90" y="150" width="20" height="26" rx="9" />
+  <ellipse class="ct-skin ct-head" cx="100" cy="118" rx="40" ry="45" />
+
+  <!-- hair -->
+  <path fill="url(#ctHair)"
+        d="M58 116 c0-30 18-48 42-48 s42 18 42 48 c0 6-1 12-2 16
+           c-3-14-6-22-12-27 c-10 8-30 12-52 6 c-8 4-13 12-16 25 c-1-6-2-13-2-20 z" />
+  <path fill="url(#ctHair)" d="M56 112 q-8 34 2 62 q10-30 6-58 z" />
+  <path fill="url(#ctHair)" d="M144 112 q8 34 -2 62 q-10-30 -6-58 z" />
+
+  <!-- face -->
+  <g class="ct-face">
+    <g class="ct-eyes">
+      <ellipse class="ct-eye" cx="85" cy="116" rx="5.5" ry="6.5" />
+      <ellipse class="ct-eye" cx="115" cy="116" rx="5.5" ry="6.5" />
+    </g>
+    <g class="ct-brows">
+      <path d="M76 104 q9 -5 18 -1" />
+      <path d="M106 103 q9 -4 18 1" />
+    </g>
+    <path class="ct-mouth ct-m-neutral" d="M90 138 q10 4 20 0" />
+    <path class="ct-mouth ct-m-worry" d="M90 141 q10 -6 20 0" />
+    <path class="ct-mouth ct-m-smile" d="M88 134 q12 12 24 0" />
+    <ellipse class="ct-blush" cx="72" cy="130" rx="7" ry="4" />
+    <ellipse class="ct-blush" cx="128" cy="130" rx="7" ry="4" />
+  </g>
+
+  <!-- a bead of sweat for the tense beat -->
+  <path class="ct-sweat" d="M146 96 q6 10 0 14 q-6 -4 0 -14 z" />
+</svg>
+</div>
+              <div class="ct-screen">
+<div class="ol" aria-hidden="true">
+  <div class="ol-title">
+    <span class="ol-logo"></span>
+    <span class="ol-title-t">Outlook</span>
+    <span class="ol-search">Search</span>
+    <span class="ol-win"><i></i><i></i><i class="x"></i></span>
+  </div>
+  <div class="ol-ribbon">
+    <span class="ol-tab on">Home</span><span class="ol-tab">View</span><span class="ol-tab">Help</span>
+    <span class="ol-rsep"></span>
+    <span class="ol-cmd new">New mail</span>
+    <span class="ol-cmd">Delete</span><span class="ol-cmd">Archive</span>
+    <span class="ol-cmd">Report</span><span class="ol-cmd">Move</span>
+  </div>
+  <div class="ol-body">
+    <div class="ol-rail">
+      <div class="ol-rail-h">Favourites</div>
+      <div class="ol-folder sel"><span class="ol-fi"></span>Inbox<span class="ol-badge">1</span></div>
+          <div class="ol-folder"><span class="ol-fi"></span>Drafts</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Sent Items</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Deleted Items</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Archive</div>
+    </div>
+    <div class="ol-list">
+      <div class="ol-list-h">Focused <span>Other</span></div>
+      <div class="ol-mail" data-mail="0"><span class="ol-av" style="background:#7b61c9">VB</span><span class="ol-mid"><span class="ol-who">Verizon Business</span><span class="ol-subj">Your November statement is ready</span></span><span class="ol-when">Mon 4:12 PM</span></div>
+          <div class="ol-mail" data-mail="1"><span class="ol-av" style="background:#3a8f5f">VP</span><span class="ol-mid"><span class="ol-who">Vendor Portal</span><span class="ol-subj">PO 44192 acknowledged</span></span><span class="ol-when">8:47 AM</span></div>
+          <div class="ol-mail unread sel" data-mail="2"><span class="ol-av" style="background:#c0392b">DW</span><span class="ol-mid"><span class="ol-who">David Whitmore</span><span class="ol-subj">Quick favour, are you at your desk?</span></span><span class="ol-when">9:14 AM</span></div>
+          <div class="ol-mail" data-mail="3"><span class="ol-av" style="background:#2f6fae">AD</span><span class="ol-mid"><span class="ol-who">ADP Payroll</span><span class="ol-subj">Payroll approved for period 22</span></span><span class="ol-when">9:05 AM</span></div>
+    </div>
+    <div class="ol-read">
+      <div class="ol-read-h">
+        <span class="ol-av big" style="background:#c0392b">DW</span>
+        <span class="ol-rh-mid">
+          <span class="ol-rh-subj">Quick favour, are you at your desk?</span>
+          <span class="ol-rh-from">David Whitmore
+            <b class="ol-addr">&lt;david.whitmore@<em>whitrnore-group</em>.com&gt;</b></span>
+        </span>
+        <span class="ol-rh-time">9:14 AM</span>
       </div>
-      <p class="wu-body">Are you at your desk? I am in back to back board meetings and I need a
-      wire out to a new supplier before close of business. <strong>Do not loop in accounting
-      yet</strong>, I will explain after. Details attached. Confirm when it is sent.</p>
-      <p class="wu-sig">Sent from my iPhone</p>
-      <span class="wu-flagline">The real domain is whitmore-group.com. This one spells it with an r and an n.</span>
-    </div></div>
-        <div class="wu-scene" data-scene="2"><div class="wu-wire">
-      <div class="wu-wire-h">Outgoing wire <span>Step 2 of 3</span></div>
-      <div class="wu-wl"><span>Beneficiary</span><b>NORTHGATE SUPPLY PARTNERS LLC</b></div>
-      <div class="wu-wl"><span>Routing</span><b>0&bull;&bull; &bull;&bull;&bull; 4471</b></div>
-      <div class="wu-wl"><span>Account</span><b>&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 8802</b></div>
-      <div class="wu-wl amt"><span>Amount</span><b>$<span id="wuAmt">0</span></b></div>
-      <span class="wu-send">Send wire</span>
-      <span class="wu-cursor"></span>
-    </div></div>
+      <div class="ol-actions"><span>Reply</span><span>Reply all</span><span>Forward</span></div>
+      <div class="ol-banner">External sender. This address does not match your organisation.</div>
+      <div class="ol-read-b">
+        <p>Are you at your desk? I am in back to back board meetings and I need a wire
+        out to a new supplier before close of business.</p>
+        <p><b>Do not loop in accounting yet</b>, I will explain after. Details attached.
+        Confirm when it is sent.</p>
+        <p class="ol-sig">Sent from my iPhone</p>
+      </div>
+    </div>
+  </div>
+  <div class="ol-quarantine">
+    <span class="ol-q-mark"></span>
+    <span class="ol-q-t">Quarantined by Cloud Guardian</span>
+    <span class="ol-q-s">Impersonation attempt &middot; message never delivered</span>
+  </div>
+</div>
+</div>
+              <div class="ct-deskwrap">
+<svg class="ct-desk" viewBox="0 0 520 70" preserveAspectRatio="none" aria-hidden="true">
+  <rect class="ct-desktop" x="0" y="0" width="520" height="14" rx="3" />
+  <rect class="ct-desk-body" x="0" y="14" width="520" height="56" />
+  <path class="ct-desk-edge" d="M0 14 H520" />
+</svg>
+</div>
+              
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <!-- 2. push in on the message, the address gets caught -->
+        <div class="wu-scene" data-scene="1">
+          <div class="ct-stage"><div class="ct-cam" style="--cam:scale(1.06); --cam-from:scale(.98)">
+            <div style="width:min(760px,96%)">
+<div class="ol flag" aria-hidden="true">
+  <div class="ol-title">
+    <span class="ol-logo"></span>
+    <span class="ol-title-t">Outlook</span>
+    <span class="ol-search">Search</span>
+    <span class="ol-win"><i></i><i></i><i class="x"></i></span>
+  </div>
+  <div class="ol-ribbon">
+    <span class="ol-tab on">Home</span><span class="ol-tab">View</span><span class="ol-tab">Help</span>
+    <span class="ol-rsep"></span>
+    <span class="ol-cmd new">New mail</span>
+    <span class="ol-cmd">Delete</span><span class="ol-cmd">Archive</span>
+    <span class="ol-cmd">Report</span><span class="ol-cmd">Move</span>
+  </div>
+  <div class="ol-body">
+    <div class="ol-rail">
+      <div class="ol-rail-h">Favourites</div>
+      <div class="ol-folder sel"><span class="ol-fi"></span>Inbox<span class="ol-badge">1</span></div>
+          <div class="ol-folder"><span class="ol-fi"></span>Drafts</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Sent Items</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Deleted Items</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Archive</div>
+    </div>
+    <div class="ol-list">
+      <div class="ol-list-h">Focused <span>Other</span></div>
+      <div class="ol-mail" data-mail="0"><span class="ol-av" style="background:#7b61c9">VB</span><span class="ol-mid"><span class="ol-who">Verizon Business</span><span class="ol-subj">Your November statement is ready</span></span><span class="ol-when">Mon 4:12 PM</span></div>
+          <div class="ol-mail" data-mail="1"><span class="ol-av" style="background:#3a8f5f">VP</span><span class="ol-mid"><span class="ol-who">Vendor Portal</span><span class="ol-subj">PO 44192 acknowledged</span></span><span class="ol-when">8:47 AM</span></div>
+          <div class="ol-mail unread sel" data-mail="2"><span class="ol-av" style="background:#c0392b">DW</span><span class="ol-mid"><span class="ol-who">David Whitmore</span><span class="ol-subj">Quick favour, are you at your desk?</span></span><span class="ol-when">9:14 AM</span></div>
+          <div class="ol-mail" data-mail="3"><span class="ol-av" style="background:#2f6fae">AD</span><span class="ol-mid"><span class="ol-who">ADP Payroll</span><span class="ol-subj">Payroll approved for period 22</span></span><span class="ol-when">9:05 AM</span></div>
+    </div>
+    <div class="ol-read">
+      <div class="ol-read-h">
+        <span class="ol-av big" style="background:#c0392b">DW</span>
+        <span class="ol-rh-mid">
+          <span class="ol-rh-subj">Quick favour, are you at your desk?</span>
+          <span class="ol-rh-from">David Whitmore
+            <b class="ol-addr">&lt;david.whitmore@<em>whitrnore-group</em>.com&gt;</b></span>
+        </span>
+        <span class="ol-rh-time">9:14 AM</span>
+      </div>
+      <div class="ol-actions"><span>Reply</span><span>Reply all</span><span>Forward</span></div>
+      <div class="ol-banner">External sender. This address does not match your organisation.</div>
+      <div class="ol-read-b">
+        <p>Are you at your desk? I am in back to back board meetings and I need a wire
+        out to a new supplier before close of business.</p>
+        <p><b>Do not loop in accounting yet</b>, I will explain after. Details attached.
+        Confirm when it is sent.</p>
+        <p class="ol-sig">Sent from my iPhone</p>
+      </div>
+    </div>
+  </div>
+  <div class="ol-quarantine">
+    <span class="ol-q-mark"></span>
+    <span class="ol-q-t">Quarantined by Cloud Guardian</span>
+    <span class="ol-q-s">Impersonation attempt &middot; message never delivered</span>
+  </div>
+</div>
+</div>
+          </div></div>
+        </div>
+
+        <!-- 3. the bank, cursor closing on the button -->
+        <div class="wu-scene" data-scene="2">
+          <div class="ct-stage">
+          <div class="ct-cam" style="--cam:scale(1.04); --cam-from:scale(.94)">
+            <div class="ct-wide">
+              <div class="ct-figure">
+<svg class="ct-person" data-mood="worry" viewBox="0 0 200 260" aria-hidden="true">
+  <defs>
+    <linearGradient id="ctHair" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b3a26" /><stop offset="1" stop-color="#3a2417" />
+    </linearGradient>
+    <linearGradient id="ctTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f6fae" /><stop offset="1" stop-color="#1f4f80" />
+    </linearGradient>
+  </defs>
+
+  <!-- chair back -->
+  <path class="ct-chair" d="M46 196 h108 a10 10 0 0 1 10 10 v54 h-128 v-54 a10 10 0 0 1 10 -10 z" />
+
+  <!-- torso -->
+  <path class="ct-torso" fill="url(#ctTop)"
+        d="M62 260 v-52 c0-22 17-38 38-38 s38 16 38 38 v52 z" />
+  <path class="ct-collar" d="M86 172 l14 16 l14 -16 l-6 -5 h-16 z" />
+
+  <!-- arms, posed toward the desk -->
+  <g class="ct-arm ct-arm-l">
+    <path d="M66 194 q-22 16 -24 40" stroke-linecap="round" />
+    <circle class="ct-hand" cx="42" cy="238" r="9" />
+  </g>
+  <g class="ct-arm ct-arm-r">
+    <path d="M134 194 q24 14 28 38" stroke-linecap="round" />
+    <circle class="ct-hand" cx="162" cy="234" r="9" />
+  </g>
+
+  <!-- neck and head -->
+  <rect class="ct-skin" x="90" y="150" width="20" height="26" rx="9" />
+  <ellipse class="ct-skin ct-head" cx="100" cy="118" rx="40" ry="45" />
+
+  <!-- hair -->
+  <path fill="url(#ctHair)"
+        d="M58 116 c0-30 18-48 42-48 s42 18 42 48 c0 6-1 12-2 16
+           c-3-14-6-22-12-27 c-10 8-30 12-52 6 c-8 4-13 12-16 25 c-1-6-2-13-2-20 z" />
+  <path fill="url(#ctHair)" d="M56 112 q-8 34 2 62 q10-30 6-58 z" />
+  <path fill="url(#ctHair)" d="M144 112 q8 34 -2 62 q-10-30 -6-58 z" />
+
+  <!-- face -->
+  <g class="ct-face">
+    <g class="ct-eyes">
+      <ellipse class="ct-eye" cx="85" cy="116" rx="5.5" ry="6.5" />
+      <ellipse class="ct-eye" cx="115" cy="116" rx="5.5" ry="6.5" />
+    </g>
+    <g class="ct-brows">
+      <path d="M76 104 q9 -5 18 -1" />
+      <path d="M106 103 q9 -4 18 1" />
+    </g>
+    <path class="ct-mouth ct-m-neutral" d="M90 138 q10 4 20 0" />
+    <path class="ct-mouth ct-m-worry" d="M90 141 q10 -6 20 0" />
+    <path class="ct-mouth ct-m-smile" d="M88 134 q12 12 24 0" />
+    <ellipse class="ct-blush" cx="72" cy="130" rx="7" ry="4" />
+    <ellipse class="ct-blush" cx="128" cy="130" rx="7" ry="4" />
+  </g>
+
+  <!-- a bead of sweat for the tense beat -->
+  <path class="ct-sweat" d="M146 96 q6 10 0 14 q-6 -4 0 -14 z" />
+</svg>
+</div>
+              <div class="ct-screen">
+<div class="bk" aria-hidden="true">
+  <div class="bk-top"><span class="bk-brand">Business Banking</span>
+    <span class="bk-step">Wire transfer &middot; step 2 of 3</span></div>
+  <div class="bk-body">
+    <div class="bk-row"><span>Beneficiary</span><b>NORTHGATE SUPPLY PARTNERS LLC</b></div>
+    <div class="bk-row"><span>Routing</span><b>0&bull;&bull; &bull;&bull;&bull; 4471</b></div>
+    <div class="bk-row"><span>Account</span><b>&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 8802</b></div>
+    <div class="bk-row big"><span>Amount</span><b>$<span id="ctAmt">0</span></b></div>
+    <div class="bk-send">Send wire</div>
+    <span class="bk-cursor"></span>
+  </div>
+</div>
+</div>
+              <div class="ct-deskwrap">
+<svg class="ct-desk" viewBox="0 0 520 70" preserveAspectRatio="none" aria-hidden="true">
+  <rect class="ct-desktop" x="0" y="0" width="520" height="14" rx="3" />
+  <rect class="ct-desk-body" x="0" y="14" width="520" height="56" />
+  <path class="ct-desk-edge" d="M0 14 H520" />
+</svg>
+</div>
+              
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <!-- 4. the intercept -->
         <div class="wu-scene" data-scene="3">
-          <div class="wu-hero">
-            <span class="wu-blocked">Quarantined 9:14:02</span>
-            
-<svg class="cgk" viewBox="0 0 300 300" role="img" aria-label="The Cloud Guardian intercepting an attack at three in the morning">
+          <div class="ct-stage"><div class="ct-cam" style="--cam:scale(1); --cam-from:scale(1.08)">
+            <div style="position:relative; width:min(760px,96%)">
+              
+<div class="ol flag quarantined" aria-hidden="true">
+  <div class="ol-title">
+    <span class="ol-logo"></span>
+    <span class="ol-title-t">Outlook</span>
+    <span class="ol-search">Search</span>
+    <span class="ol-win"><i></i><i></i><i class="x"></i></span>
+  </div>
+  <div class="ol-ribbon">
+    <span class="ol-tab on">Home</span><span class="ol-tab">View</span><span class="ol-tab">Help</span>
+    <span class="ol-rsep"></span>
+    <span class="ol-cmd new">New mail</span>
+    <span class="ol-cmd">Delete</span><span class="ol-cmd">Archive</span>
+    <span class="ol-cmd">Report</span><span class="ol-cmd">Move</span>
+  </div>
+  <div class="ol-body">
+    <div class="ol-rail">
+      <div class="ol-rail-h">Favourites</div>
+      <div class="ol-folder sel"><span class="ol-fi"></span>Inbox<span class="ol-badge">1</span></div>
+          <div class="ol-folder"><span class="ol-fi"></span>Drafts</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Sent Items</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Deleted Items</div>
+          <div class="ol-folder"><span class="ol-fi"></span>Archive</div>
+    </div>
+    <div class="ol-list">
+      <div class="ol-list-h">Focused <span>Other</span></div>
+      <div class="ol-mail" data-mail="0"><span class="ol-av" style="background:#7b61c9">VB</span><span class="ol-mid"><span class="ol-who">Verizon Business</span><span class="ol-subj">Your November statement is ready</span></span><span class="ol-when">Mon 4:12 PM</span></div>
+          <div class="ol-mail" data-mail="1"><span class="ol-av" style="background:#3a8f5f">VP</span><span class="ol-mid"><span class="ol-who">Vendor Portal</span><span class="ol-subj">PO 44192 acknowledged</span></span><span class="ol-when">8:47 AM</span></div>
+          <div class="ol-mail unread sel" data-mail="2"><span class="ol-av" style="background:#c0392b">DW</span><span class="ol-mid"><span class="ol-who">David Whitmore</span><span class="ol-subj">Quick favour, are you at your desk?</span></span><span class="ol-when">9:14 AM</span></div>
+          <div class="ol-mail" data-mail="3"><span class="ol-av" style="background:#2f6fae">AD</span><span class="ol-mid"><span class="ol-who">ADP Payroll</span><span class="ol-subj">Payroll approved for period 22</span></span><span class="ol-when">9:05 AM</span></div>
+    </div>
+    <div class="ol-read">
+      <div class="ol-read-h">
+        <span class="ol-av big" style="background:#c0392b">DW</span>
+        <span class="ol-rh-mid">
+          <span class="ol-rh-subj">Quick favour, are you at your desk?</span>
+          <span class="ol-rh-from">David Whitmore
+            <b class="ol-addr">&lt;david.whitmore@<em>whitrnore-group</em>.com&gt;</b></span>
+        </span>
+        <span class="ol-rh-time">9:14 AM</span>
+      </div>
+      <div class="ol-actions"><span>Reply</span><span>Reply all</span><span>Forward</span></div>
+      <div class="ol-banner">External sender. This address does not match your organisation.</div>
+      <div class="ol-read-b">
+        <p>Are you at your desk? I am in back to back board meetings and I need a wire
+        out to a new supplier before close of business.</p>
+        <p><b>Do not loop in accounting yet</b>, I will explain after. Details attached.
+        Confirm when it is sent.</p>
+        <p class="ol-sig">Sent from my iPhone</p>
+      </div>
+    </div>
+  </div>
+  <div class="ol-quarantine">
+    <span class="ol-q-mark"></span>
+    <span class="ol-q-t">Quarantined by Cloud Guardian</span>
+    <span class="ol-q-s">Impersonation attempt &middot; message never delivered</span>
+  </div>
+</div>
+
+              <span class="ct-shock"></span>
+              <div class="ct-guard">
+<svg class="cgk armed" viewBox="0 0 300 300" role="img" aria-label="The Cloud Guardian intercepting an attack at three in the morning">
   <defs>
     <linearGradient id="cgkSteel" x1=".2" y1="0" x2=".8" y2="1">
       <stop offset="0"   stop-color="#eef6fd" />
@@ -759,35 +1086,318 @@ var n=document.getElementById('cgIntro');if(n&&n.parentNode)n.parentNode.removeC
     <g class="cgk-spark s3"><path d="M0 -16 V16 M-16 0 H16 M-11 -11 L11 11 M11 -11 L-11 11" /></g>
   </g>
 </svg>
+</div>
+            </div>
+          </div></div>
+        </div>
 
+        <!-- 5. the console -->
+        <div class="wu-scene" data-scene="4">
+          <div class="ct-console">
+            <div class="ct-con-h">
+              <span class="ct-con-dot"></span>
+              <span class="ct-con-t">Cloud Guardian &middot; Security Operations</span>
+              <span class="ct-con-s">Live &middot; 0.42s</span>
+            </div>
+            <div class="ct-con-b">
+        <div class="ct-sig" style="--i:0"><span class="ct-sig-i">!</span><span class="ct-sig-h">Lookalike domain</span><span class="ct-sig-v">98%</span><span class="ct-sig-d">whitrnore-group.com, registered 6 days ago</span></div>
+        <div class="ct-sig" style="--i:1"><span class="ct-sig-i">!</span><span class="ct-sig-h">Display name mismatch</span><span class="ct-sig-v">95%</span><span class="ct-sig-d">Name claims CEO, address does not match tenant</span></div>
+        <div class="ct-sig" style="--i:2"><span class="ct-sig-i">!</span><span class="ct-sig-h">First contact sender</span><span class="ct-sig-v">91%</span><span class="ct-sig-d">No prior correspondence with this address</span></div>
+        <div class="ct-sig" style="--i:3"><span class="ct-sig-i">!</span><span class="ct-sig-h">Urgency and secrecy</span><span class="ct-sig-v">89%</span><span class="ct-sig-d">"before close of business", "do not loop in accounting"</span></div>
+        <div class="ct-sig" style="--i:4"><span class="ct-sig-i">!</span><span class="ct-sig-h">Out of band payment</span><span class="ct-sig-v">97%</span><span class="ct-sig-d">New beneficiary, no purchase order, no approval chain</span></div>
+              <div class="ct-verdict">Verdict: impersonation. Quarantined and reported.</div>
+            </div>
           </div>
         </div>
-        <div class="wu-scene" data-scene="4">
-          <ul class="wu-signals">
-        <li style="--i:0"><span class="wu-sflag">!</span><span class="wu-sh">Lookalike domain</span><span class="wu-sd">whitrnore-group.com registered 6 days ago</span></li>
-        <li style="--i:1"><span class="wu-sflag">!</span><span class="wu-sh">Display name mismatch</span><span class="wu-sd">Name says CEO, address does not</span></li>
-        <li style="--i:2"><span class="wu-sflag">!</span><span class="wu-sh">First contact</span><span class="wu-sd">This sender has never emailed you</span></li>
-        <li style="--i:3"><span class="wu-sflag">!</span><span class="wu-sh">Urgency and secrecy</span><span class="wu-sd">Do not loop in accounting</span></li>
-        <li style="--i:4"><span class="wu-sflag">!</span><span class="wu-sh">Out of band payment</span><span class="wu-sd">New beneficiary, no purchase order</span></li>
-          </ul>
-        </div>
+
+        <!-- 6. the money that stayed -->
         <div class="wu-scene" data-scene="5">
-          <div class="wu-saved"><span class="wu-amt">$84,000</span>
-            <span class="wu-amt-l">never left the account</span></div>
+          <div class="ct-saved">
+            <div class="ct-relief">
+<svg class="ct-person" data-mood="smile" viewBox="0 0 200 260" aria-hidden="true">
+  <defs>
+    <linearGradient id="ctHair" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b3a26" /><stop offset="1" stop-color="#3a2417" />
+    </linearGradient>
+    <linearGradient id="ctTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f6fae" /><stop offset="1" stop-color="#1f4f80" />
+    </linearGradient>
+  </defs>
+
+  <!-- chair back -->
+  <path class="ct-chair" d="M46 196 h108 a10 10 0 0 1 10 10 v54 h-128 v-54 a10 10 0 0 1 10 -10 z" />
+
+  <!-- torso -->
+  <path class="ct-torso" fill="url(#ctTop)"
+        d="M62 260 v-52 c0-22 17-38 38-38 s38 16 38 38 v52 z" />
+  <path class="ct-collar" d="M86 172 l14 16 l14 -16 l-6 -5 h-16 z" />
+
+  <!-- arms, posed toward the desk -->
+  <g class="ct-arm ct-arm-l">
+    <path d="M66 194 q-22 16 -24 40" stroke-linecap="round" />
+    <circle class="ct-hand" cx="42" cy="238" r="9" />
+  </g>
+  <g class="ct-arm ct-arm-r">
+    <path d="M134 194 q24 14 28 38" stroke-linecap="round" />
+    <circle class="ct-hand" cx="162" cy="234" r="9" />
+  </g>
+
+  <!-- neck and head -->
+  <rect class="ct-skin" x="90" y="150" width="20" height="26" rx="9" />
+  <ellipse class="ct-skin ct-head" cx="100" cy="118" rx="40" ry="45" />
+
+  <!-- hair -->
+  <path fill="url(#ctHair)"
+        d="M58 116 c0-30 18-48 42-48 s42 18 42 48 c0 6-1 12-2 16
+           c-3-14-6-22-12-27 c-10 8-30 12-52 6 c-8 4-13 12-16 25 c-1-6-2-13-2-20 z" />
+  <path fill="url(#ctHair)" d="M56 112 q-8 34 2 62 q10-30 6-58 z" />
+  <path fill="url(#ctHair)" d="M144 112 q8 34 -2 62 q-10-30 -6-58 z" />
+
+  <!-- face -->
+  <g class="ct-face">
+    <g class="ct-eyes">
+      <ellipse class="ct-eye" cx="85" cy="116" rx="5.5" ry="6.5" />
+      <ellipse class="ct-eye" cx="115" cy="116" rx="5.5" ry="6.5" />
+    </g>
+    <g class="ct-brows">
+      <path d="M76 104 q9 -5 18 -1" />
+      <path d="M106 103 q9 -4 18 1" />
+    </g>
+    <path class="ct-mouth ct-m-neutral" d="M90 138 q10 4 20 0" />
+    <path class="ct-mouth ct-m-worry" d="M90 141 q10 -6 20 0" />
+    <path class="ct-mouth ct-m-smile" d="M88 134 q12 12 24 0" />
+    <ellipse class="ct-blush" cx="72" cy="130" rx="7" ry="4" />
+    <ellipse class="ct-blush" cx="128" cy="130" rx="7" ry="4" />
+  </g>
+
+  <!-- a bead of sweat for the tense beat -->
+  <path class="ct-sweat" d="M146 96 q6 10 0 14 q-6 -4 0 -14 z" />
+</svg>
+</div>
+            <span class="ct-amt">$84,000</span>
+            <span class="ct-amt-l">never left the account</span>
+          </div>
         </div>
+
+        <!-- 7. the brand -->
         <div class="wu-scene" data-scene="6">
-          <div class="wu-close">
-            <span class="wu-close-k">Cloud Guardian</span>
+          <div class="ct-close">
+            <div class="ct-mark">
+<svg class="cgk armed" viewBox="0 0 300 300" role="img" aria-label="The Cloud Guardian intercepting an attack at three in the morning">
+  <defs>
+    <linearGradient id="cgkSteel" x1=".2" y1="0" x2=".8" y2="1">
+      <stop offset="0"   stop-color="#eef6fd" />
+      <stop offset=".38" stop-color="#a9c1d5" />
+      <stop offset=".72" stop-color="#5b768d" />
+      <stop offset="1"   stop-color="#2b3f51" />
+    </linearGradient>
+    <linearGradient id="cgkSteelDk" x1=".2" y1="0" x2=".8" y2="1">
+      <stop offset="0"   stop-color="#7d97ad" />
+      <stop offset="1"   stop-color="#1b2b38" />
+    </linearGradient>
+    <linearGradient id="cgkPlume" x1="1" y1="1" x2="0" y2="0">
+      <stop offset="0"   stop-color="#0a63b8" />
+      <stop offset=".55" stop-color="#00a8e8" />
+      <stop offset="1"   stop-color="#7fe9ff" />
+    </linearGradient>
+    <linearGradient id="cgkPlumeDk" x1="1" y1="1" x2="0" y2="0">
+      <stop offset="0"   stop-color="#063d78" />
+      <stop offset="1"   stop-color="#0a7cc4" />
+    </linearGradient>
+    <linearGradient id="cgkVisor" x1="0" y1="0" x2=".4" y2="1">
+      <stop offset="0"   stop-color="#16394f" />
+      <stop offset="1"   stop-color="#050f18" />
+    </linearGradient>
+    <linearGradient id="cgkShieldF" x1=".2" y1="0" x2=".8" y2="1">
+      <stop offset="0"   stop-color="#1f8fe0" />
+      <stop offset="1"   stop-color="#0a4f96" />
+    </linearGradient>
+    <linearGradient id="cgkWing" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0"   stop-color="#0d4f8f" />
+      <stop offset=".5"  stop-color="#8fb6d4" />
+      <stop offset="1"   stop-color="#eaf5ff" />
+    </linearGradient>
+    <linearGradient id="cgkWing2" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0"   stop-color="#093f75" />
+      <stop offset=".55" stop-color="#6f92ad" />
+      <stop offset="1"   stop-color="#cfe4f5" />
+    </linearGradient>
+    <radialGradient id="cgkGlow">
+      <stop offset="0"   stop-color="#00d4ff" stop-opacity=".42" />
+      <stop offset=".65" stop-color="#0a63b8" stop-opacity=".12" />
+      <stop offset="1"   stop-color="#00d4ff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <circle class="cgk-halo" cx="152" cy="150" r="140" fill="url(#cgkGlow)" />
+
+
+  <!-- ══ wings: five feather blades a side, swept up and out ══ -->
+  <g class="cgk-wings" aria-hidden="true">
+    <g class="cgk-wing wing-l">
+      <path class="cgk-f f0" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-31.5 -1.7 Q-10.3 -76.7 30.0 -120.3 Q35.5 -49.9 24.4 12.3 Z" />
+      <path class="cgk-fr f0" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M0.5 -1.9 L27.0 -108.3" />
+      <path class="cgk-f f1" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-32.6 -11.2 Q13.7 -89.2 70.8 -127.7 Q54.0 -46.9 22.7 19.4 Z" />
+      <path class="cgk-fr f1" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.0 -1.7 L63.7 -114.9" />
+      <path class="cgk-f f2" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-27.2 -17.9 Q35.2 -78.9 97.3 -100.7 Q61.3 -30.3 15.6 23.4 Z" />
+      <path class="cgk-fr f2" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.4 -1.4 L87.5 -90.6" />
+      <path class="cgk-f f3" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-20.5 -21.4 Q45.9 -60.1 103.5 -64.7 Q58.7 -12.0 8.1 24.3 Z" />
+      <path class="cgk-fr f3" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.7 -1.1 L93.1 -58.2" />
+      <path class="cgk-f f4" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-13.8 -21.7 Q47.4 -40.6 94.6 -32.6 Q49.4 2.0 1.3 22.3 Z" />
+      <path class="cgk-fr f4" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.9 -0.7 L85.1 -29.3" />
+    </g>
+    <g class="cgk-wing wing-r">
+      <path class="cgk-f f0" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-31.5 -1.7 Q-10.3 -76.7 30.0 -120.3 Q35.5 -49.9 24.4 12.3 Z" />
+      <path class="cgk-fr f0" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M0.5 -1.9 L27.0 -108.3" />
+      <path class="cgk-f f1" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-32.6 -11.2 Q13.7 -89.2 70.8 -127.7 Q54.0 -46.9 22.7 19.4 Z" />
+      <path class="cgk-fr f1" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.0 -1.7 L63.7 -114.9" />
+      <path class="cgk-f f2" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-27.2 -17.9 Q35.2 -78.9 97.3 -100.7 Q61.3 -30.3 15.6 23.4 Z" />
+      <path class="cgk-fr f2" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.4 -1.4 L87.5 -90.6" />
+      <path class="cgk-f f3" fill="url(#cgkWing2)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-20.5 -21.4 Q45.9 -60.1 103.5 -64.7 Q58.7 -12.0 8.1 24.3 Z" />
+      <path class="cgk-fr f3" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.7 -1.1 L93.1 -58.2" />
+      <path class="cgk-f f4" fill="url(#cgkWing)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round" d="M-13.8 -21.7 Q47.4 -40.6 94.6 -32.6 Q49.4 2.0 1.3 22.3 Z" />
+      <path class="cgk-fr f4" fill="none" stroke="#08131c" stroke-width="1.5" opacity=".4" d="M1.9 -0.7 L85.1 -29.3" />
+    </g>
+  </g>
+
+  <g class="cgk-figure">
+  <!-- ══ plume: three lobes sweeping up and back over the left shoulder ══ -->
+  <g class="cgk-plume">
+    <path fill="url(#cgkPlumeDk)"
+          d="M168 66 C150 30 112 8 70 16 c26 8 38 24 40 42
+             C90 46 66 50 52 66 c28 0 46 14 56 32
+             C118 84 138 70 168 66 Z" />
+    <path fill="url(#cgkPlume)"
+          d="M166 62 C150 34 120 16 88 20 c20 8 30 22 32 38
+             C104 46 86 52 76 64 c22 2 36 14 44 30
+             C126 78 142 66 166 62 Z" />
+    <path fill="#bff2ff" opacity=".45"
+          d="M164 60 C150 40 130 28 108 28 c14 8 20 18 22 30
+             C120 78 136 64 164 60 Z" />
+  </g>
+
+  <!-- ══ gorget, breastplate and spaulders ══ -->
+  <g class="cgk-body">
+    <!-- left spaulder, mostly behind the shield -->
+    <path fill="url(#cgkSteelDk)" stroke="#08131c" stroke-width="3.2" stroke-linejoin="round"
+          d="M126 206 C 92 210 66 230 56 262 L112 278 L126 240 Z" />
+    <!-- right spaulder, three lames -->
+    <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="3.2" stroke-linejoin="round"
+          d="M206 202 C 240 204 264 218 276 240 L232 254 L206 232 Z" />
+    <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="3.2" stroke-linejoin="round"
+          d="M208 232 C 240 234 266 246 280 266 L236 280 L208 258 Z" />
+    <path fill="url(#cgkSteelDk)" stroke="#08131c" stroke-width="3.2" stroke-linejoin="round"
+          d="M210 260 C 242 262 268 274 284 296 L238 300 L210 284 Z" />
+    <!-- gorget -->
+    <path fill="url(#cgkSteelDk)" stroke="#08131c" stroke-width="3" stroke-linejoin="round"
+          d="M136 190 H198 L212 210 L206 226 H128 L122 210 Z" />
+    <!-- breastplate -->
+    <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="3.4" stroke-linejoin="round"
+          d="M128 222 H206 L216 250 L212 300 H122 L118 250 Z" />
+    <!-- centre keel and fluting -->
+    <path fill="#08131c" opacity=".34" d="M163 226 H171 L174 300 H160 Z" />
+    <path fill="none" stroke="#08131c" stroke-width="2" opacity=".45"
+          d="M136 242 L136 300 M198 242 L198 300" />
+  </g>
+
+  <!-- ══ helm ══ -->
+  <g class="cgk-helm">
+    <!-- outer shell, apex to jaw -->
+    <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="3.6" stroke-linejoin="round"
+          d="M166 44 L214 68 L222 122 L214 166 L194 198 L166 210
+             L138 198 L118 166 L110 122 L118 68 Z" />
+    <!-- crown band -->
+    <path fill="url(#cgkSteelDk)" stroke="#08131c" stroke-width="2.6" stroke-linejoin="round"
+          d="M166 44 L214 68 L212 86 L166 70 L120 86 L118 68 Z" />
+    <!-- visor recess -->
+    <path fill="url(#cgkVisor)" stroke="#08131c" stroke-width="2.6" stroke-linejoin="round"
+          d="M124 96 L208 96 L214 150 L196 192 L166 204 L136 192 L118 150 Z" />
+    <!-- brow ridge, the angry line -->
+    <path fill="url(#cgkSteelDk)" stroke="#08131c" stroke-width="2.6" stroke-linejoin="round"
+          d="M118 102 L166 84 L214 102 L210 122 L166 104 L122 122 Z" />
+    <!-- eye slits: narrow, angled down toward the centre -->
+    <g class="cgk-eyes">
+      <path d="M126 126 L157 118 L157 133 L127 138 Z" />
+      <path d="M206 126 L175 118 L175 133 L205 138 Z" />
+    </g>
+    <!-- nasal keel: a thin raised ridge, not a slab across the face -->
+    <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="2"
+          d="M163 108 L169 108 L172 172 L160 172 Z" />
+    <!-- breath vents -->
+    <g fill="#08131c" opacity=".9">
+      <rect x="140" y="152" width="6" height="30" rx="3" />
+      <rect x="186" y="152" width="6" height="30" rx="3" />
+      <rect x="151" y="158" width="6" height="26" rx="3" />
+      <rect x="177" y="158" width="6" height="26" rx="3" />
+    </g>
+    <!-- cheek rivets -->
+    <circle fill="#cfe3f2" stroke="#08131c" stroke-width="2" cx="125" cy="112" r="5" />
+    <circle fill="#cfe3f2" stroke="#08131c" stroke-width="2" cx="207" cy="112" r="5" />
+  </g>
+
+  </g><!-- /cgk-figure -->
+
+  <!-- ══ shield, forward and to his right, angled ══ -->
+  <g class="cgk-shield">
+    <g transform="rotate(-8 108 236)">
+      <path fill="url(#cgkSteel)" stroke="#08131c" stroke-width="3.8" stroke-linejoin="round"
+            d="M108 158 L172 182 V232 C172 268 144 290 108 300
+               C72 290 44 268 44 232 V182 Z" />
+      <path fill="url(#cgkShieldF)" stroke="#08131c" stroke-width="2.2" stroke-linejoin="round"
+            d="M108 174 L160 193 V231 C160 260 138 278 108 286
+               C78 278 56 260 56 231 V193 Z" />
+      <g class="cgk-cross" stroke="#eaf5ff" stroke-width="8" stroke-linecap="square">
+        <path d="M108 180 V280" />
+        <path d="M60 228 H156" />
+      </g>
+      <path fill="#ffffff" opacity=".16" d="M108 174 L160 193 V231 L108 210 Z" />
+    </g>
+  </g>
+
+  <!-- ══ sword, raised in his right hand ══ -->
+  <g class="cgk-sword" aria-hidden="true">
+    <path class="sw-blade" fill="url(#cgkSteel)" stroke="#08131c" stroke-width="2.4" stroke-linejoin="round"
+          d="M249 242 L298 83 L306 64 L305 85 L263 246 Z" />
+    <path class="sw-fuller" fill="none" stroke="#08131c" stroke-width="1.6" opacity=".45"
+          d="M256 240 L301 78" />
+    <path class="sw-edge" fill="none" stroke="#bff2ff" stroke-width="1.6" opacity=".7"
+          d="M250 240 L299 82" />
+    <path class="sw-guard" fill="url(#cgkSteelDk)" stroke="#08131c" stroke-width="2.2" stroke-linejoin="round"
+          d="M233 234 L279 247 L277 256 L231 243 Z" />
+    <path class="sw-grip" fill="#1b2b38" stroke="#08131c" stroke-width="2.2" stroke-linejoin="round"
+          d="M248 250 L259 253 L251 276 L241 273 Z" />
+    <circle class="sw-pommel" cx="244" cy="281" r="8" fill="url(#cgkSteel)" stroke="#08131c" stroke-width="2.2" />
+  </g>
+
+  <!-- ══ the barrier the shield throws ══ -->
+  <g class="cgk-barrier" aria-hidden="true">
+    <path d="M108 128 L192 176 V272 L108 320 L24 272 V176 Z" />
+    <path class="cgk-barrier2" d="M108 148 L176 187 V265 L108 304 L40 265 V187 Z" />
+  </g>
+
+  <!-- ══ incoming attacks ══ -->
+  <g class="cgk-attacks" aria-hidden="true">
+    <g class="cgk-dart d1"><path d="M0 0 L30 6 L0 12 L9 6 Z" /></g>
+    <g class="cgk-dart d2"><path d="M0 0 L30 6 L0 12 L9 6 Z" /></g>
+    <g class="cgk-dart d3"><path d="M0 0 L30 6 L0 12 L9 6 Z" /></g>
+    <g class="cgk-spark s1"><path d="M0 -16 V16 M-16 0 H16 M-11 -11 L11 11 M11 -11 L-11 11" /></g>
+    <g class="cgk-spark s2"><path d="M0 -16 V16 M-16 0 H16 M-11 -11 L11 11 M11 -11 L-11 11" /></g>
+    <g class="cgk-spark s3"><path d="M0 -16 V16 M-16 0 H16 M-11 -11 L11 11 M11 -11 L-11 11" /></g>
+  </g>
+</svg>
+</div>
+            <span class="ct-close-k">Cloud Guardian &middot; New Jersey &amp; New York</span>
             <strong>TWICE THE QUALITY.<br/><em>HALF</em> THE PRICE.</strong>
-            <span class="wu-close-s">Managed IT and 24/7 security operations, North Brunswick, New Jersey</span>
+            <span class="ct-close-s">Managed IT and 24/7 security operations &middot; (732) 743-5472</span>
           </div>
         </div>
 
         <button class="wu-play" id="wuPlay" type="button" aria-label="Play the story">
           <span class="wu-play-tri" aria-hidden="true"></span>
-          <span class="wu-play-l">Play the story<small>About 40 seconds</small></span>
+          <span class="wu-play-l">Watch what we actually stop<small>40 seconds</small></span>
         </button>
         <span class="wu-chapter" id="wuChapter" aria-hidden="true"></span>
+        <span class="wu-brand" aria-hidden="true">Cloud Guardian</span>
       </div>
 
       <div class="wu-controls" id="wuControls">
@@ -795,17 +1405,17 @@ var n=document.getElementById('cgIntro');if(n&&n.parentNode)n.parentNode.removeC
           <span class="wu-ico-pause" aria-hidden="true"></span>
         </button>
         <div class="wu-track" id="wuTrack" role="slider" tabindex="0"
-             aria-label="Story progress" aria-valuemin="0" aria-valuemax="39" aria-valuenow="0">
+             aria-label="Story progress" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0">
           <i id="wuFill"></i>
-          <button class="wu-dotnav" type="button" data-go="0" aria-label="Chapter 1: An ordinary Tuesday"><span></span></button>
-          <button class="wu-dotnav" type="button" data-go="1" aria-label="Chapter 2: The address nobody checks"><span></span></button>
-          <button class="wu-dotnav" type="button" data-go="2" aria-label="Chapter 3: One click away"><span></span></button>
-          <button class="wu-dotnav" type="button" data-go="3" aria-label="Chapter 4: The Guardian gets there first"><span></span></button>
-          <button class="wu-dotnav" type="button" data-go="4" aria-label="Chapter 5: Five signals, one second"><span></span></button>
-          <button class="wu-dotnav" type="button" data-go="5" aria-label="Chapter 6: The money that stayed"><span></span></button>
-          <button class="wu-dotnav" type="button" data-go="6" aria-label="Chapter 7: Why people switch to us"><span></span></button>
+          <button class="wu-dotnav" type="button" data-go="0" aria-label="Scene 1: Tuesday, 9:14 a.m."><span></span></button>
+          <button class="wu-dotnav" type="button" data-go="1" aria-label="Scene 2: The address nobody reads"><span></span></button>
+          <button class="wu-dotnav" type="button" data-go="2" aria-label="Scene 3: One click from gone"><span></span></button>
+          <button class="wu-dotnav" type="button" data-go="3" aria-label="Scene 4: Cloud Guardian gets there first"><span></span></button>
+          <button class="wu-dotnav" type="button" data-go="4" aria-label="Scene 5: How it knew"><span></span></button>
+          <button class="wu-dotnav" type="button" data-go="5" aria-label="Scene 6: The money that stayed"><span></span></button>
+          <button class="wu-dotnav" type="button" data-go="6" aria-label="Scene 7: Why businesses switch"><span></span></button>
         </div>
-        <span class="wu-time-l" id="wuTime">0:00 / 0:39</span>
+        <span class="wu-time-l" id="wuTime">0:00 / 0:40</span>
         <button class="wu-btn" id="wuMute" type="button" aria-label="Sound">
           <span class="wu-ico-sound" aria-hidden="true"></span>
         </button>
@@ -815,13 +1425,13 @@ var n=document.getElementById('cgIntro');if(n&&n.parentNode)n.parentNode.removeC
       </div>
 
       <div class="wu-caps" id="wuCaps" aria-live="polite">
-        <p class="wu-cap" data-cap="0">Nine fourteen on a Tuesday. Your accounts payable clerk opens her inbox, and there is a message from your chief executive. The name is right. The tone is right. The timing is right.</p>
-        <p class="wu-cap" data-cap="1">It is not from your chief executive. Look at the address. R N, where the M should be. A domain registered six days ago, for one purpose: to send this one email, to this one person, on this one morning.</p>
-        <p class="wu-cap" data-cap="2">Seven minutes later she is on the wire screen. New beneficiary. Eighty four thousand dollars. She is not careless. She is doing exactly what she believes her boss asked her to do.</p>
-        <p class="wu-cap" data-cap="3">Except she never got that far. Two seconds after it arrived, the Guardian quarantined it. She never saw it, never replied, never opened the wire screen. There was nothing left for her to get wrong.</p>
-        <p class="wu-cap" data-cap="4">How did it know? Five signals, in under a second. A lookalike domain. A display name that does not match its address. A sender who has never written to you. Urgency, and secrecy. And a payment request with no purchase order behind it. Artificial intelligence found the pattern. A human analyst confirmed it.</p>
-        <p class="wu-cap" data-cap="5">Eighty four thousand dollars never left the account. No wire to claw back. No insurer to call. No difficult conversation with somebody who feels sick about it. One line, in a report you can read whenever you feel like it.</p>
-        <p class="wu-cap" data-cap="6">That is the whole job. Newer tooling, real automation, and thirty years of watching this exact thing happen to businesses that thought they were too small to bother with. Twice the quality. Half the price.</p>
+        <p class="wu-cap" data-cap="0">Meet Dana. She runs accounts payable at a forty person company in New Jersey. It is Tuesday morning, the coffee is still hot, and an email has just landed from her chief executive.</p>
+        <p class="wu-cap" data-cap="1">The name is right. The tone is right. The timing is right. But look at the address. R N, where the M should be. A domain registered six days ago for one purpose: to send this one email, to this one person, on this one morning.</p>
+        <p class="wu-cap" data-cap="2">Seven minutes later Dana is on the wire screen. New beneficiary. Eighty four thousand dollars. She is not careless. She is doing exactly what she believes her boss asked her to do.</p>
+        <p class="wu-cap" data-cap="3">Except she never got there. Two seconds after it arrived, Cloud Guardian quarantined the message. Dana never saw it, never replied, never opened the bank. There was nothing left for her to get wrong.</p>
+        <p class="wu-cap" data-cap="4">How did it know? Five signals, in under a second. A lookalike domain. A display name that does not match its address. A sender who has never written to her. Urgency, and secrecy. And a payment request with no purchase order behind it. Our AI found the pattern, and a human analyst confirmed it.</p>
+        <p class="wu-cap" data-cap="5">Eighty four thousand dollars never left the account. No wire to claw back. No insurer to call. No difficult conversation with somebody who feels sick about it. Dana finished her coffee.</p>
+        <p class="wu-cap" data-cap="6">That is the whole job. Newer tooling, real automation, and thirty years of watching this happen to businesses that thought they were too small to bother with. Cloud Guardian. Twice the quality, half the price.</p>
       </div>
 
       <audio id="wuAudio" preload="none" src="/assets/why-choose-us.mp3"></audio>

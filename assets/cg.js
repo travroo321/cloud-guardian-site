@@ -691,7 +691,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 5.2], [5.2, 11.4], [11.4, 16.8], [16.8, 22.6], [22.6, 28.4], [28.4, 33.8], [33.8, 39.0]];
+  var CH = [[0.0, 5.0], [5.0, 11.0], [11.0, 16.5], [16.5, 22.5], [22.5, 29.0], [29.0, 34.5], [34.5, 40.0]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -705,7 +705,7 @@
   var replay  = document.getElementById('wuReplay');
   var playBtn = document.getElementById('wuPlay');
   var audio   = document.getElementById('wuAudio');
-  var amt     = document.getElementById('wuAmt');
+  var amt     = document.getElementById('ctAmt');
 
   var t = 0, last = 0, raf = null, playing = false, current = -1;
   var haveAudio = false, muted = false;
@@ -734,7 +734,7 @@
       d.classList.toggle('now', k === i);
       d.classList.toggle('done', k < i);
     });
-    chapL.textContent = 'Chapter ' + (i + 1) + ' of ' + CH.length;
+    chapL.textContent = 'Scene ' + (i + 1) + ' of ' + CH.length;
     if (i === 2 && amt) countUp();
   }
 
