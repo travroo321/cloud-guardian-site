@@ -605,6 +605,47 @@
   var t = 0, last = 0, raf = null, playing = false, current = -1;
   var haveAudio = false, muted = false;
 
+  /* ── narration ──────────────────────────────────────────────────────
+     Preference order: a recorded mp3, then the browser speech synthesiser,
+     then silence with captions. LINES is the same text the captions and
+     the transcript use, so the three can never drift. */
+  var LINES = ["Tuesday. Susan runs accounts payable. An email arrives from a client about an unpaid invoice.", "Their bank has changed. Pay the new account before Friday. It looks completely normal.", "It is not the client. R N, not M. That domain is six days old.", "Cloud Guardian blocked it in two seconds. It was never delivered. Susan never saw it.", "Eighty four thousand stayed put. No insurance claim. Susan is fine, and the chief executive sleeps.", "Cloud Guardian. Twice the quality. Half the price."];
+  var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+  var voice = null, spoken = -1;
+
+  function pickVoice() {
+    if (!speech) return;
+    var vs = speech.getVoices().filter(function (v) { return /^en(-|_|$)/i.test(v.lang); });
+    if (!vs.length) return;
+    /* prefer the higher quality voices browsers expose, then any en-US */
+    var wanted = ['Google US English', 'Samantha', 'Microsoft Aria', 'Microsoft Jenny',
+                  'Microsoft Zira', 'Karen', 'Daniel'];
+    for (var i = 0; i < wanted.length; i++) {
+      var hit = vs.filter(function (v) { return v.name.indexOf(wanted[i]) === 0; })[0];
+      if (hit) { voice = hit; return; }
+    }
+    voice = vs.filter(function (v) { return /en[-_]US/i.test(v.lang); })[0] || vs[0];
+  }
+  if (speech) {
+    pickVoice();
+    speech.onvoiceschanged = pickVoice;
+  }
+
+  function say(i) {
+    if (haveAudio || muted || !speech || i === spoken || !LINES[i]) return;
+    spoken = i;
+    try {
+      speech.cancel();
+      var u = new SpeechSynthesisUtterance(LINES[i]);
+      if (voice) u.voice = voice;
+      u.rate = 1.06;      /* the lines are written for about 165 wpm */
+      u.pitch = 1.0;
+      u.volume = 1.0;
+      speech.speak(u);
+    } catch (e) {}
+  }
+  function hush() { if (speech) { try { speech.cancel(); } catch (e) {} } spoken = -1; }
+
   /* space the chapter dots along the track by their real start time */
   dots.forEach(function (d, i) {
     d.style.left = (CH[i][0] / RUNTIME * 100) + '%';
@@ -630,6 +671,8 @@
       d.classList.toggle('done', k < i);
     });
     chapL.textContent = 'Scene ' + (i + 1) + ' of ' + CH.length;
+    if (playing) say(i);
+    shotOf = -1;
     if (i === 2 && amt) countUp();
   }
 
@@ -651,12 +694,31 @@
     requestAnimationFrame(step);
   }
 
+  /* Each scene holds up to three shots. They swap on their own sub clock so
+     the picture keeps moving while a single narration line is being read. */
+  var shotOf = -1;
+  function paintShots(sceneIdx, time) {
+    var sc = scenes[sceneIdx];
+    if (!sc) return;
+    var shots = sc.querySelectorAll('.ct-shot');
+    if (!shots.length) return;
+    var a = CH[sceneIdx][0], b = CH[sceneIdx][1];
+    var k = Math.min(shots.length - 1,
+                     Math.floor((time - a) / ((b - a) / shots.length)));
+    var key = sceneIdx * 100 + k;
+    if (key === shotOf) return;
+    shotOf = key;
+    for (var i = 0; i < shots.length; i++) shots[i].classList.toggle('on', i === k);
+  }
+
   function paint() {
     var p = Math.min(1, t / RUNTIME);
     fill.style.width = (p * 100) + '%';
     timeL.textContent = fmt(t) + ' / ' + fmt(RUNTIME);
     track.setAttribute('aria-valuenow', Math.round(t));
-    showChapter(chapterAt(t));
+    var ci = chapterAt(t);
+    showChapter(ci);
+    paintShots(ci, t);
   }
 
   function tick(ts) {
@@ -681,6 +743,7 @@
     toggle.classList.remove('is-paused');
     toggle.setAttribute('aria-label', 'Pause');
     if (haveAudio && !muted) { audio.currentTime = t; audio.play().catch(function () {}); }
+    else if (!muted) { spoken = -1; say(chapterAt(t)); }
     raf = requestAnimationFrame(tick);
   }
 
@@ -688,16 +751,17 @@
     playing = false;
     cancelAnimationFrame(raf);
     if (haveAudio) audio.pause();
+    hush();
     toggle.classList.add('is-paused');
     toggle.setAttribute('aria-label', 'Play');
-    if (ended) { stage.classList.remove('playing'); playBtn.hidden = false; current = -1; }
+    if (ended) { stage.classList.remove('playing'); playBtn.hidden = false; current = -1; hush(); }
     else { stage.classList.add('paused'); }
   }
 
   function seek(time) {
     t = Math.max(0, Math.min(RUNTIME, time));
     counted = (t < CH[2][0]) ? false : counted;
-    if (haveAudio) audio.currentTime = t;
+    if (haveAudio) audio.currentTime = t; else hush();
     paint();
   }
 
@@ -705,9 +769,13 @@
   audio.addEventListener('canplay', function () { haveAudio = true; });
   audio.addEventListener('error', function () {
     haveAudio = false;
-    muteBtn.classList.add('muted');
-    muteBtn.setAttribute('aria-label', 'No narration track loaded yet');
-    muteBtn.title = 'Narration coming soon';
+    if (speech) {
+      muteBtn.setAttribute('aria-label', 'Mute narration');
+      muteBtn.title = 'Narration, read by your browser';
+    } else {
+      muteBtn.classList.add('muted');
+      muteBtn.title = 'This browser cannot speak, captions only';
+    }
   });
   try { audio.load(); } catch (e) {}
 
@@ -722,6 +790,8 @@
     muted = !muted;
     muteBtn.classList.toggle('muted', muted);
     if (haveAudio) { audio.muted = muted; if (!muted && playing) audio.play().catch(function () {}); }
+    else if (muted) { hush(); }
+    else if (playing) { spoken = -1; say(chapterAt(t)); }
   });
 
   dots.forEach(function (d, i) {
