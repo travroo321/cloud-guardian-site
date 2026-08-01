@@ -399,7 +399,7 @@
   var el = document.getElementById('cgIntro');
   if (!el) return;
 
-  var RAIL_MS = 21600;
+  var RAIL_MS = 4600;
   var html = document.documentElement;
   var timer = null, running = false;
 
@@ -470,26 +470,6 @@
 
   el.addEventListener('animationend', function (e) {
     if (e.animationName === 'cgiRail') end();
-  });
-
-  /* The wire amount ticks up while beat three is on screen. Driven off
-     animationstart rather than a timer, so it stays locked to the CSS
-     timeline even when this script executes late on a slow connection. */
-  el.addEventListener('animationstart', function (e) {
-    if (e.animationName !== 'cgiBeat') return;
-    var amt = e.target.querySelector && e.target.querySelector('#cgiAmt');
-    if (!amt || amt.dataset.ran) return;
-    amt.dataset.ran = '1';
-    if (reduced()) { amt.textContent = '84,000'; return; }
-    var target = 84000, t0 = null, dur = 1500;
-    function step(ts) {
-      if (t0 === null) t0 = ts;
-      var k = Math.min(1, (ts - t0) / dur);
-      var eased = 1 - Math.pow(1 - k, 3);
-      amt.textContent = Math.round(target * eased).toLocaleString('en-US');
-      if (k < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
   });
 
   el.addEventListener('click', end);
@@ -697,4 +677,187 @@
       if (btn) { btn.disabled = true; btn.textContent = 'Sending your brief...'; }
     });
   }
+})();
+
+
+/* ═══════════════════════════════════════════════════════════════
+   WHY CHOOSE US PLAYER
+   A JavaScript timeline rather than CSS delays, so a voiceover can
+   become the clock later without touching the markup. Drop an mp3 at
+   /assets/why-choose-us.mp3 and audio drives it; with no file it runs
+   silently off requestAnimationFrame and the captions carry the story.
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  var stage = document.getElementById('wuStage');
+  if (!stage) return;
+
+  var CH = [[0.0, 5.2], [5.2, 11.4], [11.4, 16.8], [16.8, 22.6], [22.6, 28.4], [28.4, 33.8], [33.8, 39.0]];
+  var RUNTIME = +stage.dataset.runtime;
+  var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
+  var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
+  var dots    = [].slice.call(stage.querySelectorAll('.wu-dotnav'));
+  var fill    = document.getElementById('wuFill');
+  var track   = document.getElementById('wuTrack');
+  var timeL   = document.getElementById('wuTime');
+  var chapL   = document.getElementById('wuChapter');
+  var toggle  = document.getElementById('wuToggle');
+  var muteBtn = document.getElementById('wuMute');
+  var replay  = document.getElementById('wuReplay');
+  var playBtn = document.getElementById('wuPlay');
+  var audio   = document.getElementById('wuAudio');
+  var amt     = document.getElementById('wuAmt');
+
+  var t = 0, last = 0, raf = null, playing = false, current = -1;
+  var haveAudio = false, muted = false;
+
+  /* space the chapter dots along the track by their real start time */
+  dots.forEach(function (d, i) {
+    d.style.left = (CH[i][0] / RUNTIME * 100) + '%';
+  });
+
+  function fmt(s) {
+    s = Math.max(0, Math.round(s));
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+
+  function chapterAt(time) {
+    for (var i = CH.length - 1; i >= 0; i--) if (time >= CH[i][0]) return i;
+    return 0;
+  }
+
+  function showChapter(i) {
+    if (i === current) return;
+    current = i;
+    scenes.forEach(function (s, k) { s.classList.toggle('on', k === i); });
+    caps.forEach(function (c, k) { c.classList.toggle('on', k === i); });
+    dots.forEach(function (d, k) {
+      d.classList.toggle('now', k === i);
+      d.classList.toggle('done', k < i);
+    });
+    chapL.textContent = 'Chapter ' + (i + 1) + ' of ' + CH.length;
+    if (i === 2 && amt) countUp();
+  }
+
+  /* the wire amount climbs while chapter three is up */
+  var counted = false;
+  function countUp() {
+    if (counted) return;
+    counted = true;
+    var target = 84000, t0 = null, dur = 1600;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      amt.textContent = '84,000'; return;
+    }
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur);
+      amt.textContent = Math.round(target * (1 - Math.pow(1 - k, 3))).toLocaleString('en-US');
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function paint() {
+    var p = Math.min(1, t / RUNTIME);
+    fill.style.width = (p * 100) + '%';
+    timeL.textContent = fmt(t) + ' / ' + fmt(RUNTIME);
+    track.setAttribute('aria-valuenow', Math.round(t));
+    showChapter(chapterAt(t));
+  }
+
+  function tick(ts) {
+    if (!playing) return;
+    if (haveAudio && !audio.paused) {
+      t = audio.currentTime;
+    } else {
+      if (!last) last = ts;
+      t += (ts - last) / 1000;
+    }
+    last = ts;
+    if (t >= RUNTIME) { t = RUNTIME; paint(); stop(true); return; }
+    paint();
+    raf = requestAnimationFrame(tick);
+  }
+
+  function start() {
+    if (playing) return;
+    playing = true; last = 0;
+    stage.classList.add('playing');
+    stage.classList.remove('paused');
+    toggle.classList.remove('is-paused');
+    toggle.setAttribute('aria-label', 'Pause');
+    if (haveAudio && !muted) { audio.currentTime = t; audio.play().catch(function () {}); }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function stop(ended) {
+    playing = false;
+    cancelAnimationFrame(raf);
+    if (haveAudio) audio.pause();
+    toggle.classList.add('is-paused');
+    toggle.setAttribute('aria-label', 'Play');
+    if (ended) { stage.classList.remove('playing'); playBtn.hidden = false; current = -1; }
+    else { stage.classList.add('paused'); }
+  }
+
+  function seek(time) {
+    t = Math.max(0, Math.min(RUNTIME, time));
+    counted = (t < CH[2][0]) ? false : counted;
+    if (haveAudio) audio.currentTime = t;
+    paint();
+  }
+
+  /* audio is optional: probe it once and carry on either way */
+  audio.addEventListener('canplay', function () { haveAudio = true; });
+  audio.addEventListener('error', function () {
+    haveAudio = false;
+    muteBtn.classList.add('muted');
+    muteBtn.setAttribute('aria-label', 'No narration track loaded yet');
+    muteBtn.title = 'Narration coming soon';
+  });
+  try { audio.load(); } catch (e) {}
+
+  playBtn.addEventListener('click', function () {
+    playBtn.hidden = true;
+    if (t >= RUNTIME) t = 0;
+    start();
+  });
+  toggle.addEventListener('click', function () { playing ? stop(false) : start(); });
+  replay.addEventListener('click', function () { seek(0); playBtn.hidden = true; start(); });
+  muteBtn.addEventListener('click', function () {
+    muted = !muted;
+    muteBtn.classList.toggle('muted', muted);
+    if (haveAudio) { audio.muted = muted; if (!muted && playing) audio.play().catch(function () {}); }
+  });
+
+  dots.forEach(function (d, i) {
+    d.addEventListener('click', function (e) {
+      e.stopPropagation();
+      seek(CH[i][0]); playBtn.hidden = true;
+      if (!playing) start();
+    });
+  });
+
+  track.addEventListener('click', function (e) {
+    if (e.target.closest('.wu-dotnav')) return;
+    var r = track.getBoundingClientRect();
+    seek((e.clientX - r.left) / r.width * RUNTIME);
+    playBtn.hidden = true;
+    if (!playing) start();
+  });
+  track.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { seek(t + 5); e.preventDefault(); }
+    if (e.key === 'ArrowLeft')  { seek(t - 5); e.preventDefault(); }
+    if (e.key === 'Home')       { seek(0); e.preventDefault(); }
+    if (e.key === 'End')        { seek(RUNTIME); e.preventDefault(); }
+  });
+
+  /* stop when it scrolls out of view; nobody wants audio from off screen */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) {
+      if (!en[0].isIntersecting && playing) stop(false);
+    }, { threshold: 0.15 }).observe(stage);
+  }
+
+  paint();
+  showChapter(0);
 })();

@@ -1217,7 +1217,7 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
 .cgi-rail i {
   display: block; height: 100%; width: 0;
   background: linear-gradient(90deg, #00d4ff, #38f8a7);
-  animation: cgiRail 21.6s linear forwards;
+  animation: cgiRail 4.6s linear forwards;
 }
 @keyframes cgiRail { to { width: 100%; } }
 .cgi-hint {
@@ -1298,244 +1298,144 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
   html.cgi-lock, html.cgi-lock body { overflow: auto !important; }
 }
 
-.cgi-b1 { animation-delay: 0.15s; animation-duration: 3.15s; }
-.cgi-b2 { animation-delay: 3.0s; animation-duration: 4.00s; }
-.cgi-b3 { animation-delay: 6.7s; animation-duration: 3.30s; }
-.cgi-b4 { animation-delay: 9.7s; animation-duration: 3.60s; }
-.cgi-b5 { animation-delay: 13.0s; animation-duration: 3.40s; }
-.cgi-b6 { animation-delay: 16.1s; animation-duration: 3.10s; }
-.cgi-b7 { animation-delay: 18.9s; animation-duration: 3.00s; }
+.cgi-b1 { animation-delay: 0.1s; animation-duration: 3.55s; }
+.cgi-b2 { animation-delay: 3.25s; animation-duration: 1.65s; }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   INTRO STORY: the business email compromise
+   INTRO: THE GUARDIAN CUTS THREE STRIKES OUT OF THE AIR
    ═══════════════════════════════════════════════════════════════ */
-.cgi-mail, .cgi-msg, .cgi-wire {
-  width: min(660px, 88vw); margin: 0 auto 22px; text-align: left;
-  border-radius: 8px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,.14);
-  background: #0b1017;
-  box-shadow: 0 26px 70px rgba(0,0,0,.6);
-  font-family: 'Syne', system-ui, sans-serif;
+.cgb-arena {
+  position: relative; width: min(560px, 84vw); aspect-ratio: 1;
+  margin: 0 auto; display: grid; place-items: center;
 }
 
-/* ── beat 1: inbox ── */
-.cm-bar {
-  display: flex; align-items: center; gap: 7px;
-  padding: 10px 14px; background: #131b26; border-bottom: 1px solid rgba(255,255,255,.09);
+/* the mascot lands, wings snapping open */
+.cgb-hero { width: 74%; position: relative; z-index: 3; }
+.cgb-hero .cgk { animation: cgbLand .62s cubic-bezier(.16,1.2,.3,1) .18s both; }
+@keyframes cgbLand {
+  0%   { opacity: 0; transform: scale(.62) translateY(34px); filter: blur(9px); }
+  70%  { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-.cm-dot { width: 9px; height: 9px; border-radius: 50%; }
-.cm-dot.r { background: #ff5f57; } .cm-dot.y { background: #febc2e; } .cm-dot.g { background: #28c840; }
-.cm-title {
-  margin-left: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .66rem; letter-spacing: .14em; color: rgba(255,255,255,.5);
+.cgb-hero .cgk-wings {
+  transform-origin: 166px 210px;
+  animation: cgbSpread .72s cubic-bezier(.16,1.25,.3,1) .34s both;
 }
-.cm-row {
-  display: grid; grid-template-columns: auto 168px 1fr auto; align-items: center; gap: 12px;
-  padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
-  font-size: .86rem;
+@keyframes cgbSpread {
+  0%   { opacity: 0; transform: translateX(18px) scaleX(.12) scaleY(.5); }
+  100% { opacity: 1; transform: translateX(18px) scaleX(1) scaleY(1); }
 }
-.cm-row.old { color: rgba(255,255,255,.34); }
-.cm-row.old .cm-from { color: rgba(255,255,255,.42); }
-.cm-row.new {
-  color: #fff; background: rgba(0,212,255,.07);
-  border-left: 3px solid var(--cyan, #00d4ff);
-  animation: cgiArrive .7s cubic-bezier(.2,.9,.3,1) 0.80s both;
-}
-@keyframes cgiArrive {
-  0%   { opacity: 0; transform: translateY(-14px); background: rgba(0,212,255,.32); }
-  60%  { opacity: 1; transform: none; }
-  100% { opacity: 1; background: rgba(0,212,255,.07); }
-}
-.cm-flag {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .56rem;
-  letter-spacing: .16em; padding: 3px 7px; border-radius: 3px;
-  background: var(--cyan, #00d4ff); color: #04121a;
-}
-.cm-row.old .cm-flag { visibility: hidden; }
-.cm-row.old::before { content: ''; }
-.cm-from { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cm-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cm-time {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .68rem; color: rgba(255,255,255,.4);
-}
-.cm-row.old > .cm-from { grid-column: 2; }
-
-/* ── beat 2: the message ── */
-.cgi-msg { padding: 0 0 18px; }
-.cg-msg-head {
-  display: flex; align-items: center; gap: 13px; flex-wrap: wrap;
-  padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.09);
-  background: #131b26;
-}
-.cg-avatar {
-  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
-  display: grid; place-items: center; background: #2f6fae; color: #fff;
-  font-weight: 700; font-size: .88rem;
-}
-.cg-who { display: flex; flex-direction: column; }
-.cg-who strong { font-size: .96rem; color: #fff; }
-.cg-role { font-size: .74rem; color: rgba(255,255,255,.48); }
-.cg-addr { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; }
-.cg-addr-l { font-size: .68rem; color: rgba(255,255,255,.4); }
-.cg-addr-v {
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .74rem; color: rgba(255,255,255,.7);
-}
-.cg-fake {
-  position: relative; color: #ff8fa3;
-  animation: cgiFakeGlow 1.1s ease 4.35s 3;
-}
-.cg-fake::after {
-  content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px;
-  background: #ff4d6d; transform: scaleX(0); transform-origin: left;
-  animation: cgiUnderline .5s cubic-bezier(.4,0,.2,1) 4.20s forwards;
-}
-@keyframes cgiUnderline { to { transform: scaleX(1); } }
-@keyframes cgiFakeGlow {
-  0%, 100% { text-shadow: none; }
-  50%      { text-shadow: 0 0 14px rgba(255,77,109,.9); }
-}
-.cg-body {
-  margin: 18px 20px 0 !important; color: rgba(255,255,255,.82) !important;
-  font-size: .94rem !important; line-height: 1.7 !important; max-width: none !important;
-}
-.cg-body strong { color: #fff; }
-.cg-sig {
-  margin: 14px 20px 0 !important; font-size: .76rem !important;
-  color: rgba(255,255,255,.38) !important; font-style: italic; max-width: none !important;
-}
-.cg-magnify {
-  display: block; margin: 16px 20px 0; padding: 10px 14px; border-radius: 5px;
-  background: rgba(255,77,109,.16); border: 1px solid rgba(255,77,109,.55);
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .74rem; letter-spacing: .03em; color: #ffb3c1; line-height: 1.5;
-  opacity: 0; animation: cgiFade .5s ease 4.75s forwards;
+/* the sword swings on each cut */
+.cgb-hero .cgk-sword { animation: cgbSwing 1.2s cubic-bezier(.3,.9,.3,1) 1.0s 3; }
+@keyframes cgbSwing {
+  0%   { transform: rotate(0deg); }
+  14%  { transform: rotate(-46deg); }
+  30%  { transform: rotate(24deg); }
+  55%  { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
 }
 
-/* ── beat 3: the wire ── */
-.cgi-wire { padding: 18px 20px 22px; position: relative; }
-.cw-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(255,255,255,.55); padding-bottom: 13px;
-  border-bottom: 1px solid rgba(255,255,255,.09); margin-bottom: 6px;
+/* His own idle loop (the drifting darts, the sparks, the barrier flash) is
+   noise against the bolts, so it is muted for the length of the intro. */
+.cgb-hero .cgk-attacks, .cgb-hero .cgk-barrier { display: none; }
+
+/* the strikes */
+.cgb-strike {
+  position: absolute; width: 17%; z-index: 5;
+  transform: rotate(var(--rot));
 }
-.cw-step { color: var(--cyan, #00d4ff); }
-.cw-line {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-  padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.05);
-  font-size: .84rem;
+.cgb-bolt { width: 100%; height: auto; display: block; overflow: visible; }
+.cgb-bolt path {
+  fill: #ff2d55;
+  filter: drop-shadow(0 0 14px rgba(255,45,85,.95)) drop-shadow(0 0 40px rgba(255,45,85,.55));
+  animation: cgbStrike .46s cubic-bezier(.2,1,.3,1) var(--tin) both,
+             cgbCut .2s ease var(--tcut) forwards;
 }
-.cw-line span { color: rgba(255,255,255,.45); }
-.cw-line b {
-  color: #fff; font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .82rem; letter-spacing: .04em; text-align: right;
+@keyframes cgbStrike {
+  0%   { opacity: 0; transform: translateY(-140px) scaleY(.25); }
+  38%  { opacity: 1; }
+  50%  { opacity: .3; }
+  64%  { opacity: 1; transform: translateY(0) scaleY(1); }
+  100% { opacity: 1; transform: translateY(0) scaleY(1); }
 }
-.cw-line.amt b {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; color: #ff8fa3;
-  letter-spacing: .03em;
-}
-.cw-send {
-  margin-top: 16px; width: 100%; padding: 13px; border: 0; border-radius: 5px;
-  background: #1f8fe0; color: #fff; font-family: 'Syne', sans-serif;
-  font-weight: 700; font-size: .92rem; cursor: default;
-  animation: cgiArm 1.1s ease-in-out 7.60s infinite;
-}
-@keyframes cgiArm {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,109,.5); }
-  55%      { box-shadow: 0 0 0 13px rgba(255,77,109,0); }
-}
-.cw-cursor {
-  position: absolute; right: 44px; bottom: 26px; width: 15px; height: 22px;
-  background: #fff; clip-path: polygon(0 0, 0 78%, 26% 60%, 44% 100%, 62% 88%, 46% 52%, 78% 50%);
-  filter: drop-shadow(0 2px 5px rgba(0,0,0,.7));
-  animation: cgiCursor 1.6s cubic-bezier(.3,.8,.4,1) 7.25s infinite;
-}
-@keyframes cgiCursor {
-  0%   { transform: translate(28px, 30px); opacity: 0; }
-  22%  { opacity: 1; }
-  60%  { transform: translate(0, 0); opacity: 1; }
-  70%  { transform: translate(0, 3px); }
-  80%  { transform: translate(0, 0); }
-  100% { transform: translate(0, 0); opacity: 1; }
+@keyframes cgbCut {
+  0%   { opacity: 1; }
+  40%  { opacity: 1; filter: drop-shadow(0 0 30px #fff) brightness(4); }
+  100% { opacity: 0; }
 }
 
-/* ── beat 5: the signals ── */
-.cgi-signals {
-  list-style: none; margin: 0 auto 22px; padding: 0;
-  width: min(620px, 88vw); text-align: left; display: grid; gap: 8px;
+/* the sword stroke that lands on it: short, fast, local to the bolt */
+.cgb-cut {
+  position: absolute; left: 50%; top: 46%; z-index: 6;
+  width: 230%; height: 5px; border-radius: 4px;
+  transform: translate(-50%, -50%) rotate(var(--cut)) scaleX(0);
+  transform-origin: 50% 50%;
+  background: linear-gradient(90deg, transparent, #fff 18%, #fff 82%, transparent);
+  box-shadow: 0 0 16px #7fe9ff, 0 0 38px rgba(0,212,255,.8);
+  opacity: 0;
+  animation: cgbCutSweep .3s cubic-bezier(.25,0,.2,1) var(--tcut) forwards;
 }
-.cgi-signals li {
-  display: grid; grid-template-columns: 26px 1fr; align-items: baseline;
-  gap: 6px 12px; padding: 11px 15px; border-radius: 5px;
-  background: rgba(255,77,109,.07); border: 1px solid rgba(255,77,109,.26);
-  opacity: 0; animation: cgiSignal .5s cubic-bezier(.2,.9,.3,1) both;
-}
-@keyframes cgiSignal {
-  from { opacity: 0; transform: translateX(-16px); }
-  to   { opacity: 1; transform: none; }
-}
-.cs-tick {
-  grid-row: 1 / 3; width: 22px; height: 22px; border-radius: 50%;
-  display: grid; place-items: center; align-self: center;
-  background: rgba(255,77,109,.18); border: 1px solid rgba(255,77,109,.5);
-  color: #ff8fa3; font-family: 'Bebas Neue', sans-serif; font-size: .92rem;
-}
-.cs-h { color: #fff; font-weight: 700; font-size: .88rem; }
-.cs-d {
-  color: rgba(255,255,255,.55); font-size: .78rem;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+@keyframes cgbCutSweep {
+  0%   { opacity: 0; transform: translate(-50%,-50%) rotate(var(--cut)) scaleX(0); }
+  18%  { opacity: 1; }
+  55%  { opacity: 1; transform: translate(-50%,-50%) rotate(var(--cut)) scaleX(1); }
+  100% { opacity: 0; transform: translate(-50%,-50%) rotate(var(--cut)) scaleX(1.25); }
 }
 
-/* ── beat 6: the money that stayed ── */
-.cgi-saved { position: relative; display: inline-block; margin: 0 auto 24px; padding: 8px 26px; }
-.cs-amt {
-  display: block; font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 11vw, 6.4rem); line-height: 1; color: #38f8a7;
-  letter-spacing: .02em; text-shadow: 0 0 44px rgba(56,248,167,.42);
-  animation: cgiSaved .8s cubic-bezier(.2,1.3,.35,1) 16.30s both;
+/* the fragments it leaves */
+.cgb-shard {
+  position: absolute; left: 50%; top: 46%; z-index: 6;
+  width: 9px; height: 3px; border-radius: 2px; background: #ff6b85;
+  box-shadow: 0 0 10px rgba(255,45,85,.9);
+  opacity: 0;
+  animation: cgbShard .62s cubic-bezier(.15,.75,.3,1) var(--sd) forwards;
 }
-@keyframes cgiSaved {
-  from { opacity: 0; transform: scale(.72); }
-  to   { opacity: 1; transform: scale(1); }
-}
-.cs-lbl {
-  display: block; margin-top: 8px;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: .7rem; letter-spacing: .24em; text-transform: uppercase;
-  color: rgba(56,248,167,.85);
-  opacity: 0; animation: cgiFade .5s ease 16.85s forwards;
-}
-.cs-ring {
-  position: absolute; inset: -14px; border-radius: 999px;
-  border: 2px solid rgba(56,248,167,.45); opacity: 0;
-  animation: cgiRingOut 1.4s cubic-bezier(.2,.8,.3,1) 16.40s 2;
-}
-@keyframes cgiRingOut {
-  0%   { opacity: .9; transform: scale(.82); }
-  100% { opacity: 0; transform: scale(1.25); }
+@keyframes cgbShard {
+  0%   { opacity: 0; transform: translate(-50%,-50%) rotate(var(--sr)) scale(.5); }
+  14%  { opacity: 1; }
+  100% { opacity: 0;
+         transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)))
+                    rotate(calc(var(--sr) + 180deg)) scale(.35); }
 }
 
-.cgi-bad { color: #ff4d6d; }
+.cgb-burst {
+  position: absolute; left: 50%; top: 46%; width: 150%; aspect-ratio: 1;
+  transform: translate(-50%,-50%); border-radius: 50%; opacity: 0; z-index: 4;
+  background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,209,102,.5) 32%, rgba(255,45,85,.2) 55%, transparent 72%);
+  animation: cgbBurst .45s cubic-bezier(.2,.8,.3,1) var(--tcut) forwards;
+}
+@keyframes cgbBurst {
+  0%   { opacity: 0; transform: translate(-50%,-50%) scale(.15); }
+  20%  { opacity: 1; transform: translate(-50%,-50%) scale(.8); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.6); }
+}
+
+/* the all clear */
+.cgb-shock {
+  position: absolute; inset: 14%; border-radius: 50%; opacity: 0; z-index: 1;
+  border: 3px solid rgba(0,212,255,.85);
+  box-shadow: 0 0 60px rgba(0,212,255,.5), inset 0 0 60px rgba(0,212,255,.25);
+  animation: cgbShock .95s cubic-bezier(.2,.8,.3,1) 2.55s forwards;
+}
+@keyframes cgbShock {
+  0%   { opacity: 0; transform: scale(.25); }
+  25%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.85); }
+}
+
+.cgb-tag { margin-top: 22px !important; margin-bottom: 0 !important; letter-spacing: .3em; }
 
 @media (max-width: 640px) {
-  .cm-row { grid-template-columns: auto 1fr auto; font-size: .78rem; padding: 11px 12px; }
-  .cm-row .cm-sub { display: none; }
-  .cgi-mail, .cgi-msg, .cgi-wire { margin-bottom: 16px; }
-  .cg-addr { margin-left: 0; align-items: flex-start; width: 100%; }
-  .cgi-signals li { grid-template-columns: 22px 1fr; padding: 9px 11px; }
-  .cs-d { font-size: .7rem; }
+  .cgb-arena { width: 92vw; }
+  .cgb-hero { width: 84%; }
+  .cgb-strike { width: 16%; }
 }
 
+/* Nothing here is information, so under reduced motion the whole intro is
+   suppressed by the existing rule and this never runs at all. */
 @media (prefers-reduced-motion: reduce) {
-  .cm-row.new, .cg-fake, .cg-fake::after, .cg-magnify, .cw-send, .cw-cursor,
-  .cgi-signals li, .cs-amt, .cs-lbl, .cs-ring { animation: none !important; }
-  .cg-magnify, .cgi-signals li, .cs-lbl { opacity: 1; }
-  .cg-fake::after { transform: scaleX(1); }
-  .cs-ring { opacity: 0; }
+  .cgb-arena *, .cgb-strike, .cgb-burst, .cgb-shock { animation: none !important; }
 }
 
 
@@ -1546,6 +1446,11 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
    ═══════════════════════════════════════════════════════════════ */
 .cgk { width: 100%; height: auto; display: block; overflow: visible; }
 .cgk-figure { transform: translateX(18px); }
+
+/* The sword only appears when the mascot is in action mode. On the static
+   portrait he is a guard, not a swordsman. */
+.cgk-sword { display: none; transform-origin: 252px 246px; }
+.cgk.armed .cgk-sword { display: block; }
 
 /* wings sit behind everything and beat slowly */
 .cgk-wings { transform: translateX(18px); }
@@ -2009,4 +1914,286 @@ html.cgi-lock, html.cgi-lock body { overflow: hidden; }
   .jr-chapter, .jr-carry, .jr-recap li, .jr-handoff { animation: none; }
   .jp-art * { stroke-dashoffset: 0 !important; opacity: 1 !important; animation: none !important; }
   .jc-risk-mark { animation: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   WHY CHOOSE US
+   A player, not an overlay. Nothing autoplays, nothing is forced.
+   ═══════════════════════════════════════════════════════════════ */
+.why-us {
+  padding: 104px 0 96px;
+  background:
+    radial-gradient(1100px 460px at 50% 0%, rgba(0,212,255,.09), transparent 68%),
+    var(--black);
+  border-top: 1px solid var(--border);
+}
+
+.wu-stage { margin-top: 44px; max-width: 1080px; }
+
+.wu-screen {
+  position: relative; aspect-ratio: 16 / 9; min-height: 380px;
+  border-radius: 10px 10px 0 0; overflow: hidden;
+  background:
+    radial-gradient(760px 320px at 50% 12%, rgba(0,212,255,.09), transparent 70%),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.022) 0 1px, transparent 1px 3px),
+    #05070d;
+  border: 1px solid var(--border); border-bottom: 0;
+  display: grid; place-items: center;
+}
+
+/* every scene stacks in the same cell; the controller shows one */
+.wu-scene {
+  grid-area: 1 / 1; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 34px 5%;
+  opacity: 0; visibility: hidden; transform: translateY(18px) scale(.985);
+  transition: opacity .55s cubic-bezier(.2,.9,.3,1),
+              transform .55s cubic-bezier(.2,.9,.3,1), visibility .55s;
+}
+.wu-scene.on { opacity: 1; visibility: visible; transform: none; }
+
+/* ── the play button ── */
+.wu-play {
+  position: absolute; inset: 0; z-index: 6; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  background: rgba(5,7,13,.72); backdrop-filter: blur(3px);
+  border: 0; cursor: pointer; color: #fff; font-family: inherit;
+  transition: opacity .4s ease, visibility .4s;
+}
+.wu-play[hidden], .wu-stage.playing .wu-play { opacity: 0; visibility: hidden; pointer-events: none; }
+.wu-play-tri {
+  width: 78px; height: 78px; border-radius: 50%;
+  background: var(--cyan); position: relative;
+  box-shadow: 0 0 0 0 rgba(0,212,255,.5);
+  animation: wuPulse 2.6s ease-out infinite;
+  transition: transform .25s cubic-bezier(.2,1.4,.4,1);
+}
+.wu-play-tri::after {
+  content: ''; position: absolute; left: 56%; top: 50%; transform: translate(-50%,-50%);
+  border-style: solid; border-width: 15px 0 15px 25px;
+  border-color: transparent transparent transparent #04121a;
+}
+.wu-play:hover .wu-play-tri { transform: scale(1.09); }
+@keyframes wuPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,255,.45); }
+  60%      { box-shadow: 0 0 0 26px rgba(0,212,255,0); }
+}
+.wu-play-l {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.06rem;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+}
+.wu-play-l small {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace; font-weight: 400;
+  font-size: .66rem; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+}
+
+.wu-chapter {
+  position: absolute; left: 18px; top: 16px; z-index: 5;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.55); padding: 5px 11px; border-radius: 4px;
+  background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.12);
+  opacity: 0; transition: opacity .35s ease;
+}
+.wu-stage.playing .wu-chapter, .wu-stage.paused .wu-chapter { opacity: 1; }
+
+/* ── scene 1: inbox ── */
+.wu-mail, .wu-msg, .wu-wire {
+  width: min(640px, 100%); text-align: left; border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14); background: #0b1017;
+  box-shadow: 0 26px 66px rgba(0,0,0,.6);
+}
+.wu-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px;
+  background: #131b26; border-bottom: 1px solid rgba(255,255,255,.09); }
+.wu-dot { width: 9px; height: 9px; border-radius: 50%; }
+.wu-dot.r { background: #ff5f57; } .wu-dot.y { background: #febc2e; } .wu-dot.g { background: #28c840; }
+.wu-bar-t { margin-left: 10px; font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .64rem; letter-spacing: .14em; color: rgba(255,255,255,.5); }
+.wu-row { display: grid; grid-template-columns: 158px 1fr auto; gap: 12px; align-items: center;
+  padding: 13px 16px; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .85rem; }
+.wu-row.old { color: rgba(255,255,255,.32); }
+.wu-row.new { color: #fff; background: rgba(0,212,255,.07);
+  box-shadow: inset 3px 0 0 var(--cyan); }
+.wu-scene.on .wu-row.new { animation: wuArrive .7s cubic-bezier(.2,.9,.3,1) .5s both; }
+@keyframes wuArrive {
+  0%   { opacity: 0; transform: translateY(-13px); background: rgba(0,212,255,.34); }
+  100% { opacity: 1; transform: none; background: rgba(0,212,255,.07); }
+}
+.wu-from { font-weight: 700; }
+.wu-sub, .wu-from { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wu-time { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .68rem;
+  color: rgba(255,255,255,.38); }
+
+/* ── scene 2: the message ── */
+.wu-msg { padding-bottom: 18px; }
+.wu-msg-head { display: flex; align-items: center; gap: 13px; flex-wrap: wrap;
+  padding: 15px 18px; background: #131b26; border-bottom: 1px solid rgba(255,255,255,.09); }
+.wu-avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  background: #2f6fae; color: #fff; font-weight: 700; font-size: .86rem; flex-shrink: 0; }
+.wu-who { display: flex; flex-direction: column; }
+.wu-who strong { color: #fff; font-size: .95rem; }
+.wu-who span { color: rgba(255,255,255,.48); font-size: .74rem; }
+.wu-addr { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; }
+.wu-addr-l { font-size: .66rem; color: rgba(255,255,255,.4); }
+.wu-addr-v { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .74rem;
+  color: rgba(255,255,255,.72); }
+.wu-fake { position: relative; color: #ff8fa3; }
+.wu-fake::after { content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px;
+  background: #ff4d6d; transform: scaleX(0); transform-origin: left; }
+.wu-scene.on .wu-fake::after { animation: wuUnderline .5s cubic-bezier(.4,0,.2,1) 1.9s forwards; }
+@keyframes wuUnderline { to { transform: scaleX(1); } }
+.wu-body { margin: 17px 20px 0; color: rgba(255,255,255,.82); font-size: .93rem; line-height: 1.7; }
+.wu-body strong { color: #fff; }
+.wu-sig { margin: 13px 20px 0; font-size: .76rem; color: rgba(255,255,255,.36); font-style: italic; }
+.wu-flagline { display: block; margin: 15px 20px 0; padding: 10px 14px; border-radius: 5px;
+  background: rgba(255,77,109,.16); border: 1px solid rgba(255,77,109,.55);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .72rem;
+  color: #ffb3c1; line-height: 1.5; opacity: 0; }
+.wu-scene.on .wu-flagline { animation: wuFade .5s ease 2.4s forwards; }
+@keyframes wuFade { to { opacity: 1; } }
+
+/* ── scene 3: the wire ── */
+.wu-wire { padding: 18px 20px 22px; position: relative; }
+.wu-wire-h { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .66rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.55);
+  padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.09); }
+.wu-wire-h span { color: var(--cyan); }
+.wu-wl { display: flex; justify-content: space-between; gap: 16px; align-items: baseline;
+  padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .84rem; }
+.wu-wl span { color: rgba(255,255,255,.45); }
+.wu-wl b { color: #fff; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .82rem; }
+.wu-wl.amt b { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; color: #ff8fa3; }
+.wu-send { display: block; margin-top: 15px; padding: 13px; border-radius: 5px; text-align: center;
+  background: #1f8fe0; color: #fff; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem; }
+.wu-scene.on .wu-send { animation: wuArm 1.2s ease-in-out 1.4s infinite; }
+@keyframes wuArm {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,109,.5); }
+  55%      { box-shadow: 0 0 0 13px rgba(255,77,109,0); }
+}
+.wu-cursor { position: absolute; right: 44px; bottom: 26px; width: 15px; height: 22px; background: #fff;
+  clip-path: polygon(0 0, 0 78%, 26% 60%, 44% 100%, 62% 88%, 46% 52%, 78% 50%);
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,.7)); opacity: 0; }
+.wu-scene.on .wu-cursor { animation: wuCursor 1.8s cubic-bezier(.3,.8,.4,1) 1.0s infinite; }
+@keyframes wuCursor {
+  0%   { opacity: 0; transform: translate(30px, 32px); }
+  22%  { opacity: 1; }
+  62%  { opacity: 1; transform: translate(0,0); }
+  72%  { transform: translate(0, 3px); }
+  100% { opacity: 1; transform: translate(0,0); }
+}
+
+/* ── scene 4: the Guardian ── */
+.wu-hero { position: relative; width: clamp(200px, 26vw, 300px); }
+.wu-blocked { position: absolute; top: -6px; right: -18px; z-index: 3;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .64rem; letter-spacing: .14em;
+  padding: 5px 10px; border-radius: 5px; color: #38f8a7;
+  background: rgba(56,248,167,.12); border: 1px solid rgba(56,248,167,.5); }
+
+/* ── scene 5: the signals ── */
+.wu-signals { list-style: none; margin: 0; padding: 0; width: min(620px, 100%);
+  display: grid; gap: 8px; text-align: left; }
+.wu-signals li { display: grid; grid-template-columns: 26px 1fr; gap: 5px 12px; align-items: baseline;
+  padding: 10px 15px; border-radius: 5px; background: rgba(255,77,109,.07);
+  border: 1px solid rgba(255,77,109,.26); opacity: 0; }
+.wu-scene.on .wu-signals li {
+  animation: wuSig .5s cubic-bezier(.2,.9,.3,1) forwards;
+  animation-delay: calc(.5s + var(--i) * .55s);
+}
+@keyframes wuSig { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+.wu-sflag { grid-row: 1 / 3; align-self: center; width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center; background: rgba(255,77,109,.18);
+  border: 1px solid rgba(255,77,109,.5); color: #ff8fa3;
+  font-family: 'Bebas Neue', sans-serif; font-size: .9rem; }
+.wu-sh { color: #fff; font-weight: 700; font-size: .87rem; }
+.wu-sd { color: rgba(255,255,255,.55); font-size: .76rem;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+
+/* ── scene 6: the money ── */
+.wu-saved { text-align: center; }
+.wu-amt { display: block; font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 9vw, 5.6rem); line-height: 1; color: #38f8a7;
+  text-shadow: 0 0 44px rgba(56,248,167,.4); }
+.wu-scene.on .wu-amt { animation: wuPop .8s cubic-bezier(.2,1.3,.35,1) .3s both; }
+@keyframes wuPop { from { opacity: 0; transform: scale(.72); } to { opacity: 1; transform: none; } }
+.wu-amt-l { display: block; margin-top: 9px; font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; color: rgba(56,248,167,.85); }
+
+/* ── scene 7: the close ── */
+.wu-close { text-align: center; }
+.wu-close-k { display: block; font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .66rem; letter-spacing: .3em; text-transform: uppercase; color: var(--cyan); margin-bottom: 16px; }
+.wu-close strong { display: block; font-family: 'Bebas Neue', sans-serif; font-weight: 400;
+  font-size: clamp(1.9rem, 5.4vw, 3.8rem); line-height: .98; color: #fff; letter-spacing: .02em; }
+.wu-close strong em { font-style: normal; color: #38f8a7; }
+.wu-close-s { display: block; margin-top: 18px; color: rgba(255,255,255,.6); font-size: .9rem; }
+
+/* ── controls ── */
+.wu-controls {
+  display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+  background: #0a0f16; border: 1px solid var(--border); border-radius: 0 0 10px 10px;
+}
+.wu-btn {
+  flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+  display: grid; place-items: center; color: #fff;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+  transition: background .2s ease, border-color .2s ease;
+}
+.wu-btn:hover { background: rgba(0,212,255,.16); border-color: var(--cyan); }
+.wu-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+.wu-ico-pause { width: 12px; height: 13px; border-left: 4px solid currentColor;
+  border-right: 4px solid currentColor; }
+.wu-btn.is-paused .wu-ico-pause { width: 0; height: 0; border: 0;
+  border-style: solid; border-width: 7px 0 7px 12px;
+  border-color: transparent transparent transparent currentColor; margin-left: 3px; }
+.wu-ico-sound { width: 14px; height: 14px; border-radius: 2px;
+  background: currentColor;
+  clip-path: polygon(0 32%, 32% 32%, 62% 0, 62% 100%, 32% 68%, 0 68%); }
+.wu-btn.muted .wu-ico-sound { opacity: .38; }
+.wu-ico-replay { font-size: 1.2rem; line-height: 1; }
+
+.wu-track { position: relative; flex: 1; height: 5px; border-radius: 3px;
+  background: rgba(255,255,255,.10); cursor: pointer; }
+.wu-track:focus-visible { outline: 2px solid var(--cyan); outline-offset: 6px; }
+.wu-track i { display: block; height: 100%; width: 0; border-radius: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--green)); }
+.wu-dotnav { position: absolute; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px;
+  border: 0; background: none; cursor: pointer; display: grid; place-items: center; padding: 0; }
+.wu-dotnav span { width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,.3); border: 1px solid rgba(255,255,255,.35);
+  transition: background .2s ease, transform .2s ease; display: block; }
+.wu-dotnav:hover span { background: var(--cyan); transform: scale(1.35); }
+.wu-dotnav.done span { background: var(--cyan); border-color: var(--cyan); }
+.wu-dotnav.now span { background: #fff; border-color: #fff; transform: scale(1.5); }
+.wu-dotnav:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 50%; }
+
+.wu-time-l { flex-shrink: 0; font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .72rem; color: rgba(255,255,255,.55); min-width: 88px; text-align: right; }
+
+/* ── captions ── */
+.wu-caps { position: relative; margin-top: 22px; min-height: 116px; }
+.wu-cap { position: absolute; inset: 0; margin: 0; opacity: 0; visibility: hidden;
+  color: rgba(255,255,255,.82); font-size: clamp(1rem, 1.9vw, 1.16rem); line-height: 1.72;
+  max-width: 84ch; transition: opacity .45s ease, visibility .45s; }
+.wu-cap.on { opacity: 1; visibility: visible; }
+
+.wu-after { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: 44px; }
+
+@media (max-width: 760px) {
+  .wu-screen { aspect-ratio: auto; min-height: 440px; }
+  .wu-row { grid-template-columns: 1fr auto; font-size: .78rem; }
+  .wu-row .wu-sub { display: none; }
+  .wu-addr { margin-left: 0; align-items: flex-start; width: 100%; }
+  .wu-controls { flex-wrap: wrap; gap: 10px; }
+  .wu-track { order: 3; flex-basis: 100%; }
+  .wu-time-l { min-width: 0; font-size: .68rem; }
+  .wu-caps { min-height: 170px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wu-scene { transition: opacity .2s linear; transform: none; }
+  .wu-scene.on * { animation: none !important; opacity: 1 !important; }
+  .wu-fake::after { transform: scaleX(1); }
+  .wu-play-tri { animation: none; }
 }
