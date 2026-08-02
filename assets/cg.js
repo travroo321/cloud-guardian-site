@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 8.012], [8.012, 15.518], [15.518, 25.338], [25.338, 32.824], [32.824, 40.768], [40.768, 48.164]];
+  var CH = [[0.0, 11.526], [11.526, 21.406], [21.406, 36.547], [36.547, 45.21], [45.21, 55.319], [55.319, 70.687]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -616,7 +616,7 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday morning. Susan runs accounts payable. An email arrives from a client she has paid for years.", "Their bank has changed. Pay by Friday. Look closely. That is an R and an N, not an M.", "Susan sees none of that. She decides to send it, believing it is her client. Without the right software, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. Susan never saw it.", "The money stayed put. No claim, nothing to disclose. Catching that at eight in the morning was never her job.", "It is ours. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
+  var LINES = ["Tuesday morning. Susan runs accounts payable. She is experienced and she is trusted. An email arrives from a client she has paid for years.", "She is told their bank has changed. Pay by Friday. Nothing seems off. Look closely. That is an R and an N, not an M.", "Susan sees none of that. She is doing her job at eight in the morning, like every other day. She decides to send it, believing it is her client. Without the right software, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. Susan never saw it.", "The money stayed put. No claim, nothing to disclose. Catching that at eight in the morning was never her job. It is ours.", "The chief executive hears about it at the quarterly review, along with every other attempt that never happened. He is glad. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 
