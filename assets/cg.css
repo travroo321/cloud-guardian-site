@@ -1869,6 +1869,49 @@
 .wu-close strong em { font-style: normal; color: #38f8a7; }
 .wu-close-s { display: block; margin-top: 18px; color: rgba(255,255,255,.6); font-size: .9rem; }
 
+/* ── the end card ──────────────────────────────────────────────────
+   A finished film that keeps its full sixteen by nine frame is a large
+   dead rectangle in the middle of the page. When the story ends the stage
+   collapses to a band, the last frame goes, and what is left is the one
+   thing a viewer wants next: watch it again, or find out what it costs. */
+.wu-end {
+  position: absolute; inset: 0; z-index: 7;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; text-align: center; padding: 26px 6%;
+  background:
+    radial-gradient(600px 240px at 50% 40%, rgba(0,212,255,.10), transparent 70%),
+    rgba(5,7,13,.94);
+  opacity: 0; visibility: hidden;
+  transition: opacity .45s ease, visibility 0s .45s;
+}
+.wu-stage.ended .wu-end { opacity: 1; visibility: visible; transition: opacity .45s ease .1s, visibility 0s; }
+.wu-end[hidden] { display: flex; }
+.wu-end-k { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .64rem;
+  letter-spacing: .3em; text-transform: uppercase; color: var(--cyan); }
+.wu-end-h { font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(1.1rem, 2.6vw, 1.7rem); color: #fff; max-width: 22ch; line-height: 1.25; }
+.wu-end-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 4px; }
+.wu-end-btn {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  padding: 11px 20px; border-radius: 999px; font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: .86rem; text-decoration: none;
+  border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06);
+  color: #fff; transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.wu-end-btn:hover { transform: translateY(-2px); border-color: var(--cyan);
+  background: rgba(0,212,255,.14); }
+.wu-end-btn.again { background: var(--cyan); color: #04121a; border-color: var(--cyan); }
+.wu-end-btn.again:hover { background: #7fe9ff; }
+.wu-end-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+/* the frame gives its height back once there is nothing left to watch */
+.wu-screen { transition: min-height .5s cubic-bezier(.3,.8,.3,1), aspect-ratio .5s; }
+.wu-stage.ended .wu-screen { aspect-ratio: auto; min-height: 250px; }
+.wu-stage.ended .wu-scene, .wu-stage.ended .wu-chapter { visibility: hidden; }
+@media (max-width: 760px) {
+  .wu-stage.ended .wu-screen { min-height: 290px; }
+}
+
 /* ── controls ── */
 .wu-controls {
   display: flex; align-items: center; gap: 14px; padding: 14px 18px;
@@ -1978,10 +2021,12 @@
 .ct-torso { stroke: #14375c; stroke-width: 2.5; }
 .ct-collar { fill: #f3c9a4; }
 .ct-chair { fill: #24313f; stroke: #16202b; stroke-width: 2.5; }
-.ct-arm path { stroke: #2f6fae; stroke-width: 17; fill: none; }
+.ct-arm path { stroke: #3f7fbe; stroke-width: 19; fill: none; }
+.ct-ceo .ct-arm path { stroke: #2b3744; stroke-width: 18; }
+.ct-ceo .ct-brows path { stroke: #33241a; }
 .ct-hand { fill: #f3c9a4; stroke: #d9a97f; stroke-width: 1.5; }
 .ct-eye { fill: #23303c; }
-.ct-brows path { stroke: #3a2417; stroke-width: 3.4; fill: none; stroke-linecap: round; }
+.ct-brows path { stroke: #4a3222; stroke-width: 4.2; fill: none; stroke-linecap: round; }
 .ct-mouth { stroke: #a4553f; stroke-width: 3.4; fill: none; stroke-linecap: round; opacity: 0; }
 .ct-blush { fill: #f0a58c; opacity: .45; }
 .ct-sweat { fill: #7fd8ff; opacity: 0; }
@@ -1990,11 +2035,13 @@
 .ct-person[data-mood="neutral"] .ct-m-neutral,
 .ct-person[data-mood="worry"]   .ct-m-worry,
 .ct-person[data-mood="smile"]   .ct-m-smile { opacity: 1; }
-.ct-person[data-mood="worry"] .ct-brows path:first-child { transform: translate(4px, 4px) rotate(9deg); }
-.ct-person[data-mood="worry"] .ct-brows path:last-child  { transform: translate(-4px, 4px) rotate(-9deg); }
+.ct-person[data-mood="worry"] .ct-brows path:first-child { transform: translate(2px, 2px) rotate(5deg); }
+.ct-person[data-mood="worry"] .ct-brows path:last-child  { transform: translate(-2px, 2px) rotate(-5deg); }
 .ct-person[data-mood="worry"] .ct-sweat { opacity: 1; animation: ctSweat 1.8s ease-in-out infinite; }
 .ct-person[data-mood="smile"] .ct-eyes ellipse { ry: 4; }
-.ct-brows path { transform-box: fill-box; transform-origin: center; transition: transform .4s ease; }
+.ct-brows path { transform-box: fill-box; transform-origin: right center;
+  transition: transform .45s cubic-bezier(.3,.8,.3,1); }
+.ct-brows path:last-child { transform-origin: left center; }
 @keyframes ctSweat {
   0%, 100% { transform: translateY(0); opacity: .9; }
   50%      { transform: translateY(5px); opacity: .5; }
@@ -2127,6 +2174,49 @@
 .ol-q-t { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.16rem; color: #fff; }
 .ol-q-s { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .68rem;
   letter-spacing: .14em; text-transform: uppercase; color: #38f8a7; }
+
+/* ── the lookalike domain, magnified ── */
+.ct-mag { width: min(560px, 94%); border-radius: 10px; overflow: hidden; text-align: left;
+  background: #070d15; border: 1px solid rgba(255,77,109,.34);
+  box-shadow: 0 12px 30px rgba(0,0,0,.55); padding: 16px 18px 18px; }
+.ct-mag-k { display: block; font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: .6rem; letter-spacing: .24em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); margin-bottom: 12px; }
+.ct-mag-row { display: flex; align-items: baseline; gap: 12px; padding: 6px 0; }
+.ct-mag-l { font-size: .68rem; color: rgba(255,255,255,.42); min-width: 84px; }
+.ct-mag-v { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .92rem;
+  letter-spacing: .02em; }
+.ct-mag-v.good { color: rgba(255,255,255,.78); }
+.ct-mag-v.good b { color: #7fe9ff; font-weight: 400; }
+.ct-mag-v.bad { color: #ffb3c1; }
+.ct-mag-v.bad b.hit { color: #ff4d6d; font-weight: 700; position: relative; }
+.ct-shot.on .ct-mag-v.bad b.hit::after {
+  content: ''; position: absolute; left: -2px; right: -2px; bottom: -4px; height: 2px;
+  background: #ff4d6d; transform: scaleX(0); transform-origin: left;
+  animation: ctUnderline .4s cubic-bezier(.4,0,.2,1) calc(var(--shot, 1.7s) * .18) forwards; }
+.ct-mag-zoom { display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin: 14px 0 10px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08); opacity: 0; }
+.ct-shot.on .ct-mag-zoom {
+  animation: ctFade .45s ease calc(var(--shot, 1.7s) * .3) forwards; }
+.ct-mag-big { font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1; letter-spacing: -.04em; }
+.ct-mag-big.good { color: #7fe9ff; }
+.ct-mag-big.bad { color: #ff4d6d; }
+/* the r and the n pushed together is the entire trick, so close the gap */
+.ct-mag-big.bad i { font-style: normal; margin-left: -.14em; }
+.ct-mag-vs { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .62rem;
+  letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+.ct-mag-note { display: block; font-size: .74rem; line-height: 1.55;
+  color: rgba(255,255,255,.6); opacity: 0; }
+.ct-shot.on .ct-mag-note {
+  animation: ctFade .45s ease calc(var(--shot, 1.7s) * .48) forwards; }
+@media (max-width: 600px) {
+  .ct-mag-row { flex-direction: column; gap: 2px; }
+  .ct-mag-l { min-width: 0; }
+  .ct-mag-v { font-size: .8rem; }
+  .ct-mag-zoom { gap: 10px; }
+}
 
 /* ── the banking screen ── */
 .bk { width: 100%; border-radius: 8px; overflow: hidden; text-align: left; position: relative;
@@ -2335,12 +2425,13 @@
 
 /* the mouse pointer, moved per shot */
 .ct-cursor {
-  position: absolute; z-index: 9; width: 17px; height: 25px; background: #fff;
-  clip-path: polygon(0 0, 0 78%, 26% 60%, 44% 100%, 62% 88%, 46% 52%, 78% 50%);
-  filter: drop-shadow(0 3px 7px rgba(0,0,0,.85));
+  position: absolute; z-index: 9; width: 20px; height: 28px;
   left: var(--cx, 50%); top: var(--cy, 50%);
-  transition: left .5s cubic-bezier(.3,.8,.35,1), top .5s cubic-bezier(.3,.8,.35,1);
+  /* position is owned by --cx and --cy alone. transitioning left and top
+     while a keyframe animation moves the transform meant two systems were
+     driving the same pixel, which is what made it jump. */
 }
+.ct-cursor svg { display: block; width: 100%; height: 100%; }
 .ct-shot.on .ct-cursor.travel {
   animation: ctTravel calc(var(--shot, 1.7s) * .42) cubic-bezier(.3,.8,.35,1) both; }
 @keyframes ctTravel {

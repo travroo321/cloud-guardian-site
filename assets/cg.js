@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 7.886], [7.886, 17.486], [17.486, 30.086], [30.086, 39.776], [39.776, 48.09], [48.09, 57.0]];
+  var CH = [[0.0, 7.886], [7.886, 23.914], [23.914, 36.514], [36.514, 46.204], [46.204, 55.804], [55.804, 66.0]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -599,6 +599,8 @@
   var muteBtn = document.getElementById('wuMute');
   var replay  = document.getElementById('wuReplay');
   var playBtn = document.getElementById('wuPlay');
+  var endCard = document.getElementById('wuEnd');
+  var againBtn = document.getElementById('wuAgain');
   var audio   = document.getElementById('wuAudio');
   var bed     = document.getElementById('wuBed');
   /* the bank screen appears in three shots, so there are three copies of
@@ -614,7 +616,7 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday morning. Susan runs accounts payable. An email arrives from a client she has paid for years.", "Their bank has changed. The invoice is due Friday. Look closely. That is an R and an N, not an M.", "Susan sees none of that. She decides to send the money, believing it is her client. Without the right software behind her, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. It was never delivered, and Susan never saw it.", "So the money stayed put. No insurance claim, nothing to disclose, no difficult call. Susan keeps her job.", "That is what we do across New Jersey and New York. Cloud Guardian. Twice the quality. Half the price."];
+  var LINES = ["Tuesday morning. Susan runs accounts payable. An email arrives from a client she has paid for years.", "Their bank has changed. The invoice is due Friday. Look closely. That is an R and an N, not an M. Side by side they are the same shape, and at inbox size nobody sees it.", "Susan sees none of that. She decides to send the money, believing it is her client. Without the right software behind her, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. It was never delivered, and Susan never saw it.", "So the money stayed put. No claim, nothing to disclose. Catching that at eight in the morning was never Susan's job.", "It is ours. That is what we do across New Jersey and New York. Cloud Guardian. Twice the quality. Half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 
@@ -837,6 +839,8 @@
   function start() {
     if (playing) return;
     playing = true; last = 0;
+    stage.classList.remove('ended');
+    if (endCard) endCard.hidden = true;
     stage.classList.add('playing');
     stage.classList.remove('paused');
     toggle.classList.remove('is-paused');
@@ -890,8 +894,15 @@
     hush();
     toggle.classList.add('is-paused');
     toggle.setAttribute('aria-label', 'Play');
-    if (ended) { stage.classList.remove('playing'); playBtn.hidden = false; current = -1; hush(); }
-    else { stage.classList.add('paused'); }
+    if (ended) {
+      /* the film is over: give the page its height back and offer the two
+         things somebody actually wants next */
+      stage.classList.remove('playing');
+      stage.classList.add('ended');
+      if (endCard) endCard.hidden = false;
+      playBtn.hidden = true;
+      current = -1; hush();
+    } else { stage.classList.add('paused'); }
   }
 
   function seek(time) {
@@ -923,7 +934,9 @@
     start();
   });
   toggle.addEventListener('click', function () { playing ? stop(false) : start(); });
-  replay.addEventListener('click', function () { seek(0); playBtn.hidden = true; start(); });
+  function restart() { seek(0); playBtn.hidden = true; start(); }
+  replay.addEventListener('click', restart);
+  if (againBtn) againBtn.addEventListener('click', restart);
   muteBtn.addEventListener('click', function () {
     muted = !muted;
     muteBtn.classList.toggle('muted', muted);
