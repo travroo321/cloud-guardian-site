@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 11.526], [11.526, 21.406], [21.406, 36.547], [36.547, 45.21], [45.21, 55.319], [55.319, 70.687]];
+  var CH = [[0.0, 11.675], [11.675, 23.632], [23.632, 40.657], [40.657, 48.498], [48.498, 59.323], [59.323, 74.682]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
