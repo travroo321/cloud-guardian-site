@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 11.675], [11.675, 23.632], [23.632, 40.657], [40.657, 48.498], [48.498, 59.323], [59.323, 74.682]];
+  var CH = [[0.0, 10.451], [10.451, 22.154], [22.154, 36.759], [36.759, 51.117], [51.117, 60.389], [60.389, 76.072]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -616,7 +616,7 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday morning. Susan runs accounts payable. She is experienced and she is trusted. An email arrives from a client she has paid for years.", "She is told their bank has changed. Pay by Friday. Nothing seems off. Look closely. That is an R and an N, not an M.", "Susan sees none of that. She is doing her job at eight in the morning, like every other day. She decides to send it, believing it is her client. Without the right software, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. Susan never saw it.", "The money stayed put. No claim, nothing to disclose. Catching that at eight in the morning was never her job. It is ours.", "The chief executive hears about it at the quarterly review, along with every other attempt that never happened. He is glad. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
+  var LINES = ["Tuesday morning. Susan runs accounts payable. She is experienced and she is trusted. An email arrives from a client she has paid for years.", "She is told their bank has changed. Pay by Friday. Nothing seems off. Look closely. That is an R and an N, not an M.", "Susan sees none of that. She is doing her job at eight in the morning, like every other day. She decides to send it, believing it is her client. Without the right software, the eighty four thousand is gone.", "Wait. They have Cloud Guardian as their MSSP. So they are safe. It does not send the wire or the email. It blocks it, and defends the company from disaster. Susan never saw it.", "The money stayed put. No claim, nothing to disclose. Catching that at eight in the morning was never her job. It is ours.", "The chief executive hears about it at the quarterly review, along with every other attempt that never happened. He is glad. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 
@@ -902,6 +902,19 @@
       if (endCard) endCard.hidden = false;
       playBtn.hidden = true;
       current = -1; hush();
+      /* The film is over and it is the first thing on the page, so it should
+         get out of the way. Wait for the frame to finish collapsing, then
+         bring whatever follows up into view rather than leaving the visitor
+         looking at a spent player. */
+      setTimeout(function () {
+        var sec = stage.closest('section');
+        var next = sec && sec.nextElementSibling;
+        if (!next || !next.scrollIntoView) return;
+        var reduce = window.matchMedia &&
+                     matchMedia('(prefers-reduced-motion: reduce)').matches;
+        next.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth',
+                              block: 'start' });
+      }, 620);
     } else { stage.classList.add('paused'); }
   }
 

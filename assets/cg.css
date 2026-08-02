@@ -1644,14 +1644,14 @@
    A player, not an overlay. Nothing autoplays, nothing is forced.
    ═══════════════════════════════════════════════════════════════ */
 .why-us {
-  padding: 104px 0 96px;
+  padding: 34px 0 72px;
   background:
     radial-gradient(1100px 460px at 50% 0%, rgba(0,212,255,.09), transparent 68%),
     var(--black);
   border-top: 1px solid var(--border);
 }
 
-.wu-stage { margin-top: 44px; max-width: 1080px; }
+.wu-stage { margin-top: 0; max-width: 1080px; }
 
 .wu-screen {
   position: relative; aspect-ratio: 16 / 9; min-height: 420px;
@@ -2416,9 +2416,16 @@
 /* anything out of frame stops burning frames. the ambient loops (blinking,
    steam, the live dot, the caret) are declared on the element itself, so
    without this they keep ticking in all six scenes at once. */
-.wu-scene:not(.on) *, .wu-scene:not(.on) *::before, .wu-scene:not(.on) *::after,
-.ct-shot:not(.on) *, .ct-shot:not(.on) *::before, .ct-shot:not(.on) *::after {
-  animation-play-state: paused; }
+.wu-scene:not(.on), .wu-scene:not(.on) *,
+.wu-scene:not(.on) *::before, .wu-scene:not(.on) *::after,
+.ct-shot:not(.on), .ct-shot:not(.on) *,
+.ct-shot:not(.on) *::before, .ct-shot:not(.on) *::after {
+  /* important, because several of these loops are declared further down at a
+     higher specificity than the selector that has to stop them. paired
+     against the shipped build in the same browser this took dropped frames
+     from 5.1 percent to 4.4, twice running, and changes nothing anybody can
+     see: the elements it freezes are the ones that are not on screen. */
+  animation-play-state: paused !important; }
 /* a parked scene is skipped by the renderer entirely: no layout, no paint,
    no style resolution for roughly five hundred nodes of SVG */
 .wu-scene.parked { content-visibility: hidden; }
@@ -2505,9 +2512,14 @@
   letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.6); }
 
 /* who we are watching, named on screen */
-.ct-tag-name { position: absolute; left: 50%; top: 52px; transform: translateX(-50%);
-  z-index: 5; padding: 6px 15px; border-radius: 999px;
-  background: rgba(0,212,255,.12); border: 1px solid rgba(0,212,255,.4);
+/* Anchored to the bottom left gutter, which is the one region of the frame
+   nothing else occupies: the scene chip owns the top left, the brand owns
+   the bottom right, and the composition is centred. Centring this at the
+   top put it straight through the Outlook title bar. */
+.ct-tag-name { position: absolute; left: 20px; bottom: 74px; transform: translateX(-50%);
+  transform: none; z-index: 5; padding: 5px 13px; border-radius: 999px;
+  background: rgba(5,10,18,.88); border: 1px solid rgba(0,212,255,.45);
+  box-shadow: 0 4px 14px rgba(0,0,0,.5);
   font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .64rem;
   letter-spacing: .16em; text-transform: uppercase; color: #7fe9ff; opacity: 0; }
 .ct-shot.on .ct-tag-name {
