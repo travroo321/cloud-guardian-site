@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 5.0], [5.0, 10.0], [10.0, 15.0], [15.0, 20.0], [20.0, 25.0], [25.0, 30.0]];
+  var CH = [[0.0, 5.02], [5.02, 9.64], [9.64, 14.26], [14.26, 19.938], [19.938, 24.958], [24.958, 30.0]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -600,6 +600,7 @@
   var replay  = document.getElementById('wuReplay');
   var playBtn = document.getElementById('wuPlay');
   var audio   = document.getElementById('wuAudio');
+  var bed     = document.getElementById('wuBed');
   /* the bank screen appears in three shots, so there are three copies of
      the amount. an id would only ever have found the first one, and the
      other two sat at zero for the rest of the scene. */
@@ -613,36 +614,55 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday. Susan runs accounts payable. An email arrives from a client about an unpaid invoice.", "Their bank has changed. Pay the new account before Friday. It looks completely normal.", "It is not the client. R N, not M. That domain is six days old.", "Cloud Guardian blocked it in two seconds. It was never delivered. Susan never saw it.", "Eighty four thousand stayed put. No insurance claim. Susan is fine, and the chief executive sleeps.", "Cloud Guardian. Twice the quality. Half the price."];
+  var LINES = ["Tuesday. Susan runs accounts payable. A client emails about an invoice.", "Their bank has changed. Pay the new account by Friday.", "Not the client. R N, not M. Six days old.", "Cloud Guardian blocked it in two seconds. Susan never saw it.", "Eighty four thousand stayed put. No claim. Susan keeps her job.", "Cloud Guardian. Twice the quality. Half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 
+  /* The robotic voice is the operating system's old formant synthesiser:
+     Microsoft David and Zira on Windows, which every browser lists first.
+     The good ones are the neural voices, and they are identifiable without
+     hardcoding a list: they are served rather than installed, so
+     localService is false, and Microsoft names its own with the word
+     Natural. Score every voice and take the best, rather than walking a
+     list of names that goes stale. */
   function pickVoice() {
     if (!speech) return;
     var vs = speech.getVoices().filter(function (v) { return /^en(-|_|$)/i.test(v.lang); });
     if (!vs.length) return;
-    /* prefer the higher quality voices browsers expose, then any en-US */
-    var wanted = ['Google US English', 'Samantha', 'Microsoft Aria', 'Microsoft Jenny',
-                  'Microsoft Zira', 'Karen', 'Daniel'];
-    for (var i = 0; i < wanted.length; i++) {
-      var hit = vs.filter(function (v) { return v.name.indexOf(wanted[i]) === 0; })[0];
-      if (hit) { voice = hit; return; }
+    function score(v) {
+      var n = v.name, s = 0;
+      if (/natural|neural/i.test(n)) s += 60;      /* Microsoft's neural set */
+      if (v.localService === false) s += 40;       /* served, not a SAPI voice */
+      if (/^Google/i.test(n)) s += 35;             /* Chrome's own */
+      if (/Samantha|Ava|Allison|Serena|Jenny|Aria|Sonia|Emma/i.test(n)) s += 20;
+      if (/en[-_]US/i.test(v.lang)) s += 10;
+      if (/David|Zira|Mark|Hazel|compact|eSpeak/i.test(n)) s -= 50;  /* the robots */
+      return s;
     }
-    voice = vs.filter(function (v) { return /en[-_]US/i.test(v.lang); })[0] || vs[0];
+    vs.sort(function (a, b) { return score(b) - score(a); });
+    voice = vs[0];
   }
   if (speech) {
     pickVoice();
     speech.onvoiceschanged = pickVoice;
   }
 
+  /* Speak, do not interrupt.
+
+     The previous version cancelled the running utterance on every scene
+     change, which is exactly what chopped the last few words off each line:
+     a fifteen word sentence does not fit a five second box. The scenes are
+     now sized to their own word counts with air at the end, and this queues
+     rather than cancels, so a line that runs a little long finishes and the
+     next one follows it. cancel() is now reserved for the cases where the
+     audience actually asked for silence: pause, seek, mute and the end. */
   function say(i) {
     if (haveAudio || muted || !speech || i === spoken || !LINES[i]) return;
     spoken = i;
     try {
-      speech.cancel();
       var u = new SpeechSynthesisUtterance(LINES[i]);
       if (voice) u.voice = voice;
-      u.rate = 1.06;      /* the lines are written for about 165 wpm */
+      u.rate = 1.0;
       u.pitch = 1.0;
       u.volume = 1.0;
       speech.speak(u);
@@ -679,7 +699,7 @@
      resolution for several hundred SVG nodes. The scene about to play is
      always unparked one scene early, so the work of laying it out never
      lands on the frame where the cut happens. */
-  var parkT = null;
+  var parkT = null, turnT = null;
   function stageScenes(i) {
     scenes[i].classList.remove('parked');
     if (scenes[i + 1]) scenes[i + 1].classList.remove('parked');
@@ -699,11 +719,34 @@
     /* Every shot outside the live scene is released. The outgoing one keeps
        dissolving under the incoming scene's first shot rather than being cut
        off mid fade, and nothing is left holding visibility:visible inside a
-       hidden parent, which is the one way a stale frame can survive a cut. */
+       hidden parent, which is the one way a stale frame can survive a cut.
+
+       A chapter turn gets a longer dissolve than a beat cut: the outgoing
+       shot is marked on its way out and the incoming one on its way in, and
+       both marks clear once the handover is finished so the quick beat cuts
+       inside the scene are unaffected. */
+    var turning = [];
     for (var k = 0; k < SHOTS.length; k++) {
       if (k === i) continue;
-      for (var j = 0; j < SHOTS[k].length; j++) SHOTS[k][j].classList.remove('on');
+      for (var j = 0; j < SHOTS[k].length; j++) {
+        var sh = SHOTS[k][j];
+        if (sh.classList.contains('on')) {
+          sh.classList.add('chapter-out');
+          turning.push(sh);
+        }
+        sh.classList.remove('on');
+      }
     }
+    if (SHOTS[i] && SHOTS[i][0]) {
+      SHOTS[i][0].classList.add('chapter-in');
+      turning.push(SHOTS[i][0]);
+    }
+    clearTimeout(turnT);
+    turnT = setTimeout(function () {
+      turning.forEach(function (sh) {
+        sh.classList.remove('chapter-out', 'chapter-in');
+      });
+    }, 700);
     caps.forEach(function (c, k) { c.classList.toggle('on', k === i); });
     dots.forEach(function (d, k) {
       d.classList.toggle('now', k === i);
@@ -787,6 +830,7 @@
     last = ts;
     if (t >= RUNTIME) { t = RUNTIME; paint(); stop(true); return; }
     paint();
+    syncBed(ts);
     raf = requestAnimationFrame(tick);
   }
 
@@ -799,13 +843,42 @@
     toggle.setAttribute('aria-label', 'Pause');
     if (haveAudio && !muted) { audio.currentTime = t; audio.play().catch(function () {}); }
     else if (!muted) { spoken = -1; say(chapterAt(t)); }
+    playBed();
     raf = requestAnimationFrame(tick);
+  }
+
+  /* the underscore. it is a track, not a loop, so it is kept on the same
+     clock as the picture: seeking the story seeks the music with it. */
+  function playBed() {
+    if (!bed || muted) return;
+    try {
+      if (Math.abs(bed.currentTime - t) > 0.35) bed.currentTime = Math.min(t, 31);
+      bed.volume = 0.34;
+      var pr = bed.play();
+      if (pr && pr.catch) pr.catch(function () {});
+    } catch (e) {}
+  }
+  function stopBed() { if (bed) { try { bed.pause(); } catch (e) {} } }
+
+  /* Setting currentTime once at the moment of a seek is not enough: the
+     element may still be buffering, or a pending play() promise can land
+     afterwards and put the head back where it was. Checking once a second
+     costs nothing and makes drift impossible whatever the cause. */
+  var bedCheck = 0;
+  function syncBed(ts) {
+    if (!bed || muted || ts - bedCheck < 1000) return;
+    bedCheck = ts;
+    try {
+      if (bed.paused && playing) { var pr = bed.play(); if (pr && pr.catch) pr.catch(function () {}); }
+      if (Math.abs(bed.currentTime - t) > 0.4) bed.currentTime = Math.min(t, 31);
+    } catch (e) {}
   }
 
   function stop(ended) {
     playing = false;
     cancelAnimationFrame(raf);
     if (haveAudio) audio.pause();
+    stopBed();
     hush();
     toggle.classList.add('is-paused');
     toggle.setAttribute('aria-label', 'Play');
@@ -817,6 +890,7 @@
     t = Math.max(0, Math.min(RUNTIME, time));
     counted = (t < CH[2][0]) ? false : counted;
     if (haveAudio) audio.currentTime = t; else hush();
+    if (bed) { try { bed.currentTime = Math.min(t, 31); } catch (e) {} }
     lastSec = -1; lastPct = -1;
     paint();
   }
@@ -848,6 +922,7 @@
     if (haveAudio) { audio.muted = muted; if (!muted && playing) audio.play().catch(function () {}); }
     else if (muted) { hush(); }
     else if (playing) { spoken = -1; say(chapterAt(t)); }
+    if (muted) stopBed(); else if (playing) playBed();
   });
 
   dots.forEach(function (d, i) {

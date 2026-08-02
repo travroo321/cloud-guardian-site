@@ -1678,7 +1678,7 @@
   padding: 26px 4%;
   contain: layout paint;
   opacity: 1; visibility: hidden;
-  transition: visibility 0s .5s;
+  transition: visibility 0s .78s;
 }
 .wu-scene.on { visibility: visible; transition: visibility 0s 0s; }
 
@@ -2291,6 +2291,20 @@
    cuts are held, and the frame is identical on both sides of every one. */
 .ct-shot.hold.on { transition: opacity 0s, visibility 0s; }
 .ct-shot.cutout:not(.on) { transition: opacity 0s, visibility 0s; }
+
+/* A CHAPTER TURN. A cut between two beats of the same scene and a cut
+   between two scenes are different edits and should not look the same. The
+   beat cuts are quick because the narration is continuous across them. The
+   chapter turns land on a new sentence, so they get twice the dissolve and
+   a slow settle out of the outgoing frame. The constant power curves are
+   unchanged, so the picture still never dips. */
+.ct-shot.chapter-in.on {
+  transition: opacity .52s cubic-bezier(0,.45,.6,.8), visibility 0s; }
+.ct-shot.chapter-out {
+  transition: opacity .52s cubic-bezier(.4,.2,1,.55), visibility 0s .52s;
+  scale: 1.012; }
+.ct-shot.chapter-out.hold, .ct-shot.chapter-out.cutout {
+  transition: opacity .52s cubic-bezier(.4,.2,1,.55), visibility 0s .52s; }
 .ct-shot.hold.on .ct-cam { transition-delay: 0s; }
 
 /* No will-change here on purpose. Chromium already promotes an element for
