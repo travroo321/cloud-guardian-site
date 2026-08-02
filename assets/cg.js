@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 7.886], [7.886, 23.914], [23.914, 36.514], [36.514, 46.204], [46.204, 55.804], [55.804, 66.0]];
+  var CH = [[0.0, 8.012], [8.012, 15.518], [15.518, 25.338], [25.338, 32.824], [32.824, 40.768], [40.768, 48.164]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -616,7 +616,7 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday morning. Susan runs accounts payable. An email arrives from a client she has paid for years.", "Their bank has changed. The invoice is due Friday. Look closely. That is an R and an N, not an M. Side by side they are the same shape, and at inbox size nobody sees it.", "Susan sees none of that. She decides to send the money, believing it is her client. Without the right software behind her, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. It was never delivered, and Susan never saw it.", "So the money stayed put. No claim, nothing to disclose. Catching that at eight in the morning was never Susan's job.", "It is ours. That is what we do across New Jersey and New York. Cloud Guardian. Twice the quality. Half the price."];
+  var LINES = ["Tuesday morning. Susan runs accounts payable. An email arrives from a client she has paid for years.", "Their bank has changed. Pay by Friday. Look closely. That is an R and an N, not an M.", "Susan sees none of that. She decides to send it, believing it is her client. Without the right software, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. Susan never saw it.", "The money stayed put. No claim, nothing to disclose. Catching that at eight in the morning was never her job.", "It is ours. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 
