@@ -2103,10 +2103,12 @@
   background: #a4262c; transform: scaleX(0); transform-origin: left;
 }
 .ct-shot.on .ol.flag .ol-addr em::after {
-  animation: ctUnderline .42s cubic-bezier(.4,0,.2,1) .15s forwards;
+  animation: ctUnderline .42s cubic-bezier(.4,0,.2,1)
+             calc(var(--shot, 1.7s) * .1) forwards;
 }
 @keyframes ctUnderline { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); } }
-.ct-shot.on .ol.flag .ol-banner { animation: ctFade .4s ease .5s forwards; }
+.ct-shot.on .ol.flag .ol-banner {
+  animation: ctFade .4s ease calc(var(--shot, 1.7s) * .28) forwards; }
 @keyframes ctFade { to { opacity: 1; } }
 
 /* the quarantine card slams over the window */
@@ -2197,7 +2199,13 @@
 
 /* the camera push. it now rides the shot rather than the scene, so every
    beat gets its own move instead of one push every five seconds. */
-.ct-cam { transition: transform .95s cubic-bezier(.22,.72,.26,1) 0s;
+/* The move is sized to the beat. A shot that holds for four seconds with a
+   one second push is a still frame for three of them, which is the other
+   half of why the film felt like it was skipping: the picture stopped
+   moving long before the sentence finished. --shot is set per shot by the
+   controller from the real scene timings. */
+.ct-cam { transition: transform calc(var(--shot, 1.7s) * .62)
+                      cubic-bezier(.22,.72,.26,1) 0s;
   transform: var(--cam-from, scale(.965)); backface-visibility: hidden; }
 /* percentage widths inside a shrink to fit flex item resolve against the
    intrinsic width, so the wrapper came out wider than the thing inside it
@@ -2207,7 +2215,8 @@
 
 /* the Guardian flying in to intercept */
 .ct-guard { position: absolute; z-index: 6; width: 25%; left: 27%; top: 50%; }
-.ct-shot.on .ct-guard { animation: ctSwoop .8s cubic-bezier(.15,1.12,.3,1) .1s both; }
+.ct-shot.on .ct-guard {
+  animation: ctSwoop .8s cubic-bezier(.15,1.12,.3,1) calc(var(--shot, 1.7s) * .06) both; }
 @keyframes ctSwoop {
   0%   { opacity: 0; transform: translate(-260%, -150%) scale(.45) rotate(-18deg); }
   70%  { opacity: 1; }
@@ -2216,7 +2225,8 @@
 .ct-shock { position: absolute; left: 50%; top: 50%; width: 46%; aspect-ratio: 1; z-index: 5;
   transform: translate(-50%,-50%); border-radius: 50%; opacity: 0;
   border: 3px solid rgba(0,212,255,.9); }
-.ct-shot.on .ct-shock { animation: ctShock .85s cubic-bezier(.2,.8,.3,1) .55s 2; }
+.ct-shot.on .ct-shock {
+  animation: ctShock .85s cubic-bezier(.2,.8,.3,1) calc(var(--shot, 1.7s) * .3) 2; }
 @keyframes ctShock {
   0%   { opacity: .95; transform: translate(-50%,-50%) scale(.4); }
   100% { opacity: 0; transform: translate(-50%,-50%) scale(1.7); }
@@ -2239,7 +2249,7 @@
   padding: 9px 12px; border-radius: 4px; background: rgba(255,77,109,.07);
   border: 1px solid rgba(255,77,109,.24); opacity: 0; }
 .ct-shot.on .ct-sig { animation: ctSig .42s cubic-bezier(.2,.9,.3,1) both;
-  animation-delay: calc(.2s + var(--i) * .26s); }
+  animation-delay: calc(var(--shot, 1.7s) * .1 + var(--i) * var(--shot, 1.7s) * .2); }
 @keyframes ctSig { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
 .ct-sig-i { grid-column: 1; grid-row: 1 / 3; width: 20px; height: 20px; border-radius: 50%; display: grid;
   place-items: center; background: rgba(255,77,109,.18); border: 1px solid rgba(255,77,109,.5);
@@ -2331,18 +2341,21 @@
   left: var(--cx, 50%); top: var(--cy, 50%);
   transition: left .5s cubic-bezier(.3,.8,.35,1), top .5s cubic-bezier(.3,.8,.35,1);
 }
-.ct-shot.on .ct-cursor.travel { animation: ctTravel .7s cubic-bezier(.3,.8,.35,1) both; }
+.ct-shot.on .ct-cursor.travel {
+  animation: ctTravel calc(var(--shot, 1.7s) * .42) cubic-bezier(.3,.8,.35,1) both; }
 @keyframes ctTravel {
   from { transform: translate(var(--fx, -90px), var(--fy, 60px)); }
   to   { transform: none; }
 }
-.ct-shot.on .ct-cursor.click { animation: ctClick .34s ease .35s 2; }
+.ct-shot.on .ct-cursor.click {
+  animation: ctClick .34s ease calc(var(--shot, 1.7s) * .2) 2; }
 @keyframes ctClick { 0%,100% { transform: scale(1); } 45% { transform: scale(.82); } }
 .ct-click-ring {
   position: absolute; z-index: 8; width: 34px; height: 34px; margin: -17px 0 0 -17px;
   left: var(--cx, 50%); top: var(--cy, 50%); border-radius: 50%;
   border: 2px solid #7fe9ff; opacity: 0; }
-.ct-shot.on .ct-click-ring { animation: ctRing .5s ease-out .34s 2; }
+.ct-shot.on .ct-click-ring {
+  animation: ctRing .5s ease-out calc(var(--shot, 1.7s) * .19) 2; }
 @keyframes ctRing {
   0%   { opacity: .9; transform: scale(.3); }
   100% { opacity: 0; transform: scale(1.5); }
@@ -2359,7 +2372,9 @@
   font-size: 12px; box-shadow: 0 8px 18px rgba(0,0,0,.55);
   right: 4%; top: 8%; opacity: 0; }
 .ct-ping b { display: block; font-size: 11px; opacity: .8; font-weight: 400; }
-.ct-shot.on .ct-ping { animation: ctPing 1.5s cubic-bezier(.2,.9,.3,1) .15s both; }
+.ct-shot.on .ct-ping {
+  animation: ctPing calc(var(--shot, 1.7s) * .82) cubic-bezier(.2,.9,.3,1)
+             calc(var(--shot, 1.7s) * .08) both; }
 @keyframes ctPing {
   0%   { opacity: 0; transform: translateX(40px); }
   16%  { opacity: 1; transform: none; }
@@ -2385,7 +2400,8 @@
 .ct-guard-still .cgk-attacks, .ct-guard-still .cgk-barrier { display: none; }
 .ct-blocked-t { display: block; font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1; letter-spacing: .1em; color: #38f8a7; }
-.ct-shot.on .ct-blocked-t { animation: ctPunch .4s cubic-bezier(.3,1.1,.4,1) .12s both; }
+.ct-shot.on .ct-blocked-t {
+  animation: ctPunch .4s cubic-bezier(.3,1.1,.4,1) calc(var(--shot, 1.7s) * .07) both; }
 @keyframes ctPunch {
   0%   { opacity: 0; transform: scale(2.2); }
   70%  { opacity: 1; transform: scale(.94); }
@@ -2403,7 +2419,8 @@
   background: rgba(0,212,255,.12); border: 1px solid rgba(0,212,255,.4);
   font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: .64rem;
   letter-spacing: .16em; text-transform: uppercase; color: #7fe9ff; opacity: 0; }
-.ct-shot.on .ct-tag-name { animation: ctFade .4s ease .45s forwards; }
+.ct-shot.on .ct-tag-name {
+  animation: ctFade .4s ease calc(var(--shot, 1.7s) * .2) forwards; }
 
 /* ── the celebration: the two people and the mascot, and a BLOCKED stamp ── */
 .ct-celebrate { position: relative; width: min(760px, 100%); text-align: center;
@@ -2412,8 +2429,8 @@
 .ct-cast > * { width: clamp(96px, 15vw, 168px); }
 .ct-cast .ct-mascot { width: clamp(120px, 19vw, 210px); align-self: center; }
 .ct-shot.on .ct-cast > * { animation: ctCheer .5s cubic-bezier(.2,1.3,.35,1) both; }
-.ct-shot.on .ct-cast > *:nth-child(2) { animation-delay: .1s; }
-.ct-shot.on .ct-cast > *:nth-child(3) { animation-delay: .2s; }
+.ct-shot.on .ct-cast > *:nth-child(2) { animation-delay: calc(var(--shot, 1.7s) * .07); }
+.ct-shot.on .ct-cast > *:nth-child(3) { animation-delay: calc(var(--shot, 1.7s) * .14); }
 @keyframes ctCheer {
   from { opacity: 0; transform: translateY(26px) scale(.9); }
   to   { opacity: 1; transform: none; }
@@ -2426,7 +2443,8 @@
   letter-spacing: .12em; color: #ff2d55; background: rgba(255,45,85,.12);
   transform: translate(-50%, 0) rotate(-9deg) scale(2.6); opacity: 0;
 }
-.ct-shot.on .ct-stamp { animation: ctStamp .42s cubic-bezier(.3,1.1,.4,1) .4s both; }
+.ct-shot.on .ct-stamp {
+  animation: ctStamp .42s cubic-bezier(.3,1.1,.4,1) calc(var(--shot, 1.7s) * .28) both; }
 @keyframes ctStamp {
   0%   { opacity: 0; transform: translate(-50%,0) rotate(-9deg) scale(1.9); }
   70%  { opacity: 1; transform: translate(-50%,0) rotate(-9deg) scale(.94); }
@@ -2454,7 +2472,8 @@
 .ct-saved .ct-amt { display: block; font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(2.8rem, 8.5vw, 5.4rem); line-height: 1; color: #38f8a7;
   text-shadow: 0 0 48px rgba(56,248,167,.42); }
-.ct-shot.on .ct-saved .ct-amt { animation: ctPop .7s cubic-bezier(.2,1.3,.35,1) .18s both; }
+.ct-shot.on .ct-saved .ct-amt {
+  animation: ctPop .7s cubic-bezier(.2,1.3,.35,1) calc(var(--shot, 1.7s) * .1) both; }
 @keyframes ctPop { from { opacity: 0; transform: scale(.7); } to { opacity: 1; transform: none; } }
 .ct-saved .ct-amt-l { display: block; margin-top: 8px; font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-size: .66rem; letter-spacing: .24em; text-transform: uppercase; color: rgba(56,248,167,.85); }
@@ -2470,7 +2489,7 @@
 }
 .ct-out b { color: #38f8a7; font-weight: 400; }
 .ct-shot.on .ct-out { animation: ctSig .42s cubic-bezier(.2,.9,.3,1) both;
-  animation-delay: calc(.32s + var(--i) * .2s); }
+  animation-delay: calc(var(--shot, 1.7s) * .22 + var(--i) * var(--shot, 1.7s) * .16); }
 @media (max-width: 600px) { .ct-out { font-size: .74rem; padding: 7px 12px; } }
 
 @media (max-width: 860px) {

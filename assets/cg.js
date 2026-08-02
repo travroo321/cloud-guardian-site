@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 5.02], [5.02, 9.64], [9.64, 14.26], [14.26, 19.938], [19.938, 24.958], [24.958, 30.0]];
+  var CH = [[0.0, 7.886], [7.886, 17.486], [17.486, 30.086], [30.086, 39.776], [39.776, 48.09], [48.09, 57.0]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -614,7 +614,7 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday. Susan runs accounts payable. A client emails about an invoice.", "Their bank has changed. Pay the new account by Friday.", "Not the client. R N, not M. Six days old.", "Cloud Guardian blocked it in two seconds. Susan never saw it.", "Eighty four thousand stayed put. No claim. Susan keeps her job.", "Cloud Guardian. Twice the quality. Half the price."];
+  var LINES = ["Tuesday morning. Susan runs accounts payable. An email arrives from a client she has paid for years.", "Their bank has changed. The invoice is due Friday. Look closely. That is an R and an N, not an M.", "Susan sees none of that. She decides to send the money, believing it is her client. Without the right software behind her, the eighty four thousand is gone.", "It does not go. Cloud Guardian caught the impersonation in two seconds. It was never delivered, and Susan never saw it.", "So the money stayed put. No insurance claim, nothing to disclose, no difficult call. Susan keeps her job.", "That is what we do across New Jersey and New York. Cloud Guardian. Twice the quality. Half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 
@@ -848,11 +848,19 @@
   }
 
   /* the underscore. it is a track, not a loop, so it is kept on the same
-     clock as the picture: seeking the story seeks the music with it. */
+     clock as the picture: seeking the story seeks the music with it.
+
+     The seek target is clamped to the score's real duration rather than a
+     literal, because a literal goes stale the moment the edit changes
+     length and then silently caps the music halfway through the film. */
+  function bedAt(time) {
+    var d = (bed && isFinite(bed.duration) && bed.duration > 0) ? bed.duration : RUNTIME;
+    return Math.max(0, Math.min(time, d - 0.05));
+  }
   function playBed() {
     if (!bed || muted) return;
     try {
-      if (Math.abs(bed.currentTime - t) > 0.35) bed.currentTime = Math.min(t, 31);
+      if (Math.abs(bed.currentTime - t) > 0.35) bed.currentTime = bedAt(t);
       bed.volume = 0.34;
       var pr = bed.play();
       if (pr && pr.catch) pr.catch(function () {});
@@ -870,7 +878,7 @@
     bedCheck = ts;
     try {
       if (bed.paused && playing) { var pr = bed.play(); if (pr && pr.catch) pr.catch(function () {}); }
-      if (Math.abs(bed.currentTime - t) > 0.4) bed.currentTime = Math.min(t, 31);
+      if (Math.abs(bed.currentTime - t) > 0.4) bed.currentTime = bedAt(t);
     } catch (e) {}
   }
 
@@ -890,7 +898,7 @@
     t = Math.max(0, Math.min(RUNTIME, time));
     counted = (t < CH[2][0]) ? false : counted;
     if (haveAudio) audio.currentTime = t; else hush();
-    if (bed) { try { bed.currentTime = Math.min(t, 31); } catch (e) {} }
+    if (bed) { try { bed.currentTime = bedAt(t); } catch (e) {} }
     lastSec = -1; lastPct = -1;
     paint();
   }
