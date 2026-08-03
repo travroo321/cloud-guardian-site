@@ -586,7 +586,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 6.406], [6.406, 15.809], [15.809, 20.429], [20.429, 28.031], [28.031, 34.733], [34.733, 44.005]];
+  var CH = [[0.0, 7.066], [7.066, 16.4], [16.4, 21.241], [21.241, 27.988], [27.988, 34.245], [34.245, 44.355]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -616,7 +616,7 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday, eight in the morning. Susan runs accounts payable. An email from a client she has paid for years.", "Their bank has changed. Pay by Friday. Nothing seems off. Look closely. That is an R and an N, not an M.", "Susan never sees it. She sends the wire. Eighty four thousand.", "Wait. Cloud Guardian is their MSSP. It blocks the wire and the email. Susan never knew.", "The money stayed put. Nothing to disclose. That was never her job. It is ours.", "The chief executive hears at the quarterly review, with every other attempt that never happened. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
+  var LINES = ["Tuesday, eight in the morning. Susan runs accounts payable. An email from a client she has paid for years.", "Their bank has changed. Pay by Friday. Nothing seems off. Look closely. That is an R and an N, not an M.", "Susan never sees it. She sends the wire. Eighty four thousand.", "Wait. Cloud Guardian is their MSSP. It blocks the wire and the email. Susan never knew.", "The money stayed put. Nothing to disclose. That was never her job. It is ours.", "The chief executive hears at the quarterly review. Along with every attempt that never happened. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 
