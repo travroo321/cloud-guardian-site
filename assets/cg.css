@@ -497,6 +497,42 @@
   .article ul, .article ol { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin: 0 0 18px 22px; }
   .article strong { color: var(--white); }
 
+  /* ─── LEGAL PAGES ───
+     A contract is read differently from an article: people scan for the
+     clause that matters and then read that one closely. So the headings
+     are numbered and quiet rather than display sized, the measure is a
+     little wider, and the body is a touch larger than blog copy because
+     these pages get read by somebody's lawyer at eleven at night. */
+  .lgl h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.12rem; letter-spacing: .01em; color: var(--white);
+    margin-top: 42px; margin-bottom: 12px;
+    padding-top: 18px; border-top: 1px solid rgba(255,255,255,.08); }
+  .lgl h2:first-of-type { border-top: 0; padding-top: 0; }
+  .lgl p { font-size: 0.97rem; line-height: 1.85; }
+  .lgl .lgl-lede { color: var(--white); font-size: 1.05rem; line-height: 1.8; }
+  .lgl .lgl-meta {
+    display: flex; flex-wrap: wrap; gap: 8px 20px;
+    font-family: 'IBM Plex Mono', monospace; font-size: .74rem;
+    letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+    padding: 14px 0 18px; margin-bottom: 22px;
+    border-bottom: 1px solid rgba(255,255,255,.1); }
+  .lgl .lgl-meta strong { color: var(--cyan); }
+  .lgl .lgl-note {
+    border-left: 2px solid var(--cyan); background: rgba(0,180,216,.06);
+    padding: 16px 20px; margin: 26px 0; border-radius: 0 8px 8px 0;
+    color: var(--muted); font-size: .93rem; line-height: 1.75; }
+  .lgl .lgl-note strong { color: var(--white); }
+  .lgl .lgl-foot {
+    margin-top: 46px; padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.1);
+    font-family: 'IBM Plex Mono', monospace; font-size: .78rem;
+    line-height: 1.9; color: var(--muted); }
+  .lgl code {
+    font-family: 'IBM Plex Mono', monospace; font-size: .88em;
+    background: rgba(255,255,255,.07); padding: 2px 6px; border-radius: 4px;
+    color: var(--cyan); }
+
   /* ─── FOOTER NAP ─── */
   footer { display: block; padding: 0; }
   .foot-nap {
