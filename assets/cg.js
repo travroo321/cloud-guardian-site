@@ -181,26 +181,57 @@
     if (!el) return;
 
     var RATES = {
-      essential_user: 20, managed_user: 65, mssp_user: 95,
-      workstation: 15, server: 85,
+      silver_hour: 90, silver_half: 45,
+      gold_user: 65, platinum_user: 95, server: 85,
       m365: 22, backup: 6, voip: 20
     };
     var BAND = 0.15;
 
     var users = document.getElementById('c-users');
-    var ws    = document.getElementById('c-ws');
     var srv   = document.getElementById('c-srv');
-    var tier  = 'managed';
+    var tier  = 'gold';
 
     function money(n) {
       return '$' + Math.round(n).toLocaleString('en-US');
     }
 
     function recalc() {
-      var u = +users.value, w = +ws.value, s = +srv.value;
+      var u = +users.value, s = +srv.value;
       document.getElementById('c-users-v').textContent = u;
-      document.getElementById('c-ws-v').textContent = w;
       document.getElementById('c-srv-v').textContent = s;
+
+      /* Silver is not a monthly plan, so there is no monthly figure to
+         show. Printing one anyway, by inventing a seat rate it does not
+         have, would be the calculator lying to make itself useful. It
+         shows the hourly instead and says what it cannot know. */
+      var out = document.getElementById('calc-out-wrap') || el;
+      if (tier === 'silver') {
+        document.getElementById('calc-lo').textContent = money(RATES.silver_half);
+        document.getElementById('calc-hi').textContent = money(RATES.silver_hour);
+        document.getElementById('calc-break').innerHTML =
+          '<div class="calc-line"><span>Half hour, the smallest unit billed</span><span>'
+          + money(RATES.silver_half) + '</span></div>'
+          + '<div class="calc-line"><span>Full hour</span><span>' + money(RATES.silver_hour) + '</span></div>'
+          + '<div class="calc-line calc-line-total"><span>Monthly commitment</span><span>None</span></div>'
+          + '<div class="calc-flag">Silver has no monthly fee, so there is nothing here to add up. '
+          + 'You are billed for the time you use, in half hour increments, nine to five Monday to Friday. '
+          + 'After hours and emergency work is charged at a special rate agreed with you in advance. '
+          + 'If you want a number you can budget, that is Gold.</div>';
+        var lbl = document.querySelector('.calc-out-label');
+        if (lbl) lbl.textContent = 'Silver, pay as you go';
+        try { sessionStorage.setItem('cg_estimate', money(RATES.silver_hour) + ' / hour, pay as you go'); } catch (e) {}
+        var hoS = document.getElementById('calcNext');
+        if (hoS) {
+          hoS.classList.add('on');
+          var lkS = document.getElementById('calcNextLink');
+          if (lkS) lkS.href = '/next-steps/?est=' + encodeURIComponent(money(RATES.silver_hour) + ' / hour');
+          var lvS = document.getElementById('calcNextVal');
+          if (lvS) lvS.textContent = money(RATES.silver_hour) + ' per hour';
+        }
+        return;
+      }
+      var lbl2 = document.querySelector('.calc-out-label');
+      if (lbl2) lbl2.textContent = 'Estimated monthly';
 
       var perUser = RATES[tier + '_user'];
       var lines = [];
@@ -210,11 +241,6 @@
       total += seat;
       lines.push([u + ' user' + (u === 1 ? '' : 's') + ' at ' + money(perUser), seat]);
 
-      if (w > 0) {
-        var wsCost = w * RATES.workstation;
-        total += wsCost;
-        lines.push([w + ' workstation' + (w === 1 ? '' : 's') + ' at ' + money(RATES.workstation), wsCost]);
-      }
       if (s > 0) {
         var srvCost = s * RATES.server;
         total += srvCost;
@@ -225,7 +251,7 @@
         lines.push(['Microsoft 365 licensing', m]);
       }
       if (document.getElementById('a-backup').checked) {
-        var protectedCount = w + s;
+        var protectedCount = u + s;
         var b = protectedCount * RATES.backup; total += b;
         lines.push(['Immutable backup, ' + protectedCount + ' endpoint' + (protectedCount === 1 ? '' : 's'), b]);
       }
@@ -242,7 +268,7 @@
         html += '<div class="calc-line"><span>' + lines[i][0] + '</span><span>' + money(lines[i][1]) + '</span></div>';
       }
       html += '<div class="calc-line calc-line-total"><span>Midpoint</span><span>' + money(total) + ' / month</span></div>';
-      if (u > 40 || w > 50) {
+      if (u > 40) {
         html += '<div class="calc-flag">Above 40 users this calculator stops being useful. At your size the number comes down per seat, so call and we will price it properly.</div>';
       }
       document.getElementById('calc-break').innerHTML = html;
@@ -261,7 +287,7 @@
       }
     }
 
-    [users, ws, srv].forEach(function (i) {
+    [users, srv].forEach(function (i) {
       i.addEventListener('input', recalc);
     });
     ['a-m365', 'a-backup', 'a-voip'].forEach(function (id) {
@@ -586,7 +612,7 @@
   var stage = document.getElementById('wuStage');
   if (!stage) return;
 
-  var CH = [[0.0, 6.006], [6.006, 15.192], [15.192, 20.177], [20.177, 28.099], [28.099, 34.165], [34.165, 44.872]];
+  var CH = [[0.0, 8.625], [8.625, 20.095], [20.095, 27.16], [27.16, 36.365], [36.365, 44.535], [44.535, 52.275]];
   var RUNTIME = +stage.dataset.runtime;
   var scenes  = [].slice.call(stage.querySelectorAll('.wu-scene'));
   var caps    = [].slice.call(stage.querySelectorAll('.wu-cap'));
@@ -616,7 +642,7 @@
      Preference order: a recorded mp3, then the browser speech synthesiser,
      then silence with captions. LINES is the same text the captions and
      the transcript use, so the three can never drift. */
-  var LINES = ["Tuesday, eight in the morning. Susan runs accounts payable. An email from a client she has paid for years.", "Their bank has changed. Pay by Friday. Nothing seems off. Look closely. That is an R and an N, not an M.", "Susan never sees it. She sends the wire. Eighty four thousand.", "Wait. Cloud Guardian is their MSSP. It blocks the wire and the email. Susan never knew.", "The money stayed put. Nothing to disclose. That was never her job. It is ours.", "The chief executive hears at the quarterly review. Along with every attempt that never happened. Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
+  var LINES = ["Tuesday, eight in the morning. Susan runs accounts payable. An email from a client she has paid for years.", "Their bank has changed. Pay by Friday. Nothing seems off. Look closely. That is an R and an N, not an M.", "Susan never sees it. She sends the wire. Eighty four thousand.", "Wait. Cloud Guardian is their MSSP. It blocks the wire and the email. Susan never knew.", "The money stayed put. Nothing to disclose. That was never her job. It is ours.", "Cloud Guardian. New Jersey and New York. Twice the quality, half the price."];
   var speech = ('speechSynthesis' in window) ? window.speechSynthesis : null;
   var voice = null, spoken = -1;
 

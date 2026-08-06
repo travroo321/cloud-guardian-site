@@ -497,6 +497,32 @@
   .article ul, .article ol { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin: 0 0 18px 22px; }
   .article strong { color: var(--white); }
 
+  /* ─── SERVICE LEVEL BUTTONS ───
+     Two lines: the metal the client says on the phone, and what it is. */
+  .calc-tier b, .calc-tier i { display: block; font-style: normal; }
+  .calc-tier b { font-weight: 700; letter-spacing: .04em; }
+  .calc-tier i { font-size: .72rem; opacity: .72; margin-top: 2px;
+                 font-weight: 400; letter-spacing: .02em; }
+
+  /* ─── PLAN METAL BADGE ───
+     The plans have two names now: what the plan is, and what the client
+     calls it on the phone. The descriptive name stays the heading because
+     nobody searches for "gold", and the metal sits above it as a chip so
+     the two are attached wherever a plan appears. */
+  .pr-metal {
+    display: inline-block; font-family: 'IBM Plex Mono', monospace;
+    font-size: .66rem; font-weight: 500; letter-spacing: .18em;
+    text-transform: uppercase; padding: 4px 11px; border-radius: 999px;
+    margin-bottom: 10px; border: 1px solid currentColor; }
+  .pr-metal-silver   { color: #b9c4cf; }
+  .pr-metal-gold     { color: #e8c46a; }
+  .pr-metal-platinum { color: #6fe3ff; }
+  .pkg-metal {
+    display: inline-block; font-family: 'IBM Plex Mono', monospace;
+    font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+    padding: 2px 9px; border-radius: 999px; margin-left: 8px;
+    border: 1px solid currentColor; vertical-align: middle; }
+
   /* ─── LEGAL PAGES ───
      A contract is read differently from an article: people scan for the
      clause that matters and then read that one closely. So the headings
@@ -614,6 +640,12 @@
   }
   .fab-wrap:not(.open):hover .fab-label { opacity: 1; }
   @media (max-width: 560px) { .fab-wrap { right: 14px; bottom: 14px; } .fab-label { display: none; } }
+
+  .fab-item.fab-whatsapp .fi { color: #25d366; }
+  .fab-item.fab-telegram .fi { color: #29a9eb; }
+  .fab-item.fab-whatsapp:hover { border-color: #25d366; }
+  .fab-item.fab-telegram:hover { border-color: #29a9eb; }
+  .fab-item .fi svg { display: block; }
 
   /* ─── TOAST ─── */
   .cg-toast {
