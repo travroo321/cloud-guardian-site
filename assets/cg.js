@@ -415,6 +415,100 @@
     if (tier && msg && !msg.value) { msg.value = 'Interested in the ' + tier + ' tier. '; }
   })();
 
+  // ── Chat panel ──
+  (function () {
+    var panel = document.getElementById('cgChat');
+    var wrap  = document.getElementById('fabWrap');
+    var btn   = document.getElementById('fabBtn');
+    if (!panel || !btn) return;
+
+    var TAWK = "";
+    var SMS  = "+17327435472";
+    var MAIL = "sales@cloud-guardian.com";
+    var AWAY = "Outside 9 to 5 we still read everything and reply first thing.";
+    var box  = document.getElementById('cgcText');
+
+    /* Business hours are a claim the widget makes, so it should be true.
+       Nine to five Monday to Friday, in New Jersey rather than in whatever
+       timezone the visitor happens to be sitting in. */
+    function openNow() {
+      var s = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+      var d = new Date(s), h = d.getHours(), day = d.getDay();
+      return day >= 1 && day <= 5 && h >= 9 && h < 17;
+    }
+    if (!openNow()) {
+      var w = document.getElementById('cgcWhen');
+      if (w) w.textContent = 'Away right now';
+      var g = document.getElementById('cgcGreet');
+      if (g) g.textContent = g.textContent + ' ' + AWAY;
+      var dot = panel.querySelector('.cgc-dot');
+      if (dot) { dot.style.background = '#e8a33d';
+                 dot.style.boxShadow = '0 0 0 3px rgba(232,163,61,.18)'; }
+    }
+
+    /* Every channel gets the same message. Rebuilt on each keystroke rather
+       than on click, so the href is real and a middle click or a long press
+       opens the right thing. */
+    function refresh() {
+      var t = (box.value || '').trim();
+      var body = t || 'Hi Cloud Guardian, I have a question.';
+      var enc = encodeURIComponent(body);
+      [].forEach.call(panel.querySelectorAll('.cgc-send a'), function (a) {
+        var ch = a.getAttribute('data-ch'), href = '#';
+        if (ch === 'wa')  href = 'https://wa.me/' + a.getAttribute('data-num') + '?text=' + enc;
+        if (ch === 'tg')  href = 'https://t.me/' + a.getAttribute('data-user');
+        if (ch === 'sms') href = 'sms:' + SMS + (/iPhone|iPad|Mac/.test(navigator.userAgent) ? '&' : '?') + 'body=' + enc;
+        if (ch === 'em')  href = 'mailto:' + MAIL + '?subject=' +
+              encodeURIComponent('Website chat') + '&body=' + enc;
+        a.setAttribute('href', href);
+        a.removeAttribute('aria-disabled');
+        if (ch === 'wa' || ch === 'tg') { a.target = '_blank'; a.rel = 'noopener'; }
+      });
+    }
+    box.addEventListener('input', refresh);
+    refresh();
+
+    function show(on) {
+      panel.classList.toggle('on', on);
+      btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on) { wrap.classList.remove('open'); setTimeout(function () { box.focus(); }, 180); }
+    }
+
+    /* A real agent widget, if one is configured, replaces all of this. It is
+       fetched on the first click rather than on page load: a visitor who
+       never opens the chat should not pay for the script. */
+    var tawkLoaded = false;
+    function loadTawk() {
+      if (tawkLoaded) return true;
+      tawkLoaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://embed.tawk.to/' + TAWK;
+      s.charset = 'UTF-8';
+      s.setAttribute('crossorigin', '*');
+      document.head.appendChild(s);
+      return true;
+    }
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (TAWK) {
+        loadTawk();
+        if (window.Tawk_API && window.Tawk_API.toggle) { window.Tawk_API.toggle(); return; }
+      }
+      show(!panel.classList.contains('on'));
+    });
+    var x = document.getElementById('cgChatX');
+    if (x) x.addEventListener('click', function () { show(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel.classList.contains('on')) show(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (panel.classList.contains('on') && !panel.contains(e.target) &&
+          !wrap.contains(e.target)) show(false);
+    });
+  })();
+
 
 /* ═══════════════════════════════════════════════════════════════
    NEXT STEPS JOURNEY
