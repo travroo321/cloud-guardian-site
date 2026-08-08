@@ -316,22 +316,11 @@
     t._h = setTimeout(function () { t.classList.remove('show'); }, 2600);
   }
 
-  // ── Floating contact widget ──
-  (function () {
-    var wrap = document.getElementById('fabWrap'), btn = document.getElementById('fabBtn');
-    if (!wrap || !btn) return;
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var open = wrap.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.addEventListener('click', function (e) {
-      if (!wrap.contains(e.target)) { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
-    });
-  })();
+  // The floating contact menu used to live here. It opened a list of
+  // channels from the same button the chat panel now uses, so both handlers
+  // fired on every click and closing the panel left the menu open behind
+  // it. Everything the menu offered is inside the panel: WhatsApp, Text and
+  // Email are the send buttons, Call and Free assessment are the footer.
 
   // ── Phone links: on desktop tel: often has no handler, so also copy the number
   //    and confirm visibly. Default action is NOT blocked, so softphones still dial. ──
