@@ -517,6 +517,7 @@
   .pr-metal-silver   { color: #b9c4cf; }
   .pr-metal-gold     { color: #e8c46a; }
   .pr-metal-platinum { color: #6fe3ff; }
+  .pr-metal-business  { color: #b07cf5; }
   .pkg-metal {
     display: inline-block; font-family: 'IBM Plex Mono', monospace;
     font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;

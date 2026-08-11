@@ -463,7 +463,19 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://cloud-guardian.com/services/business-technology/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://cloud-guardian.com/services/cybersecurity-audit/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cloud-guardian.com/services/digital-presence/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -506,6 +518,12 @@
   </url>
   <url>
     <loc>https://cloud-guardian.com/services/structured-cabling/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cloud-guardian.com/services/vcio/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
