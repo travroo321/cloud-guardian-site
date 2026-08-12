@@ -55,6 +55,7 @@
     <div class="has-dropdown">
       <a href="/industries/">Industries</a>
       <div class="nav-dropdown">
+        <a href="/industries/"><strong>All Industries</strong></a>
         <a href="/industries/law-firms/">Law Firms &amp; Legal</a>
         <a href="/industries/healthcare/">Healthcare &amp; Dental</a>
         <a href="/industries/accounting-finance/">Accounting &amp; Financial</a>
@@ -67,7 +68,7 @@
         <a href="/industries/hospitality-retail/">Hospitality &amp; Retail</a>
       </div>
     </div>
-    <a href="/pricing/">Managed IT Pricing</a>
+    <a href="/pricing/">Pricing</a>
     <a href="/service-areas/">Locations</a>
     <div class="has-dropdown">
       <a href="/support/">Support</a>
@@ -117,7 +118,7 @@
   <a class="mm-sub" href="/support/">Support Portal</a>
   <a class="mm-sub" href="/free-assesment/">Free Assessment</a>
   <a class="mm-sub" href="/blog/">Blog &amp; Insights</a>
-  <a href="/pricing/">Managed IT Pricing</a>
+  <a href="/pricing/">Pricing</a>
   <a href="/service-areas/">Locations</a>
   <a href="/contact/" class="active">Contact</a>
   <a href="tel:+17327435472" style="color:var(--cyan)">📞 (732) 743-5472</a>
@@ -153,15 +154,22 @@
       <div class="fld full">
         <label for="services">What services are you interested in?</label>
         <select id="services" name="services">
-          <option value="">Select a service&hellip;</option>
-          <option value="Managed IT and Support">Managed IT and Support</option>
-          <option value="Cybersecurity and Compliance">Cybersecurity and Compliance</option>
-          <option value="Cloud and Email Migration">Cloud and Email Migration</option>
-          <option value="Phones, Cabling and Wi-Fi">Phones, Cabling and Wi-Fi</option>
-          <option value="Something else">Something else</option>
+          <option value="">Select a service…</option>
+          <option>Managed IT Services</option>
+          <option>Small Business Plan</option>
+          <option>Cybersecurity Audit</option>
+          <option>IT Cost Consulting</option>
+          <option>Law Firm IT Support</option>
+          <option>Email &amp; Cloud Migrations</option>
+          <option>AI Support Agent</option>
+          <option>ISO/IEC 42001 AIMS Certification</option>
+          <option>Structured Cabling</option>
+          <option>VoIP Phone Systems</option>
+          <option>Wireless Site Survey</option>
+          <option>Other</option>
         </select>
       </div>
-        <div class="fld full"><label for="message">Tell us what you need *</label><textarea id="message" name="message" required rows="5" placeholder="A sentence or two is plenty. What is not working, how many people it affects, and how soon you need it sorted."></textarea></div>
+        <div class="fld full"><label for="message">Message *</label><textarea id="message" name="message" required></textarea></div>
       </div>
       <button class="form-btn" type="submit">Send Message</button>
       <p class="form-note">We respond within one business day. Prefer to talk? Call <a href="tel:+17327435472" style="color:var(--cyan)">(732) 743-5472</a>.</p>
@@ -301,39 +309,5 @@
 </div>
 
 <script src="/assets/cg.js?v=20260801b" defer></script>
-
-<script>
-/* Pre-select the service from where the visitor came from.
-   Priority: ?service= in the URL, then the referring page's path. Also records
-   the source page as a hidden field so the notification email shows it. */
-(function(){
-  var MAP = {"itservices": "Managed IT and Support", "small-business": "Managed IT and Support", "vcio": "Managed IT and Support", "business-technology": "Managed IT and Support", "leap-software-it-support": "Managed IT and Support", "ai-support-agent": "Managed IT and Support", "it-consulting": "Managed IT and Support", "digital-presence": "Managed IT and Support", "law-firms": "Managed IT and Support", "healthcare": "Managed IT and Support", "construction": "Managed IT and Support", "education": "Managed IT and Support", "hospitality-retail": "Managed IT and Support", "local-government": "Managed IT and Support", "nonprofits": "Managed IT and Support", "real-estate": "Managed IT and Support", "accounting-finance": "Managed IT and Support", "manufacturing-warehouse": "Managed IT and Support", "managed-security-soc": "Cybersecurity and Compliance", "cybersecurity-audit": "Cybersecurity and Compliance", "iso-42001": "Cybersecurity and Compliance", "email-migrations": "Cloud and Email Migration", "structured-cabling": "Phones, Cabling and Wi-Fi", "voip": "Phones, Cabling and Wi-Fi", "wireless-site-survey": "Phones, Cabling and Wi-Fi"};
-  var sel = document.getElementById('services');
-  if(!sel) return;
-  function slugFrom(str){
-    if(!str) return '';
-    var m = String(str).match(/\/(?:services|industries)\/([a-z0-9-]+)\/?/i);
-    return m ? m[1].toLowerCase() : '';
-  }
-  var q = new URLSearchParams(location.search);
-  var want = (q.get('service')||'').toLowerCase();
-  var slug = want || slugFrom(document.referrer);
-  var label = MAP[slug];
-  if(label){
-    for(var i=0;i<sel.options.length;i++){
-      if(sel.options[i].text.trim() === label){ sel.selectedIndex = i; break; }
-    }
-  }
-  /* tell the email which page sent them, selected or not */
-  var f = sel.form;
-  if(f && !f.querySelector('input[name="Came from"]')){
-    var h = document.createElement('input');
-    h.type='hidden'; h.name='Came from';
-    h.value = document.referrer || location.href;
-    f.appendChild(h);
-  }
-})();
-</script>
-
 </body>
 </html>
