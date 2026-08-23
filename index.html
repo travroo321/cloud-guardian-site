@@ -131,6 +131,17 @@
          first thing on the site, so anything above it is a delay between
          arriving and watching. The story states its own case. -->
 
+    <!-- After the film has been seen once this browser session, the full
+         stage stays out of the way and this strip stands in for it. One
+         click brings the stage back at full size and plays with sound,
+         because the click is the gesture that unlocks audio. -->
+    <button class="wu-mini" id="wuMini" type="button" hidden>
+      <span class="wu-mini-shot" aria-hidden="true"><span class="wu-mini-tri"></span></span>
+      <span class="wu-mini-l"><b>Watch what we actually stop</b>
+        <small>The 52 second film &middot; plays with sound</small></span>
+      <span class="wu-mini-go" aria-hidden="true">Play</span>
+    </button>
+
     <div class="wu-stage reveal" id="wuStage" data-runtime="52.275">
       <div class="wu-screen">
 
@@ -2548,6 +2559,23 @@
         <button class="wu-play" id="wuPlay" type="button" aria-label="Play the story">
           <span class="wu-play-tri" aria-hidden="true"></span>
           <span class="wu-play-l">Watch what we actually stop<small>52 seconds</small></span>
+        </button>
+
+        <!-- Skip lives on the screen, not in the control bar, because the
+             person reaching for it has decided not to watch and is not
+             studying a row of player buttons. It puts the film away and
+             brings the page up. -->
+        <button class="wu-skip" id="wuSkip" type="button" aria-label="Skip the film">
+          Skip <span aria-hidden="true">&darr;</span>
+        </button>
+
+        <!-- Shown only while the film is auto playing muted. Browsers do
+             not allow sound before the visitor's first click, so the first
+             play of a visit runs silent with captions and this one button
+             turns the narration on, from the current moment rather than
+             from the top. -->
+        <button class="wu-sound" id="wuSound" type="button" hidden>
+          <span aria-hidden="true">&#128266;</span> Tap for sound
         </button>
         <span class="wu-chapter" id="wuChapter" aria-hidden="true"></span>
         <span class="wu-brand" aria-hidden="true">Cloud Guardian</span>

@@ -710,6 +710,9 @@
   var playBtn = document.getElementById('wuPlay');
   var endCard = document.getElementById('wuEnd');
   var againBtn = document.getElementById('wuAgain');
+  var skipBtn = document.getElementById('wuSkip');
+  var soundBtn = document.getElementById('wuSound');
+  var mini    = document.getElementById('wuMini');
   var audio   = document.getElementById('wuAudio');
   var bed     = document.getElementById('wuBed');
   /* the bank screen appears in three shots, so there are three copies of
@@ -995,6 +998,37 @@
     } catch (e) {}
   }
 
+  /* ── once per browser visit ──
+     sessionStorage rather than localStorage on purpose: a visit means a
+     browser session, and next week the film should get its full opening
+     again. If storage is unavailable the film behaves as already seen,
+     which fails toward the quiet page rather than toward autoplay. */
+  function seen() {
+    try { return sessionStorage.getItem('cgWuSeen') === '1'; }
+    catch (e) { return true; }
+  }
+  function markSeen() {
+    try { sessionStorage.setItem('cgWuSeen', '1'); } catch (e) {}
+  }
+
+  /* the film is the first thing on the page, so leaving it means bringing
+     up whatever follows rather than parking the visitor on a spent player */
+  function scrollPast() {
+    var sec = stage.closest('section');
+    var next = sec && sec.nextElementSibling;
+    if (!next || !next.scrollIntoView) return;
+    var reduce = window.matchMedia &&
+                 matchMedia('(prefers-reduced-motion: reduce)').matches;
+    next.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth',
+                          block: 'start' });
+  }
+
+  function minimize() {
+    if (!mini) return;
+    stage.hidden = true;
+    mini.hidden = false;
+  }
+
   function stop(ended) {
     playing = false;
     cancelAnimationFrame(raf);
@@ -1011,19 +1045,11 @@
       if (endCard) endCard.hidden = false;
       playBtn.hidden = true;
       current = -1; hush();
-      /* The film is over and it is the first thing on the page, so it should
-         get out of the way. Wait for the frame to finish collapsing, then
-         bring whatever follows up into view rather than leaving the visitor
-         looking at a spent player. */
-      setTimeout(function () {
-        var sec = stage.closest('section');
-        var next = sec && sec.nextElementSibling;
-        if (!next || !next.scrollIntoView) return;
-        var reduce = window.matchMedia &&
-                     matchMedia('(prefers-reduced-motion: reduce)').matches;
-        next.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth',
-                              block: 'start' });
-      }, 620);
+      markSeen();
+      if (soundBtn) soundBtn.hidden = true;
+      /* Wait for the frame to finish collapsing into the end card, then
+         bring whatever follows up into view. */
+      setTimeout(scrollPast, 620);
     } else { stage.classList.add('paused'); }
   }
 
@@ -1059,7 +1085,49 @@
   function restart() { seek(0); playBtn.hidden = true; start(); }
   replay.addEventListener('click', restart);
   if (againBtn) againBtn.addEventListener('click', restart);
+  /* Skip: the visitor has decided not to watch. Put the film away as the
+     strip, remember that for the session, and bring the page up. The scroll
+     waits one frame so it measures the layout with the stage already gone. */
+  if (skipBtn) skipBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    markSeen();
+    if (soundBtn) soundBtn.hidden = true;
+    stop(false);
+    stage.classList.remove('paused');
+    minimize();
+    requestAnimationFrame(scrollPast);
+  });
+
+  /* Sound: this click is the gesture the browser has been waiting for, so
+     the narration can start mid film from wherever the clock is now. */
+  if (soundBtn) soundBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    soundBtn.hidden = true;
+    muted = false;
+    muteBtn.classList.remove('muted');
+    if (haveAudio) {
+      audio.muted = false;
+      audio.currentTime = t;
+      if (playing) audio.play().catch(function () {});
+    } else if (playing) { spoken = -1; say(chapterAt(t)); }
+    if (playing) playBed();
+  });
+
+  /* The strip: bring the stage back at full size and play from the top,
+     with sound, because this click unlocks audio. */
+  if (mini) mini.addEventListener('click', function () {
+    mini.hidden = true;
+    stage.hidden = false;
+    playBtn.hidden = true;
+    muted = false;
+    muteBtn.classList.remove('muted');
+    if (haveAudio) audio.muted = false;
+    seek(0);
+    start();
+  });
+
   muteBtn.addEventListener('click', function () {
+    if (soundBtn) soundBtn.hidden = true;
     muted = !muted;
     muteBtn.classList.toggle('muted', muted);
     if (haveAudio) { audio.muted = muted; if (!muted && playing) audio.play().catch(function () {}); }
@@ -1099,4 +1167,27 @@
 
   paint();
   showChapter(0);
+
+  /* ── the opening ──
+     First view of a session: the film starts itself, silent, captions on,
+     with the sound invitation up. It is marked seen the moment it starts,
+     so a reload mid film gets the quiet page rather than a second opening.
+     Every later view this session: the strip stands in for the stage.
+     Reduced motion never autoplays anything, and gets the poster. */
+  (function () {
+    var reduce = window.matchMedia &&
+                 matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (seen()) { minimize(); return; }
+    if (reduce) return;
+    setTimeout(function () {
+      if (playing || seen()) return;
+      markSeen();
+      muted = true;
+      muteBtn.classList.add('muted');
+      if (haveAudio) audio.muted = true;
+      if (soundBtn) soundBtn.hidden = false;
+      playBtn.hidden = true;
+      start();
+    }, 600);
+  })();
 })();

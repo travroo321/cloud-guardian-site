@@ -1772,7 +1772,10 @@
    A player, not an overlay. Nothing autoplays, nothing is forced.
    ═══════════════════════════════════════════════════════════════ */
 .why-us {
-  padding: 34px 0 72px;
+  /* the nav is fixed and 74px tall. 34px of padding put the top of the
+     film, and the whole minimized strip, underneath it, where they render
+     but cannot be clicked. clear the nav with air to spare. */
+  padding: 96px 0 72px;
   background:
     radial-gradient(1100px 460px at 50% 0%, rgba(0,212,255,.09), transparent 68%),
     var(--black);
@@ -1809,6 +1812,94 @@
   transition: visibility 0s .78s;
 }
 .wu-scene.on { visibility: visible; transition: visibility 0s 0s; }
+
+/* ── skip ──
+   Ghost pill in the corner of the screen. Present the whole time the film
+   is running or paused, absent on the poster and after the end, because at
+   those moments there is nothing to skip. */
+.wu-skip {
+  /* bottom corner, not top: the site nav is fixed over the top of the
+     screen when the film is at the top of the page, and a skip button
+     under the nav cannot be clicked */
+  position: absolute; bottom: 20px; right: 16px; z-index: 7;
+  background: rgba(5,7,13,.55); border: 1px solid rgba(255,255,255,.3);
+  color: #fff; font-family: 'Syne', sans-serif; font-weight: 600;
+  font-size: .76rem; letter-spacing: .07em; text-transform: uppercase;
+  padding: 8px 15px; border-radius: 999px; cursor: pointer;
+  backdrop-filter: blur(2px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s, visibility .25s, border-color .18s;
+}
+.wu-stage.playing .wu-skip, .wu-stage.paused .wu-skip {
+  opacity: 1; visibility: visible; }
+.wu-stage.ended .wu-skip { opacity: 0; visibility: hidden; }
+.wu-skip:hover { border-color: var(--cyan); }
+
+/* ── the sound invitation ──
+   Only exists during the muted first play of a session. One pulse ring so
+   it reads as the thing to press, killed under reduced motion. */
+.wu-sound {
+  position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
+  z-index: 7; display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,212,255,.16); border: 1px solid var(--cyan);
+  color: #fff; font-family: 'Syne', sans-serif; font-weight: 600;
+  font-size: .84rem; padding: 11px 20px; border-radius: 999px;
+  cursor: pointer; backdrop-filter: blur(2px);
+  animation: wuSoundPulse 2.4s ease-out infinite;
+}
+.wu-sound[hidden] { display: none; }
+@keyframes wuSoundPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0,212,255,.45); }
+  70%  { box-shadow: 0 0 0 14px rgba(0,212,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,212,255,0); }
+}
+
+/* ── the minimized strip ──
+   Stands in for the whole stage after the film has been seen once this
+   session. Slim on purpose: the page is the point now, the film is an
+   offer. */
+.wu-mini {
+  display: flex; align-items: center; gap: 15px;
+  width: 100%; max-width: 660px; margin: 0 auto;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 18px 10px 10px;
+  cursor: pointer; color: var(--white); text-align: left;
+  font-family: inherit;
+  transition: border-color .18s, background .18s;
+}
+.wu-mini:hover { border-color: var(--cyan); background: rgba(0,212,255,.05); }
+.wu-mini[hidden], .wu-stage[hidden] { display: none; }
+.wu-mini-shot {
+  width: 88px; aspect-ratio: 16 / 9; flex: none; border-radius: 6px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(60px 26px at 50% 18%, rgba(0,212,255,.22), transparent 70%),
+    #05070d;
+  display: grid; place-items: center;
+}
+.wu-mini-tri {
+  width: 0; height: 0; margin-left: 3px;
+  border-left: 13px solid var(--cyan);
+  border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+}
+.wu-mini-l { min-width: 0; }
+.wu-mini-l b { display: block; font-family: 'Syne', sans-serif;
+  font-size: .94rem; line-height: 1.25; }
+.wu-mini-l small { color: var(--muted); font-size: .73rem; }
+.wu-mini-go {
+  margin-left: auto; flex: none;
+  font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--cyan);
+  border: 1px solid rgba(0,212,255,.45); border-radius: 999px;
+  padding: 7px 16px;
+}
+@media (max-width: 560px) {
+  .wu-mini-go { display: none; }
+  .wu-skip { bottom: 14px; right: 10px; padding: 7px 12px; }
+  /* the character name tag rides the bottom left of the frame on a phone,
+     so the sound pill moves up a row instead of sitting on it */
+  .wu-sound { bottom: 80px; }
+}
 
 /* ── the play button ── */
 .wu-play {
@@ -2133,6 +2224,7 @@
   .wu-scene.on > *:not(.ct-shot) { animation: none !important; opacity: 1 !important; }
   .wu-fake::after { transform: scaleX(1); }
   .wu-play-tri::before { animation: none; }
+  .wu-sound { animation: none; }
 }
 
 
