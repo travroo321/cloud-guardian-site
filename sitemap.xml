@@ -163,6 +163,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://cloud-guardian.com/service-areas/brooklyn-ny/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://cloud-guardian.com/service-areas/carteret-nj/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
@@ -283,6 +289,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://cloud-guardian.com/service-areas/manhattan-ny/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://cloud-guardian.com/service-areas/metuchen-nj/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
@@ -356,6 +368,12 @@
   </url>
   <url>
     <loc>https://cloud-guardian.com/service-areas/perth-amboy-nj/</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://cloud-guardian.com/service-areas/philadelphia-pa/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
