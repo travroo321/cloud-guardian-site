@@ -518,6 +518,7 @@
   .pr-metal-gold     { color: #e8c46a; }
   .pr-metal-platinum { color: #6fe3ff; }
   .pr-metal-business  { color: #b07cf5; }
+  .pr-metal-sbp       { color: #7fd4a8; }
   .pkg-metal {
     display: inline-block; font-family: 'IBM Plex Mono', monospace;
     font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
@@ -2843,4 +2844,19 @@
     transition: opacity .2s linear, visibility 0s !important; }
   .ct-sig, .ct-verdict, .ol-banner { opacity: 1; }
   .ol.flag .ol-addr em::after { transform: scaleX(1); }
+}
+
+/* ── Managed IT Service Pricing layout ──
+   Appended last so it wins the cascade over the base .pr-grid rule above.
+   Four cards across one row on a desktop; the advisory card sits in its own
+   full-width strip below the grid. */
+@media (min-width: 1100px) {
+  .pr-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .pr-card { padding: 26px 20px; }
+}
+.pr-bt-strip { margin-top: 26px; }
+.pr-bt-strip .pr-card { max-width: none; }
+@media (min-width: 900px) {
+  .pr-bt-strip .pr-feats { columns: 2; column-gap: 34px; }
+  .pr-bt-strip .pr-cta { align-self: flex-start; padding-left: 34px; padding-right: 34px; }
 }
