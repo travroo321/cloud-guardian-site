@@ -30,11 +30,13 @@
 
 - **Managed IT Services** (https://cloud-guardian.com/services/itservices/): Proactive monitoring, patch
   management, cloud management, disaster recovery planning, 24/7 managed support, IT infrastructure audits.
-- **Small Business Plan** (https://cloud-guardian.com/pricing/): $90 per hour per incident, billed in half
-  hour increments, no monthly fee, for teams of roughly one to ten. Baseline security checked on every visit.
+- **Small Business Plan** (https://cloud-guardian.com/pricing/): $25 per user per month, recommended for up
+  to 10 users. Cybersecurity protections and email security on the email the business already hosts, such as
+  Google Workspace or Microsoft 365, with no migration and no change of provider. Support is billed
+  separately at $90 per hour per incident in half hour increments.
 - **Silver, pay as you go** (https://cloud-guardian.com/pricing/): $90 an hour billed in half hours, no
-  monthly fee, no contract. Incident response billed at $90 per hour with no minimum hours and no
-  long-term lock-in.
+  monthly fee, no contract, with email and infrastructure hosted and run by Cloud Guardian. Incident
+  response billed at $90 per hour with no minimum hours and no long-term lock-in.
 - **Cybersecurity Audit** (https://cloud-guardian.com/services/cybersecurity-audit/): Full external and
   internal vulnerability scanning, firewall and endpoint review, compromised account detection, and a
   prioritized ransomware remediation plan.
