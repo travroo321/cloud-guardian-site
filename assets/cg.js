@@ -48,8 +48,7 @@
       var shared = num('sq-shared', 0, 20);
       if (shared > 0) html += '<div class="calc-line"><span>Shared mailboxes, ' + shared + '</span><span>confirmed on your quote</span></div>';
       if ($('sq-phones').checked) html += '<div class="calc-flag">Your first 30 days of phones are FREE with our no-commit, month to month IT services. Every user gets the cell phone app, an extension, and voicemail to email with transcription.</div>';
-      if ($('sq-server').checked) html += '<div class="calc-flag">A server usually needs a quick audit before we can promise a number. The $50 hosting line is the normal case.</div>';
-      if ($('sq-staff').checked) html += '<div class="calc-flag">You have IT staff, so ask us about working alongside them instead of replacing them.</div>';
+      if ($('sq-staff').checked) html += '<div class="calc-flag">Helping or replacing existing IT staff is normal work for us. We will ask about them on the call.</div>';
       total = +total.toFixed(2);
       $('sq-total').textContent = money(total);
       $('sq-break').innerHTML = html;
@@ -152,8 +151,8 @@
         doc.text(doc.splitTextToSize(envline, W - 2 * x - 12), x + 6, iy); iy += 26;
         var flags = [];
         if (q.phones) flags.push('Phones: first 30 days FREE, then $4.99 per user per month. Cell phone app, extension, voicemail to email with transcription for every user.');
-        if (q.server) flags.push('Server: $50.00 per month hosting. A quick audit may be required before final server pricing is confirmed.');
-        if (q.staff) flags.push('You have IT staff: ask about co-managed IT, working alongside them rather than replacing them.');
+        if (q.server) flags.push('Server: $50.00 per month.');
+        if (q.staff) flags.push('Looking to help or replace existing IT staff: we do both, and will cover it on the call.');
         flags.push('Support is billed separately at $90 per hour, per incident, in half hour increments.');
         for (var f = 0; f < flags.length; f++) {
           var wr = doc.splitTextToSize(flags[f], W - 2 * x - 12);
@@ -243,8 +242,8 @@
         name: name, contact: reach, business: q.biz,
         email_users: q.users, computer_users: q.comp, shared_mailboxes: q.shared,
         provider: q.provider || 'not chosen',
-        server: q.server ? 'yes (+$50/mo, audit may be required)' : 'no',
-        it_staff: q.staff ? 'yes' : 'no', self_managed: q.self ? 'yes' : 'no',
+        server: q.server ? 'yes (+$50/mo)' : 'no',
+        help_or_replace_it_staff: q.staff ? 'yes' : 'no', no_existing_it: q.self ? 'yes' : 'no',
         phones: q.phones ? 'yes (+$4.99/user, first 30 days free)' : 'no',
         estimated_total: money(q.total) + ' / month', notes: q.notes
       };
