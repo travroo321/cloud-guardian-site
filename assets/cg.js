@@ -664,6 +664,8 @@
     carryV.textContent = est;
     carry.hidden = false;
     if (fEst) fEst.value = est;
+    var ei = document.getElementById('jrEstInline');
+    if (ei) ei.textContent = ' of ' + est;
   }
 
   /* ── 2. the fork ── */
