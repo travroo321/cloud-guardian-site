@@ -57,8 +57,10 @@
 - **Structured Cabling** (https://cloud-guardian.com/services/structured-cabling/): Cat6A and fiber
   installation for offices and warehouses, supporting 10 Gbps over a full 100-meter run, terminated and
   certified to ANSI/TIA-568 standards with complete documentation.
-- **VoIP Phone Systems** (https://cloud-guardian.com/services/voip/): Managed cloud phone systems with call
-  routing, voicemail to email, and video conferencing on carrier-grade platforms with 99.99% uptime SLAs.
+- **VoIP Phone Systems** (https://cloud-guardian.com/services/voip/): Managed cloud phones priced per user:
+  VoIP Basic $4.99 per user per month for the Small Business Plan (up to 10 users, first 30 days free),
+  VoIP Silver $9.99, VoIP Gold $12.99, VoIP Platinum $14.99. Every plan includes a cell phone app, an
+  extension per user, and voicemail to email with transcription. Additional AI features upon request.
 - **Wireless Site Survey** (https://cloud-guardian.com/services/wireless-site-survey/): Coverage and
   interference analysis across 2.4, 5, and 6 GHz bands with floor-by-floor heatmaps, engineered to hold
   signal strength above -67 dBm in every required coverage zone.

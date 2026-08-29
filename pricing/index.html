@@ -24,7 +24,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://cloud-guardian.com/"},{"@type":"ListItem","position":2,"name":"Managed IT Pricing NJ & NY","item":"https://cloud-guardian.com/pricing/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Managed IT and Managed Security Pricing","description":"Published pricing: Silver pay as you go at $90 an hour billed in half hours, Gold fully managed IT at $65 per user per month, and Platinum with 24/7 security operations at $95, with an instant estimate calculator and no minimum seat count.","serviceType":"Managed IT and Managed Security Pricing","url":"https://cloud-guardian.com/pricing/","provider":{"@type":"ProfessionalService","name":"Cloud Guardian","telephone":"+1-732-743-5472","url":"https://cloud-guardian.com/","address":{"@type":"PostalAddress","streetAddress":"643 Georges Rd","addressLocality":"North Brunswick","addressRegion":"NJ","postalCode":"08902","addressCountry":"US"}},"areaServed":[{"@type":"State","name":"New Jersey"},{"@type":"State","name":"New York"},{"@type":"Place","name":"Tri-State Area"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How can you be half the price of my current provider?","acceptedAnswer":{"@type":"Answer","text":"Because it is a different cost structure, not a discount. A legacy MSP carries a tiered help desk where a ticket passes through two people who cannot fix it before reaching one who can, on tooling bought a decade ago. We automate the volume work and use AI to triage, correlate and close the noise, so we carry far less labour per managed endpoint. That difference goes into the price rather than into a margin. During the assessment we show you the line items so you can check it against your current invoice."}},{"@type":"Question","name":"Is there a minimum number of users?","acceptedAnswer":{"@type":"Answer","text":"No. Most providers set a floor at 10 or 20 seats because small accounts are unprofitable under a staffed model. Ours is not, so there is no floor."}},{"@type":"Question","name":"What is the contract term?","acceptedAnswer":{"@type":"Answer","text":"Silver has no contract at all, because there is nothing to contract for: you call, we bill the time. Gold and Platinum are typically annual because the onboarding work is front-loaded, but there is no three-year lock and no exit fee. If you leave, your documentation goes with you, because it was always yours."}},{"@type":"Question","name":"What is not included?","acceptedAnswer":{"@type":"Answer","text":"Third-party licensing unless you buy it through us, hardware, and project work such as cabling and wireless surveys. On Silver, after hours and emergency work is charged at a special rate, agreed with you before the work happens rather than discovered on an invoice afterwards. All of it is quoted before it happens. You will not find a line on an invoice you have not already seen."}},{"@type":"Question","name":"Why is Silver hourly when Gold and Platinum are flat?","acceptedAnswer":{"@type":"Answer","text":"Because they are different deals. On Silver you are buying our time when you need it, which suits a business that has few problems and would rather not pay a retainer for the privilege of not having them. Billing in half hour increments matters here: a ten minute fix costs $45, not a rounded up hour. On Gold and Platinum you are buying the absence of problems, so the incentive has to be on us. A flat number means we lose money when your environment is badly run, which is the correct way round."}},{"@type":"Question","name":"Do the prices change if we grow?","acceptedAnswer":{"@type":"Answer","text":"Per user, so yes, proportionally. Adding people changes the figure on the next cycle. Nothing else moves without a conversation first."}},{"@type":"Question","name":"What does the free assessment actually involve?","acceptedAnswer":{"@type":"Answer","text":"A full inventory of devices, accounts, licensing and exposure, an external check for what is already reachable from the internet, and a search for your credentials in breach data. You get written findings with prioritised remediation. If you do not hire us, you keep the report and can hand it to whoever you do hire."}}]}</script>
-<link rel="stylesheet" href="/assets/cg.css?v=20260829" />
+<link rel="stylesheet" href="/assets/cg.css?v=20260829c" />
 <script id="vtag-ai-js" async src="https://r2.leadsy.ai/tag.js" data-pid="12VnB3hoXFptM57Ud" data-version="062024"></script>
 </head>
 <body>
@@ -195,7 +195,7 @@
           <label class="sq-check"><input type="checkbox" id="sq-server" /> <span>We have a server, not just cloud <b>+ $50.00 / month hosting</b><i>A server may need a quick audit first.</i></span></label>
           <label class="sq-check"><input type="checkbox" id="sq-staff" /> <span>We already have IT staff</span></label>
           <label class="sq-check"><input type="checkbox" id="sq-self" /> <span>We manage it ourselves today</span></label>
-          <label class="sq-check"><input type="checkbox" id="sq-phones" /> <span>Interested in integrated phones <b>+ $9.99 per user / month</b></span></label>
+          <label class="sq-check"><input type="checkbox" id="sq-phones" /> <span>&#128222; Interested in integrated phones <b>+ $4.99 per user / month, first 30 days FREE</b><i>Each user gets the cell phone app, their own extension, voicemail to email with transcription, all of it. <a href="/services/voip/" style="color:var(--cyan)">Click to find out more &rarr;</a></i></span></label>
         </div>
 
         <div class="sq-field">
@@ -209,7 +209,15 @@
         <div class="sq-total"><span id="sq-total">$125</span><small>/ month</small></div>
         <div class="sq-break" id="sq-break"></div>
         <p class="sq-note">Support is billed separately at $90 per hour, per incident, in half hour increments. This is an estimate, not a quote; the real number is confirmed after a free look at what you have.</p>
-        <button type="button" class="btn-primary sq-pdf" id="sq-pdf">Download my estimate (PDF)</button>
+        <button type="button" class="btn-primary sq-pdf" id="sq-pdf">Download my quote (PDF)</button>
+        <div class="sq-contact" id="sq-contact" hidden>
+          <label for="sq-name">Your name</label>
+          <input type="text" id="sq-name" autocomplete="name" />
+          <label for="sq-reach">Email or phone number</label>
+          <input type="text" id="sq-reach" autocomplete="email" />
+        </div>
+        <button type="button" class="btn-outline sq-send" id="sq-send">Send my quote to Cloud Guardian</button>
+        <p class="sq-sent" id="sq-sent" hidden></p>
         <a class="phone-link" href="tel:+17327435472">&#128222; (732) 743-5472</a>
         <div class="jr-handoff" id="calcNext">
           <strong>You have a number. Now see what actually happens.</strong>
@@ -459,7 +467,7 @@
       <div class="uc-card reveal">
         <span class="uc-emoji">📞</span>
         <h3>Cloud VoIP</h3>
-        <p class="pr-addon-price">from $20 / extension / month</p>
+        <p class="pr-addon-price">from $4.99 / user / month</p>
         <p>Managed phone system with call routing, voicemail to email and an app so the office number follows the person.</p>
       </div>
       <div class="uc-card reveal">
@@ -637,7 +645,7 @@
   </div>
 </div>
 
-<script src="/assets/cg.js?v=20260829" defer></script>
+<script src="/assets/cg.js?v=20260829c" defer></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>

@@ -2922,3 +2922,16 @@
 .sbb-price small { color: var(--muted); font-size: .8rem; }
 .sbb-cta { grid-column: 1 / -1; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
 @media (max-width: 720px) { .sbb { grid-template-columns: 1fr; } }
+
+.sq-send { width: 100%; text-align: center; box-sizing: border-box; margin-bottom: 14px;
+  font-size: .98rem; padding-top: 14px; padding-bottom: 14px; display: block; }
+.sq-contact { margin-bottom: 14px; }
+.sq-contact label { display: block; font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: .9rem; color: var(--white); margin: 10px 0 6px; }
+.sq-contact input { width: 100%; box-sizing: border-box; background: var(--black);
+  border: 1px solid var(--border); color: var(--white); font: inherit;
+  font-size: 1rem; padding: 11px 12px; border-radius: 6px; }
+.sq-contact input:focus { outline: none; border-color: var(--cyan); }
+.sq-sent { font-size: .88rem; color: #35e07a; margin: 0 0 14px; }
+.sq-sent.err { color: #ff5d5d; }
+[hidden] { display: none !important; }

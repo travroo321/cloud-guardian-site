@@ -11,7 +11,7 @@
   (function () {
     var root = document.getElementById('sq');
     if (!root) return;
-    var P_USER = 25, P_PHONE = 9.99, P_SERVER = 50;
+    var P_USER = 25, P_PHONE = 4.99, P_SERVER = 50;
     function $(id) { return document.getElementById(id); }
     function money(n) {
       return '$' + n.toLocaleString('en-US', { minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2 });
@@ -34,7 +34,7 @@
     function lines() {
       var users = num('sq-users', 1, 25);
       var out = [['Email protection, ' + users + ' user' + (users === 1 ? '' : 's') + ' x $25', users * P_USER]];
-      if ($('sq-phones').checked) out.push(['Integrated phones, ' + users + ' x $9.99', +(users * P_PHONE).toFixed(2)]);
+      if ($('sq-phones').checked) out.push(['Integrated phones, ' + users + ' x $4.99, first 30 days FREE', +(users * P_PHONE).toFixed(2)]);
       if ($('sq-server').checked) out.push(['Server hosting', P_SERVER]);
       return out;
     }
@@ -47,6 +47,7 @@
       }
       var shared = num('sq-shared', 0, 20);
       if (shared > 0) html += '<div class="calc-line"><span>Shared mailboxes, ' + shared + '</span><span>confirmed on your quote</span></div>';
+      if ($('sq-phones').checked) html += '<div class="calc-flag">Your first 30 days of phones are FREE with our no-commit, month to month IT services. Every user gets the cell phone app, an extension, and voicemail to email with transcription.</div>';
       if ($('sq-server').checked) html += '<div class="calc-flag">A server usually needs a quick audit before we can promise a number. The $50 hosting line is the normal case.</div>';
       if ($('sq-staff').checked) html += '<div class="calc-flag">You have IT staff, so ask us about working alongside them instead of replacing them.</div>';
       total = +total.toFixed(2);
@@ -62,68 +63,200 @@
     ['sq-server', 'sq-staff', 'sq-self', 'sq-phones'].forEach(function (id) { $(id).addEventListener('change', recalc); });
     recalc();
 
-    // The PDF. jsPDF is on the page via a deferred cdnjs script; if it has
-    // not arrived (blocked, offline), fall back to the browser's own
-    // print-to-PDF so the button never dead-ends.
-    $('sq-pdf').addEventListener('click', function () {
+    // ── The quote PDF ──
+    // Styled after the Managed IT Services Proposal: navy cover page with
+    // the winged logo, white inner page, site cyan and the proposal's amber.
+    var NAVY = [10, 18, 32], CYAN = [0, 212, 255], AMBER = [232, 163, 61];
+    var INK = [30, 42, 58], MUT = [96, 110, 128];
+    var logoData = null;
+    function getLogo(cb) {
+      if (logoData) return cb(logoData);
+      fetch('/assets/cg-logo.png').then(function (r) { return r.blob(); }).then(function (bl) {
+        var fr = new FileReader();
+        fr.onload = function () { logoData = fr.result; cb(logoData); };
+        fr.readAsDataURL(bl);
+      }).catch(function () { cb(null); });
+    }
+    function quoteState() {
       var r = recalc();
+      return {
+        items: r.items, total: r.total,
+        biz: ($('sq-biz').value || '').trim(),
+        users: num('sq-users', 1, 25), comp: num('sq-comp', 0, 25),
+        shared: num('sq-shared', 0, 20), provider: provider,
+        server: $('sq-server').checked, staff: $('sq-staff').checked,
+        self: $('sq-self').checked, phones: $('sq-phones').checked,
+        notes: ($('sq-notes').value || '').trim()
+      };
+    }
+    function buildPdf(cb) {
       var J = window.jspdf && window.jspdf.jsPDF;
       if (!J) { window.print(); return; }
-      var doc = new J({ unit: 'pt', format: 'letter' });
-      var W = doc.internal.pageSize.getWidth(), x = 54, y = 64;
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(11, 22, 36);
-      doc.text('CLOUD GUARDIAN', x, y);
-      doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(90, 105, 125);
-      doc.text('Managed IT & Cybersecurity  |  (732) 743-5472  |  sales@cloud-guardian.com', x, y + 16);
-      doc.setDrawColor(0, 180, 220); doc.setLineWidth(2); doc.line(x, y + 26, W - x, y + 26);
-      y += 58;
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.setTextColor(11, 22, 36);
-      doc.text('Estimated Monthly Quote - Small Business Standard Plan', x, y);
-      y += 20;
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.setTextColor(60, 72, 88);
-      var biz = ($('sq-biz').value || '').trim();
-      var today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      doc.text('Prepared for: ' + (biz || 'Your business'), x, y); y += 16;
-      doc.text('Date: ' + today + '   |   Estimate valid 30 days', x, y); y += 14;
-      if (provider) { doc.text('Email today: ' + provider + ' (stays where it is, nothing moves)', x, y); y += 14; }
-      var comp = num('sq-comp', 0, 25), shared = num('sq-shared', 0, 20);
-      doc.text('Computer users: ' + comp + (shared ? '   |   Shared mailboxes: ' + shared : ''), x, y); y += 24;
-      doc.setDrawColor(220, 226, 234); doc.setLineWidth(1);
-      for (var k = 0; k < r.items.length; k++) {
-        doc.setTextColor(40, 52, 68);
-        doc.text(r.items[k][0], x, y);
-        doc.text(money(r.items[k][1]), W - x, y, { align: 'right' });
-        y += 8; doc.line(x, y, W - x, y); y += 16;
-      }
-      doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(11, 22, 36);
-      doc.text('Estimated total per month', x, y);
-      doc.text(money(r.total), W - x, y, { align: 'right' });
-      y += 30;
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(90, 105, 125);
-      var notes = [
-        'Includes cybersecurity protection on the email you already have: phishing and impersonation',
-        'defense, SPF, DKIM and DMARC enforced, plus monitoring and alerting. No migration, no change',
-        'of provider, no contract, cancel any month.',
-        'Support is billed separately at $90 per hour, per incident, in half hour increments.',
-        $('sq-server').checked ? 'Server: a quick audit may be required before final server pricing is confirmed.' : null,
-        $('sq-staff').checked ? 'Existing IT staff noted: ask about co-managed IT.' : null
-      ].filter(Boolean);
-      for (var n = 0; n < notes.length; n++) { doc.text(notes[n], x, y); y += 14; }
-      var extra = ($('sq-notes').value || '').trim();
-      if (extra) {
-        y += 6; doc.setFont('helvetica', 'bold'); doc.setTextColor(60, 72, 88);
-        doc.text('Your note to us:', x, y); y += 14;
-        doc.setFont('helvetica', 'normal');
-        var wrapped = doc.splitTextToSize(extra, W - 2 * x);
-        doc.text(wrapped, x, y); y += wrapped.length * 13 + 4;
-      }
-      y += 12; doc.setTextColor(0, 140, 180);
-      doc.text('Next step: call (732) 743-5472 or book a free assessment at cloud-guardian.com', x, y);
-      doc.setTextColor(150, 158, 170);
-      doc.text('This is an estimate, not a binding quote. Cloud Guardian LLC, North Brunswick, NJ.', x, 756);
-      var fname = (biz ? biz.replace(/[^A-Za-z0-9 ]/g, '').trim().replace(/ +/g, '-') + '-' : '') + 'Cloud-Guardian-Estimate.pdf';
-      doc.save(fname);
+      var q = quoteState();
+      getLogo(function (logo) {
+        var doc = new J({ unit: 'pt', format: 'letter' });
+        var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+        var x = 58, cx = W / 2;
+
+        // ── page 1: the navy cover-quote ──
+        doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
+        doc.rect(0, 0, W, H, 'F');
+        if (logo) doc.addImage(logo, 'PNG', cx - 95, 46, 190, 95);
+        var y = 178;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(27); doc.setTextColor(255, 255, 255);
+        doc.text('MANAGED IT SERVICES', cx, y, { align: 'center' }); y += 32;
+        doc.setTextColor(CYAN[0], CYAN[1], CYAN[2]);
+        doc.text('ESTIMATED QUOTE', cx, y, { align: 'center' }); y += 26;
+        doc.setFontSize(10.5); doc.setTextColor(AMBER[0], AMBER[1], AMBER[2]);
+        doc.text('ONE-STOP IT SERVICES & SOLUTIONS', cx, y, { align: 'center' }); y += 14;
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(170, 182, 198);
+        doc.text('SMALL BUSINESS STANDARD PLAN', cx, y, { align: 'center' }); y += 36;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(CYAN[0], CYAN[1], CYAN[2]);
+        doc.text('P R E P A R E D   F O R', cx, y, { align: 'center' }); y += 20;
+        doc.setFontSize(15); doc.setTextColor(255, 255, 255);
+        doc.text(q.biz || 'Your Business', cx, y, { align: 'center' }); y += 17;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(170, 182, 198);
+        var today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        doc.text(today + '   |   Estimate valid 30 days', cx, y, { align: 'center' });
+
+        // white quote panel
+        var py = y + 34, ph = 210 + q.items.length * 26;
+        doc.setFillColor(255, 255, 255);
+        doc.roundedRect(x - 10, py, W - 2 * x + 20, ph, 8, 8, 'F');
+        var iy = py + 34;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(INK[0], INK[1], INK[2]);
+        doc.text('YOUR MONTHLY QUOTE', x + 6, iy); iy += 10;
+        doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(2);
+        doc.line(x + 6, iy, x + 130, iy); iy += 24;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5);
+        for (var k = 0; k < q.items.length; k++) {
+          doc.setTextColor(INK[0], INK[1], INK[2]);
+          doc.text(q.items[k][0], x + 6, iy);
+          doc.text(money(q.items[k][1]), W - x - 6, iy, { align: 'right' });
+          iy += 9; doc.setDrawColor(224, 230, 238); doc.setLineWidth(1);
+          doc.line(x + 6, iy, W - x - 6, iy); iy += 17;
+        }
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+        doc.text('Estimated total per month', x + 6, iy);
+        doc.setTextColor(0, 150, 190);
+        doc.text(money(q.total), W - x - 6, iy, { align: 'right' }); iy += 24;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
+        var envline = 'Email users: ' + q.users + '   |   Computer users: ' + q.comp
+          + (q.shared ? '   |   Shared mailboxes: ' + q.shared + ' (confirmed on your quote)' : '')
+          + (q.provider ? '   |   ' + q.provider : '');
+        doc.text(doc.splitTextToSize(envline, W - 2 * x - 12), x + 6, iy); iy += 26;
+        var flags = [];
+        if (q.phones) flags.push('Phones: first 30 days FREE, then $4.99 per user per month. Cell phone app, extension, voicemail to email with transcription for every user.');
+        if (q.server) flags.push('Server: $50.00 per month hosting. A quick audit may be required before final server pricing is confirmed.');
+        if (q.staff) flags.push('You have IT staff: ask about co-managed IT, working alongside them rather than replacing them.');
+        flags.push('Support is billed separately at $90 per hour, per incident, in half hour increments.');
+        for (var f = 0; f < flags.length; f++) {
+          var wr = doc.splitTextToSize(flags[f], W - 2 * x - 12);
+          doc.text(wr, x + 6, iy); iy += wr.length * 11 + 5;
+        }
+
+        doc.setFontSize(9.5); doc.setTextColor(170, 182, 198);
+        doc.text('(732) 743-5472    |    cloud-guardian.com    |    sales@cloud-guardian.com', cx, H - 64, { align: 'center' });
+        doc.setTextColor(120, 132, 148);
+        doc.text('North Brunswick, NJ  ·  Onsite across the Tri-State area  ·  Remote support globally', cx, H - 48, { align: 'center' });
+
+        // ── page 2: white, what is covered + next steps ──
+        doc.addPage();
+        doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
+        doc.rect(0, 0, W, 84, 'F');
+        if (logo) doc.addImage(logo, 'PNG', W - x - 110, 14, 110, 55);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.setTextColor(255, 255, 255);
+        doc.text('WHAT YOUR PLAN COVERS', x, 50);
+        var y2 = 122;
+        doc.setFontSize(11); doc.setTextColor(INK[0], INK[1], INK[2]);
+        doc.text('SMALL BUSINESS STANDARD PLAN - $25 PER USER / MONTH', x, y2); y2 += 8;
+        doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(2);
+        doc.line(x, y2, x + 200, y2); y2 += 20;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5);
+        var covered = [
+          'Security for the email you host today, Google Workspace or Microsoft 365, with no migration and no change of provider',
+          'Cybersecurity protections: phishing and impersonation defense, SPF, DKIM and DMARC enforced',
+          'Monitoring and alerting for the threats that actually hit small businesses',
+          'No contract, cancel any month',
+          'Step up to Gold or Platinum whenever you are ready'
+        ];
+        for (var c = 0; c < covered.length; c++) {
+          doc.setFillColor(0, 150, 190); doc.circle(x + 3, y2 - 3, 2.6, 'F');
+          doc.setTextColor(INK[0], INK[1], INK[2]);
+          var cw = doc.splitTextToSize(covered[c], W - 2 * x - 18);
+          doc.text(cw, x + 16, y2); y2 += cw.length * 13 + 8;
+        }
+        if (q.notes) {
+          y2 += 8; doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+          doc.text('YOUR NOTE TO US', x, y2); y2 += 16;
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
+          var nw = doc.splitTextToSize(q.notes, W - 2 * x);
+          doc.text(nw, x, y2); y2 += nw.length * 13 + 10;
+        }
+        y2 += 14;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(INK[0], INK[1], INK[2]);
+        doc.text('NEXT STEPS', x, y2); y2 += 18;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
+        var steps = [
+          '01  Send us this quote, or call. We reply the same business day.',
+          '02  A free look at what you have. No obligation, nothing is signed.',
+          '03  Your final quote, confirmed in writing. Protection usually starts within days.'
+        ];
+        for (var s = 0; s < steps.length; s++) { doc.text(steps[s], x, y2); y2 += 17; }
+        y2 += 16;
+        doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(1.5);
+        doc.roundedRect(x, y2, W - 2 * x, 74, 6, 6, 'S');
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(INK[0], INK[1], INK[2]);
+        doc.text('READY TO GET STARTED?', cx, y2 + 28, { align: 'center' });
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(0, 150, 190);
+        doc.text('(732) 743-5472       sales@cloud-guardian.com       cloud-guardian.com', cx, y2 + 50, { align: 'center' });
+        doc.setFontSize(8.5); doc.setTextColor(150, 158, 170);
+        doc.text('This is an estimate, not a binding quote. Getting a quote carries no obligation to use our services.', cx, H - 46, { align: 'center' });
+        doc.text('Cloud Guardian LLC  ·  North Brunswick, NJ', cx, H - 33, { align: 'center' });
+        cb(doc, q);
+      });
+    }
+    $('sq-pdf').addEventListener('click', function () {
+      buildPdf(function (doc, q) {
+        var fname = (q.biz ? q.biz.replace(/[^A-Za-z0-9 ]/g, '').trim().replace(/ +/g, '-') + '-' : '') + 'Cloud-Guardian-Quote.pdf';
+        doc.save(fname);
+      });
     });
+
+    // ── Send the quote in. First click reveals name + contact, second click
+    // posts the whole quote to the same inbox the contact form uses. ──
+    $('sq-send').addEventListener('click', function () {
+      var box = $('sq-contact'), msg = $('sq-sent');
+      if (box.hidden) { box.hidden = false; $('sq-name').focus(); return; }
+      var name = ($('sq-name').value || '').trim();
+      var reach = ($('sq-reach').value || '').trim();
+      if (!reach) { msg.hidden = false; msg.classList.add('err');
+        msg.textContent = 'Add an email or phone number so we can reply to you.'; return; }
+      var q = quoteState();
+      var body = {
+        _subject: 'SIMPLE QUOTE - ' + (q.biz || name || 'website visitor') + ' - ' + money(q.total) + '/mo',
+        name: name, contact: reach, business: q.biz,
+        email_users: q.users, computer_users: q.comp, shared_mailboxes: q.shared,
+        provider: q.provider || 'not chosen',
+        server: q.server ? 'yes (+$50/mo, audit may be required)' : 'no',
+        it_staff: q.staff ? 'yes' : 'no', self_managed: q.self ? 'yes' : 'no',
+        phones: q.phones ? 'yes (+$4.99/user, first 30 days free)' : 'no',
+        estimated_total: money(q.total) + ' / month', notes: q.notes
+      };
+      msg.hidden = false; msg.classList.remove('err'); msg.textContent = 'Sending...';
+      fetch('https://formspree.io/f/xkoezydq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(body)
+      }).then(function (r) {
+        if (r.ok) { msg.textContent = 'Sent. We reply the same business day. Your PDF copy is one click away above.'; }
+        else { throw new Error(); }
+      }).catch(function () {
+        msg.classList.add('err');
+        msg.textContent = 'That did not go through. Call (732) 743-5472 or email sales@cloud-guardian.com and we will take it from there.';
+      });
+    });
+
   })();
 
   // ── Scroll reveal, with stagger inside a grid so cards arrive in sequence ──
