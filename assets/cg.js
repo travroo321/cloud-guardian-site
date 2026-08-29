@@ -105,7 +105,7 @@
         // ── page 1: the navy cover-quote ──
         doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
         doc.rect(0, 0, W, H, 'F');
-        if (logo) doc.addImage(logo, 'PNG', cx - 95, 46, 190, 95);
+        if (logo) doc.addImage(logo, 'PNG', cx - 115, 46, 230, 95);
         var y = 178;
         doc.setFont('helvetica', 'bold'); doc.setFontSize(27); doc.setTextColor(255, 255, 255);
         doc.text('MANAGED IT SERVICES', cx, y, { align: 'center' }); y += 32;
@@ -153,7 +153,7 @@
         if (q.phones) flags.push('Phones: first 30 days FREE, then $4.99 per user per month. Cell phone app, extension, voicemail to email with transcription for every user.');
         if (q.server) flags.push('Server: $50.00 per month.');
         if (q.staff) flags.push('Looking to help or replace existing IT staff: we do both, and will cover it on the call.');
-        flags.push('Support is billed separately at $90 per hour, per incident, in half hour increments.');
+        flags.push('Support is billed separately at $90 per hour, per incident, in half hour increments. If you do not need our support that month, you do not pay for any incidents. We are proactively preventing issues for you at this locked in rate.');
         for (var f = 0; f < flags.length; f++) {
           var wr = doc.splitTextToSize(flags[f], W - 2 * x - 12);
           doc.text(wr, x + 6, iy); iy += wr.length * 11 + 5;
@@ -168,7 +168,7 @@
         doc.addPage();
         doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
         doc.rect(0, 0, W, 84, 'F');
-        if (logo) doc.addImage(logo, 'PNG', W - x - 110, 14, 110, 55);
+        if (logo) doc.addImage(logo, 'PNG', W - x - 133, 14, 133, 55);
         doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.setTextColor(255, 255, 255);
         doc.text('WHAT YOUR PLAN COVERS', x, 50);
         var y2 = 122;
