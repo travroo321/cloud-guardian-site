@@ -59,7 +59,12 @@
       var lk = $('calcNextLink'); if (lk) lk.href = '/next-steps/?est=' + encodeURIComponent(money(total) + ' / month');
       return { total: total, items: ls };
     }
-    ['sq-users', 'sq-comp', 'sq-shared'].forEach(function (id) { $(id).addEventListener('input', recalc); });
+    ['sq-users', 'sq-comp', 'sq-shared'].forEach(function (id) {
+      $(id).addEventListener('input', function () {
+        var v = $(id + '-v'); if (v) v.textContent = $(id).value;
+        recalc();
+      });
+    });
     ['sq-server', 'sq-staff', 'sq-self', 'sq-phones'].forEach(function (id) { $(id).addEventListener('change', recalc); });
     recalc();
 
