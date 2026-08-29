@@ -46,7 +46,7 @@
 - **Managed Security Operations / 24/7 SOC** (https://cloud-guardian.com/services/managed-security-soc/):
   MSSP service covering continuous monitoring, AI-assisted detection and triage, managed EDR and XDR, identity
   threat detection, email security and BEC defense, continuous vulnerability management, privileged access
-  control, immutable tested backup, security awareness training, and incident response retainer.
+  control, cloud backup, tested, security awareness training, and incident response retainer.
 - **Client Support Portal** (https://cloud-guardian.com/support/): 24/7 support entry point with remote
   session initiation, ticket submission, on-call emergency line, provider status checks, billing, and self-help guides.
 - **AI Support Agent** (https://cloud-guardian.com/services/ai-support-agent/): Automated IT support that

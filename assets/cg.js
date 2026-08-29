@@ -1,6 +1,131 @@
 
   var CG_REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+
+  // ── Simple quote builder (pricing page) ──
+  // Written for somebody who does not want a spreadsheet: plain questions,
+  // one big number, and a PDF they can hold. Prices: $25 per user with an
+  // email address, $9.99 per user for integrated phones if wanted, $50 flat
+  // for server hosting. Support is hourly and deliberately NOT in the
+  // monthly number, the note under the total says so in words.
+  (function () {
+    var root = document.getElementById('sq');
+    if (!root) return;
+    var P_USER = 25, P_PHONE = 9.99, P_SERVER = 50;
+    function $(id) { return document.getElementById(id); }
+    function money(n) {
+      return '$' + n.toLocaleString('en-US', { minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2 });
+    }
+    function num(id, lo, hi) {
+      var v = parseInt($(id).value, 10);
+      if (isNaN(v)) v = lo;
+      return Math.max(lo, Math.min(hi, v));
+    }
+    var provider = '';
+    [].forEach.call(root.querySelectorAll('.sq-pill'), function (b) {
+      b.addEventListener('click', function () {
+        provider = b.getAttribute('data-v');
+        [].forEach.call(root.querySelectorAll('.sq-pill'), function (x) {
+          x.classList.toggle('active', x === b);
+        });
+        recalc();
+      });
+    });
+    function lines() {
+      var users = num('sq-users', 1, 25);
+      var out = [['Email protection, ' + users + ' user' + (users === 1 ? '' : 's') + ' x $25', users * P_USER]];
+      if ($('sq-phones').checked) out.push(['Integrated phones, ' + users + ' x $9.99', +(users * P_PHONE).toFixed(2)]);
+      if ($('sq-server').checked) out.push(['Server hosting', P_SERVER]);
+      return out;
+    }
+    function recalc() {
+      var ls = lines();
+      var total = 0, html = '';
+      for (var k = 0; k < ls.length; k++) {
+        total += ls[k][1];
+        html += '<div class="calc-line"><span>' + ls[k][0] + '</span><span>' + money(ls[k][1]) + '</span></div>';
+      }
+      var shared = num('sq-shared', 0, 20);
+      if (shared > 0) html += '<div class="calc-line"><span>Shared mailboxes, ' + shared + '</span><span>confirmed on your quote</span></div>';
+      if ($('sq-server').checked) html += '<div class="calc-flag">A server usually needs a quick audit before we can promise a number. The $50 hosting line is the normal case.</div>';
+      if ($('sq-staff').checked) html += '<div class="calc-flag">You have IT staff, so ask us about working alongside them instead of replacing them.</div>';
+      total = +total.toFixed(2);
+      $('sq-total').textContent = money(total);
+      $('sq-break').innerHTML = html;
+      try { sessionStorage.setItem('cg_estimate', money(total) + ' / month, Small Business Standard'); } catch (e) {}
+      var ho = $('calcNext'); if (ho) ho.classList.add('on');
+      var lv = $('calcNextVal'); if (lv) lv.textContent = money(total) + ' / month';
+      var lk = $('calcNextLink'); if (lk) lk.href = '/next-steps/?est=' + encodeURIComponent(money(total) + ' / month');
+      return { total: total, items: ls };
+    }
+    ['sq-users', 'sq-comp', 'sq-shared'].forEach(function (id) { $(id).addEventListener('input', recalc); });
+    ['sq-server', 'sq-staff', 'sq-self', 'sq-phones'].forEach(function (id) { $(id).addEventListener('change', recalc); });
+    recalc();
+
+    // The PDF. jsPDF is on the page via a deferred cdnjs script; if it has
+    // not arrived (blocked, offline), fall back to the browser's own
+    // print-to-PDF so the button never dead-ends.
+    $('sq-pdf').addEventListener('click', function () {
+      var r = recalc();
+      var J = window.jspdf && window.jspdf.jsPDF;
+      if (!J) { window.print(); return; }
+      var doc = new J({ unit: 'pt', format: 'letter' });
+      var W = doc.internal.pageSize.getWidth(), x = 54, y = 64;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(11, 22, 36);
+      doc.text('CLOUD GUARDIAN', x, y);
+      doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.setTextColor(90, 105, 125);
+      doc.text('Managed IT & Cybersecurity  |  (732) 743-5472  |  sales@cloud-guardian.com', x, y + 16);
+      doc.setDrawColor(0, 180, 220); doc.setLineWidth(2); doc.line(x, y + 26, W - x, y + 26);
+      y += 58;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.setTextColor(11, 22, 36);
+      doc.text('Estimated Monthly Quote - Small Business Standard Plan', x, y);
+      y += 20;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(11); doc.setTextColor(60, 72, 88);
+      var biz = ($('sq-biz').value || '').trim();
+      var today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      doc.text('Prepared for: ' + (biz || 'Your business'), x, y); y += 16;
+      doc.text('Date: ' + today + '   |   Estimate valid 30 days', x, y); y += 14;
+      if (provider) { doc.text('Email today: ' + provider + ' (stays where it is, nothing moves)', x, y); y += 14; }
+      var comp = num('sq-comp', 0, 25), shared = num('sq-shared', 0, 20);
+      doc.text('Computer users: ' + comp + (shared ? '   |   Shared mailboxes: ' + shared : ''), x, y); y += 24;
+      doc.setDrawColor(220, 226, 234); doc.setLineWidth(1);
+      for (var k = 0; k < r.items.length; k++) {
+        doc.setTextColor(40, 52, 68);
+        doc.text(r.items[k][0], x, y);
+        doc.text(money(r.items[k][1]), W - x, y, { align: 'right' });
+        y += 8; doc.line(x, y, W - x, y); y += 16;
+      }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(11, 22, 36);
+      doc.text('Estimated total per month', x, y);
+      doc.text(money(r.total), W - x, y, { align: 'right' });
+      y += 30;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(90, 105, 125);
+      var notes = [
+        'Includes cybersecurity protection on the email you already have: phishing and impersonation',
+        'defense, SPF, DKIM and DMARC enforced, plus monitoring and alerting. No migration, no change',
+        'of provider, no contract, cancel any month.',
+        'Support is billed separately at $90 per hour, per incident, in half hour increments.',
+        $('sq-server').checked ? 'Server: a quick audit may be required before final server pricing is confirmed.' : null,
+        $('sq-staff').checked ? 'Existing IT staff noted: ask about co-managed IT.' : null
+      ].filter(Boolean);
+      for (var n = 0; n < notes.length; n++) { doc.text(notes[n], x, y); y += 14; }
+      var extra = ($('sq-notes').value || '').trim();
+      if (extra) {
+        y += 6; doc.setFont('helvetica', 'bold'); doc.setTextColor(60, 72, 88);
+        doc.text('Your note to us:', x, y); y += 14;
+        doc.setFont('helvetica', 'normal');
+        var wrapped = doc.splitTextToSize(extra, W - 2 * x);
+        doc.text(wrapped, x, y); y += wrapped.length * 13 + 4;
+      }
+      y += 12; doc.setTextColor(0, 140, 180);
+      doc.text('Next step: call (732) 743-5472 or book a free assessment at cloud-guardian.com', x, y);
+      doc.setTextColor(150, 158, 170);
+      doc.text('This is an estimate, not a binding quote. Cloud Guardian LLC, North Brunswick, NJ.', x, 756);
+      var fname = (biz ? biz.replace(/[^A-Za-z0-9 ]/g, '').trim().replace(/ +/g, '-') + '-' : '') + 'Cloud-Guardian-Estimate.pdf';
+      doc.save(fname);
+    });
+  })();
+
   // ── Scroll reveal, with stagger inside a grid so cards arrive in sequence ──
   (function () {
     var reveals = document.querySelectorAll('.reveal');
@@ -174,138 +299,7 @@
     show(0);
   })();
 
-  // ── Instant estimate calculator (pricing page) ──
-  //    Rates are duplicated from pricing.py RATES. If you change one, change both.
-  (function () {
-    var el = document.getElementById('calc');
-    if (!el) return;
-
-    var RATES = {
-      silver_hour: 90, silver_half: 45,
-      gold_user: 65, platinum_user: 95, server: 85,
-      m365: 22, backup: 6, voip: 20
-    };
-    var BAND = 0.15;
-
-    var users = document.getElementById('c-users');
-    var srv   = document.getElementById('c-srv');
-    var tier  = 'gold';
-
-    function money(n) {
-      return '$' + Math.round(n).toLocaleString('en-US');
-    }
-
-    function recalc() {
-      var u = +users.value, s = +srv.value;
-      document.getElementById('c-users-v').textContent = u;
-      document.getElementById('c-srv-v').textContent = s;
-
-      /* Silver is not a monthly plan, so there is no monthly figure to
-         show. Printing one anyway, by inventing a seat rate it does not
-         have, would be the calculator lying to make itself useful. It
-         shows the hourly instead and says what it cannot know. */
-      var out = document.getElementById('calc-out-wrap') || el;
-      if (tier === 'silver') {
-        document.getElementById('calc-lo').textContent = money(RATES.silver_half);
-        document.getElementById('calc-hi').textContent = money(RATES.silver_hour);
-        document.getElementById('calc-break').innerHTML =
-          '<div class="calc-line"><span>Half hour, the smallest unit billed</span><span>'
-          + money(RATES.silver_half) + '</span></div>'
-          + '<div class="calc-line"><span>Full hour</span><span>' + money(RATES.silver_hour) + '</span></div>'
-          + '<div class="calc-line calc-line-total"><span>Monthly commitment</span><span>None</span></div>'
-          + '<div class="calc-flag">Silver has no monthly fee, so there is nothing here to add up. '
-          + 'You are billed for the time you use, in half hour increments, nine to five Monday to Friday. '
-          + 'After hours and emergency work is charged at a special rate agreed with you in advance. '
-          + 'If you want a number you can budget, that is Gold.</div>';
-        var lbl = document.querySelector('.calc-out-label');
-        if (lbl) lbl.textContent = 'Silver, pay as you go';
-        try { sessionStorage.setItem('cg_estimate', money(RATES.silver_hour) + ' / hour, pay as you go'); } catch (e) {}
-        var hoS = document.getElementById('calcNext');
-        if (hoS) {
-          hoS.classList.add('on');
-          var lkS = document.getElementById('calcNextLink');
-          if (lkS) lkS.href = '/next-steps/?est=' + encodeURIComponent(money(RATES.silver_hour) + ' / hour');
-          var lvS = document.getElementById('calcNextVal');
-          if (lvS) lvS.textContent = money(RATES.silver_hour) + ' per hour';
-        }
-        return;
-      }
-      var lbl2 = document.querySelector('.calc-out-label');
-      if (lbl2) lbl2.textContent = 'Estimated monthly';
-
-      var perUser = RATES[tier + '_user'];
-      var lines = [];
-      var total = 0;
-
-      var seat = u * perUser;
-      total += seat;
-      lines.push([u + ' user' + (u === 1 ? '' : 's') + ' at ' + money(perUser), seat]);
-
-      if (s > 0) {
-        var srvCost = s * RATES.server;
-        total += srvCost;
-        lines.push([s + ' server' + (s === 1 ? '' : 's') + ' at ' + money(RATES.server), srvCost]);
-      }
-      if (document.getElementById('a-m365').checked) {
-        var m = u * RATES.m365; total += m;
-        lines.push(['Microsoft 365 licensing', m]);
-      }
-      if (document.getElementById('a-backup').checked) {
-        var protectedCount = u + s;
-        var b = protectedCount * RATES.backup; total += b;
-        lines.push(['Immutable backup, ' + protectedCount + ' endpoint' + (protectedCount === 1 ? '' : 's'), b]);
-      }
-      if (document.getElementById('a-voip').checked) {
-        var v = u * RATES.voip; total += v;
-        lines.push(['Cloud VoIP, ' + u + ' extension' + (u === 1 ? '' : 's'), v]);
-      }
-
-      document.getElementById('calc-lo').textContent = money(total * (1 - BAND));
-      document.getElementById('calc-hi').textContent = money(total * (1 + BAND));
-
-      var html = '';
-      for (var i = 0; i < lines.length; i++) {
-        html += '<div class="calc-line"><span>' + lines[i][0] + '</span><span>' + money(lines[i][1]) + '</span></div>';
-      }
-      html += '<div class="calc-line calc-line-total"><span>Midpoint</span><span>' + money(total) + ' / month</span></div>';
-      if (u > 40) {
-        html += '<div class="calc-flag">Above 40 users this calculator stops being useful. At your size the number comes down per seat, so call and we will price it properly.</div>';
-      }
-      document.getElementById('calc-break').innerHTML = html;
-
-      // Hand the result to /next-steps/. The estimate is the reason someone
-      // is ready for the next step, so it travels with them.
-      var range = money(total * (1 - BAND)) + ' to ' + money(total * (1 + BAND)) + ' / month';
-      try { sessionStorage.setItem('cg_estimate', range); } catch (e) {}
-      var ho = document.getElementById('calcNext');
-      if (ho) {
-        ho.classList.add('on');
-        var link = document.getElementById('calcNextLink');
-        if (link) link.href = '/next-steps/?est=' + encodeURIComponent(range);
-        var lbl = document.getElementById('calcNextVal');
-        if (lbl) lbl.textContent = range;
-      }
-    }
-
-    [users, srv].forEach(function (i) {
-      i.addEventListener('input', recalc);
-    });
-    ['a-m365', 'a-backup', 'a-voip'].forEach(function (id) {
-      document.getElementById(id).addEventListener('change', recalc);
-    });
-    [].forEach.call(document.querySelectorAll('.calc-tier'), function (b) {
-      b.addEventListener('click', function () {
-        [].forEach.call(document.querySelectorAll('.calc-tier'), function (x) { x.classList.remove('active'); });
-        b.classList.add('active');
-        tier = b.getAttribute('data-tier');
-        recalc();
-      });
-    });
-
-    recalc();
-  })();
-
-  // ── Toast helper ──
+// ── Toast helper ──
   function cgToast(msg) {
     var t = document.getElementById('cgToast');
     if (!t) { t = document.createElement('div'); t.id = 'cgToast'; t.className = 'cg-toast'; document.body.appendChild(t); }
