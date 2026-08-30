@@ -2968,3 +2968,26 @@
 .sq-inc-line { margin: 0 0 10px; font-size: .92rem; color: #c9d6e6; }
 .sq-inc-feats { margin-bottom: 6px !important; }
 .sq-inc-feats li { font-size: .86rem; }
+
+  /* ─── CERTIFIED VENDORS MARQUEE (2026-08-30, from the Durable-era band) ─── */
+  .vendor-band { background: var(--navy); border-top: 1px solid var(--border); padding: 2.2rem 0 2.6rem; overflow: hidden; }
+  .vendor-label { max-width: 1200px; margin: 0 auto 1.6rem; padding: 0 24px; color: var(--white); font-weight: 700; font-size: .95rem; letter-spacing: .05em; text-transform: uppercase; }
+  .vendor-track { display: flex; width: max-content; animation: vendorScroll 38s linear infinite; }
+  .vendor-band:hover .vendor-track { animation-play-state: paused; }
+  .vendor-set { display: flex; align-items: center; gap: 4.5rem; padding-right: 4.5rem; }
+  .vendor-set img { height: 32px; width: auto; filter: brightness(0) invert(1); opacity: .72; }
+  .vendor-set .v-office { height: 38px; }
+  .vendor-set .v-vmware { height: 24px; }
+  .vendor-word { color: var(--white); opacity: .72; font-weight: 800; font-size: 1.45rem; letter-spacing: .04em; white-space: nowrap; }
+  .vendor-pair { display: flex; align-items: center; gap: .55rem; }
+  .vendor-pair .vendor-word { font-weight: 600; letter-spacing: 0; }
+  @keyframes vendorScroll { to { transform: translateX(-50%); } }
+  @media (max-width: 700px) {
+    .vendor-set { gap: 2.6rem; padding-right: 2.6rem; }
+    .vendor-set img { height: 26px; }
+    .vendor-word { font-size: 1.15rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vendor-track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; }
+    .vendor-set[aria-hidden="true"] { display: none; }
+  }
