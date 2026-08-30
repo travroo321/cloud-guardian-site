@@ -153,7 +153,7 @@
         if (q.phones) flags.push('Phones: first 30 days FREE, then $4.99 per user per month. Cell phone app, extension, voicemail to email with transcription for every user.');
         if (q.server) flags.push('Server: $50.00 per month.');
         if (q.staff) flags.push('Looking to help or replace existing IT staff: we do both, and will cover it on the call.');
-        flags.push('Support is billed separately at $90 per hour, per incident, in half hour increments. If you do not need our support that month, you do not pay for any incidents. We are proactively preventing issues for you at this locked in rate.');
+        flags.push('Support is billed separately at $90 per hour, in 15 minute increments, and quick calls under 5 minutes are free. If you do not need our support that month, you do not pay for any incidents. We are proactively preventing issues for you at this locked in rate.');
         for (var f = 0; f < flags.length; f++) {
           var wr = doc.splitTextToSize(flags[f], W - 2 * x - 12);
           doc.text(wr, x + 6, iy); iy += wr.length * 11 + 5;
@@ -180,7 +180,9 @@
         var covered = [
           'Security for the email you host today, Google Workspace or Microsoft 365, with no migration and no change of provider',
           'Cybersecurity protections: phishing and impersonation defense, SPF, DKIM and DMARC enforced',
+          'Name-brand tools with automated patching and updates for your machines',
           'Monitoring and alerting for the threats that actually hit small businesses',
+          'Support billed in 15 minute increments, and quick calls under 5 minutes are free',
           'No contract, cancel any month',
           'Step up to Gold or Platinum whenever you are ready'
         ];
