@@ -2961,3 +2961,10 @@
 .sq-send:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,.07); }
 .sq-form, .sq-out { box-sizing: border-box; min-width: 0; max-width: 100%; }
 @media (max-width: 560px) { .sq-form { padding: 22px 16px; } .sq-out { padding: 22px 16px; } }
+
+/* ── SBP inclusions inside the simple quote panel ── */
+.sq-inc { margin: 14px 0 4px; padding: 14px 16px 10px; border: 1px solid rgba(0,212,255,.18); border-radius: 12px; background: rgba(0,212,255,.04); text-align: left; }
+.sq-inc-l { display: block; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--cyan); margin-bottom: 6px; }
+.sq-inc-line { margin: 0 0 10px; font-size: .92rem; color: #c9d6e6; }
+.sq-inc-feats { margin-bottom: 6px !important; }
+.sq-inc-feats li { font-size: .86rem; }
