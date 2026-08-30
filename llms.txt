@@ -33,8 +33,8 @@
 - **Small Business Plan** (https://cloud-guardian.com/pricing/): $25 per user per month, recommended for up
   to 10 users. Cybersecurity protections and email security on the email the business already hosts, such as
   Google Workspace or Microsoft 365, with no migration and no change of provider. Support is billed
-  separately at $90 per hour per incident in half hour increments.
-- **Silver, pay as you go** (https://cloud-guardian.com/pricing/): $90 an hour billed in half hours, no
+  separately at $90 per hour per incident in 15 minute increments.
+- **Silver, pay as you go** (https://cloud-guardian.com/pricing/): $90 an hour billed in 15 minute increments, no
   monthly fee, no contract, with email and infrastructure hosted and run by Cloud Guardian. Incident
   response billed at $90 per hour with no minimum hours and no long-term lock-in.
 - **Cybersecurity Audit** (https://cloud-guardian.com/services/cybersecurity-audit/): Full external and
@@ -148,7 +148,7 @@ parties, and contract terms are discussed transparently during the proposal proc
 **Does Cloud Guardian work with businesses that already have IT staff?** Yes. Cloud Guardian frequently works
 alongside internal IT resources, covering areas where they lack bandwidth or specialization.
 
-**What does small business IT support cost?** $90 an hour on Silver, billed in half hour increments with no monthly fee, and $65 per user per month on Gold, with
+**What does small business IT support cost?** $90 an hour on Silver, billed in 15 minute increments with no monthly fee, and $65 per user per month on Gold, with
 incident response billed at $90 per hour. There are no minimum hours and no long-term lock-in. Fully managed
 IT is quoted after a free assessment.
 
