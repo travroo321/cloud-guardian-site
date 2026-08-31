@@ -155,7 +155,8 @@
         if (q.phones) flags.push('Phones: first 30 days FREE, then $4.99 per user per month. Cell phone app, extension, voicemail to email with transcription for every user.');
         if (q.server) flags.push('Server: $50.00 per month.');
         if (q.staff) flags.push('Looking to help or replace existing IT staff: we do both, and will cover it on the call.');
-        flags.push('Support is billed separately at $90 per hour, in 15 minute increments: that is just $22.50 per 15 minutes. Calls under 5 minutes are free, even support calls. Example: five calls in a month, four quick ones and one 15 minute fix, and your support bill is $22.50 total. If you do not need our support that month, you do not pay for any incidents. We are proactively preventing issues for you at this locked in rate.');
+        if (q.isp) flags.push('Business Internet bundle: you asked us to look into it. Not included in the figure above - we check what is available at your address and quote the bundle separately, starting at $50 a month.');
+        flags.push('Included every month: 15 minutes of tech time for every user, and any call under 5 minutes is free. Past that, support is $90 per hour billed in 15 minute blocks, so $22.50 a block, tracked to the minute and itemized. You get a live person in the queue, not a callback. Most issues are done in about 7 minutes.')
         for (var f = 0; f < flags.length; f++) {
           var wr = doc.splitTextToSize(flags[f], W - 2 * x - 12);
           doc.text(wr, x + 6, iy); iy += wr.length * 11 + 5;
@@ -249,6 +250,7 @@
         server: q.server ? 'yes (+$50/mo)' : 'no',
         help_or_replace_it_staff: q.staff ? 'yes' : 'no', no_existing_it: q.self ? 'yes' : 'no',
         phones: q.phones ? 'yes (+$4.99/user, first 30 days free)' : 'no',
+        business_internet_bundle: q.isp ? 'YES - wants a Business Internet bundle quote (line check needed)' : 'no',
         estimated_total: money(q.total) + ' / month', notes: q.notes
       };
       msg.hidden = false; msg.classList.remove('err'); msg.textContent = 'Sending...';
