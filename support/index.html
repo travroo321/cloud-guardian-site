@@ -24,7 +24,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://cloud-guardian.com/"},{"@type":"ListItem","position":2,"name":"Client Support Portal","item":"https://cloud-guardian.com/support/"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"IT Support and Help Desk","description":"24/7 client support including remote support sessions, ticket intake, on-call emergency response, and self-service guides.","serviceType":"IT Support and Help Desk","url":"https://cloud-guardian.com/support/","provider":{"@type":"ProfessionalService","name":"Cloud Guardian","telephone":"+1-732-743-5472","url":"https://cloud-guardian.com/","address":{"@type":"PostalAddress","streetAddress":"643 Georges Rd","addressLocality":"North Brunswick","addressRegion":"NJ","postalCode":"08902","addressCountry":"US"}},"areaServed":[{"@type":"State","name":"New Jersey"},{"@type":"State","name":"New York"},{"@type":"Place","name":"Tri-State Area"}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are your support hours?","acceptedAnswer":{"@type":"Answer","text":"Monitoring and emergency response run 24/7, every day of the year. Standard requests are handled during business hours, and P0 or P1 issues page an on-call engineer regardless of the hour."}},{"@type":"Question","name":"How fast will someone respond?","acceptedAnswer":{"@type":"Answer","text":"Phoned-in P0 and P1 issues reach a live engineer immediately. Tickets are triaged continuously, with the AI agent resolving common in-scope issues within minutes and everything else routed to an engineer. Response commitments for your specific agreement are written into it rather than implied."}},{"@type":"Question","name":"Do I have to use the portal, or can I just call?","acceptedAnswer":{"@type":"Answer","text":"Call. We are not the kind of provider that hides behind a ticket system. The portal exists because some people prefer it and because a written record is useful, not because we want a buffer between you and an engineer."}},{"@type":"Question","name":"Can you get onsite if remote cannot fix it?","acceptedAnswer":{"@type":"Answer","text":"Yes. Middlesex and Somerset County is typically same business day and often same hour. The wider Tri-State area is same or next business day depending on severity."}},{"@type":"Question","name":"What if I am not a client yet?","acceptedAnswer":{"@type":"Answer","text":"Call anyway. If you are in the middle of an incident we will tell you honestly whether we can help and what it costs. Otherwise start with a free assessment and we will show you what your environment actually looks like."}},{"@type":"Question","name":"Is there an authenticated client portal with ticket history?","acceptedAnswer":{"@type":"Answer","text":"It is rolling out to managed clients now, covering ticket history, asset inventory, and your documentation. Request access and we will enable your account."}}]}</script>
-<link rel="stylesheet" href="/assets/cg.css?v=20260831pdf" />
+<link rel="stylesheet" href="/assets/cg.css?v=20260831caps" />
 <script id="vtag-ai-js" async src="https://r2.leadsy.ai/tag.js" data-pid="12VnB3hoXFptM57Ud" data-version="062024"></script>
 </head>
 <body>
@@ -297,7 +297,7 @@
             <option>Something else</option>
           </select>
         </div>
-        <div class="fld full"><label for="t-msg">What is happening?</label><textarea id="t-msg" name="message" required placeholder="What you were doing, the exact error text if there is one, when it started, and who else is affected. Detail here means fewer questions back."></textarea></div>
+        <div class="fld full"><label for="t-msg">What is happening?</label><textarea maxlength="2000" id="t-msg" name="message" required placeholder="What you were doing, the exact error text if there is one, when it started, and who else is affected. Detail here means fewer questions back."></textarea></div>
       </div>
       <button class="form-btn" type="submit">Submit Ticket</button>
       <p class="form-note">Tickets are monitored 24/7. P1 and P0 issues should be phoned in at <a href="tel:+17327435472" style="color:var(--cyan)">(732) 743-5472</a> so an engineer is paged rather than notified.</p>
@@ -506,7 +506,7 @@
   <div class="cgc-body">
     <p class="cgc-msg" id="cgcGreet">Hi. Ask us anything about your IT, pricing, or an issue you are having right now. We reply fast during business hours.</p>
     <label class="cgc-lbl" for="cgcText">Your message</label>
-    <textarea id="cgcText" placeholder="Type your message..." rows="3"></textarea>
+    <textarea id="cgcText" maxlength="2000" placeholder="Type your message..." rows="3"></textarea>
     <p class="cgc-hint">Pick where you want the reply. Your message comes with you, nothing is retyped.</p>
     <div class="cgc-send">
       <a class="wa" data-ch="wa" data-num="18482286231" href="#" aria-disabled="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.7-5.2A8.5 8.5 0 1 1 21 11.5Z"/><path d="M9 8.6c.2-.4.5-.4.8-.4h.5c.2 0 .3.1.4.4l.6 1.4c.1.2 0 .4-.1.5l-.4.5c-.1.2-.2.3 0 .5.5.8 1.2 1.4 2 1.8.2.1.4.1.5-.1l.5-.5c.2-.2.3-.2.5-.1l1.4.7c.2.1.3.2.3.4 0 .5-.3 1.1-.8 1.3-.4.2-1 .2-2.1-.2a7.4 7.4 0 0 1-3.6-3.2c-.4-.7-.7-1.4-.7-2 0-.5.2-.8.4-1Z"/></svg> WhatsApp</a>
@@ -520,6 +520,6 @@
   </div>
 </div>
 
-<script src="/assets/cg.js?v=20260831pdf" defer></script>
+<script src="/assets/cg.js?v=20260831caps" defer></script>
 </body>
 </html>
