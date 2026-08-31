@@ -3032,7 +3032,7 @@
     color: var(--muted);
   }
   .lead-points li::before {
-    content: '¹3'; position: absolute; left: 0; top: 0;
+    content: "\2713"; position: absolute; left: 0; top: 0;
     color: var(--cyan); font-weight: 700;
   }
   .lead-points strong { color: var(--white); }

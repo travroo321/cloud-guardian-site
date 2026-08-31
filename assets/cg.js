@@ -49,6 +49,7 @@
       if (shared > 0) html += '<div class="calc-line"><span>Shared mailboxes, ' + shared + '</span><span>confirmed on your quote</span></div>';
       if ($('sq-phones').checked) html += '<div class="calc-flag">Your first 30 days of phones are FREE with our no-commit, month to month IT services. Every user gets the cell phone app, an extension, and voicemail to email with transcription.</div>';
       if ($('sq-staff').checked) html += '<div class="calc-flag">Helping or replacing existing IT staff is normal work for us. We will ask about them on the call.</div>';
+      if ($('sq-isp').checked) html += '<div class="calc-flag">Business Internet is not in this figure. We will check what is available at your address and quote the bundle separately, starting at $50 a month.</div>';
       total = +total.toFixed(2);
       $('sq-total').textContent = money(total);
       $('sq-break').innerHTML = html;
@@ -64,7 +65,7 @@
         recalc();
       });
     });
-    ['sq-server', 'sq-staff', 'sq-self', 'sq-phones'].forEach(function (id) { $(id).addEventListener('change', recalc); });
+    ['sq-server', 'sq-staff', 'sq-self', 'sq-phones', 'sq-isp'].forEach(function (id) { $(id).addEventListener('change', recalc); });
     recalc();
 
     // ── The quote PDF ──
@@ -90,6 +91,7 @@
         shared: num('sq-shared', 0, 20), provider: provider,
         server: $('sq-server').checked, staff: $('sq-staff').checked,
         self: $('sq-self').checked, phones: $('sq-phones').checked,
+        isp: $('sq-isp').checked,
         notes: ($('sq-notes').value || '').trim()
       };
     }
