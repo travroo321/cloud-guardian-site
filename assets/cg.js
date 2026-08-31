@@ -1326,3 +1326,61 @@
     }, 600);
   })();
 })();
+
+/* ── Mobile menu: categories collapsed until tapped ──
+   Travis 2026-08-31: "The categories should not auto drop down the menu.
+   Should just show the main items until you click."
+
+   This lives OUTSIDE the main cg.js IIFE on purpose. That one returns early
+   on any page without the hero stage element, so anything appended inside it
+   would silently never run on most pages.
+
+   Progressive enhancement: the menu markup is a flat list (an .mm-label div
+   followed by its .mm-sub links, per category). We group it at runtime and
+   toggle a class, so no page HTML changes and a failure here leaves the old
+   flat menu working exactly as before. */
+(function () {
+  function build() {
+    var menu = document.getElementById('mobileMenu');
+    if (!menu || menu.querySelector('.mm-group')) return;
+
+    var labels = [].slice.call(menu.querySelectorAll('.mm-label'));
+    labels.forEach(function (label) {
+      var group = document.createElement('div');
+      group.className = 'mm-group';
+      label.parentNode.insertBefore(group, label);
+
+      /* a real button, so it is keyboard reachable and screen readers
+         announce the expanded state */
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mm-label';
+      btn.textContent = label.textContent;
+      btn.setAttribute('aria-expanded', 'false');
+      group.appendChild(btn);
+      label.parentNode.removeChild(label);
+
+      /* move this category's own sub links, stopping at the next category */
+      var node = group.nextSibling;
+      while (node) {
+        var next = node.nextSibling;
+        if (node.nodeType === 1) {
+          if (!node.classList.contains('mm-sub')) break;
+          group.appendChild(node);
+        }
+        node = next;
+      }
+
+      btn.addEventListener('click', function () {
+        var open = group.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', build);
+  } else {
+    build();
+  }
+})();

@@ -475,6 +475,22 @@
   }
   .mobile-menu a:hover, .mobile-menu a.active { color: var(--cyan); }
   .mobile-menu .mm-sub { padding-left: 12%; font-size: 0.78rem; color: var(--muted); text-transform: none; letter-spacing: 0.5px; }
+  /* Collapsed-by-default mobile categories (Travis 2026-08-31: the menu must
+     show only the main items until a category is tapped). The groups are built
+     by cg.js from the existing mm-label / mm-sub markup, so no page markup
+     changes and a JS failure simply leaves the old flat list working. */
+  .mobile-menu .mm-group > .mm-sub { display: none; }
+  .mobile-menu .mm-group.open > .mm-sub { display: block; }
+  .mobile-menu .mm-label {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; text-align: left; background: none; border: none;
+    border-bottom: 1px solid var(--border); cursor: pointer;
+  }
+  .mobile-menu .mm-label::after {
+    content: '+'; font-size: 1rem; line-height: 1; color: var(--cyan);
+    transition: transform 0.15s ease;
+  }
+  .mobile-menu .mm-group.open > .mm-label::after { content: '2'; }
   .mobile-menu .mm-label { padding: 14px 6% 6px; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); }
   @media (max-width: 860px) {
     .nav-burger { display: block; }
@@ -696,6 +712,13 @@
     position: relative; border-bottom: 1px solid rgba(255,255,255,.045);
   }
   .pr-feats li::before { content: "✓"; position: absolute; left: 0; color: var(--cyan); font-weight: 700; }
+  /* What a plan does NOT carry, stated as plainly as what it does.
+     Travis 2026-08-31: the licensing / full-suite distinction between the
+     Small Business Plan and Gold must be visible at a glance. */
+  .pr-feats li.no { color: rgba(255,255,255,.38); }
+  .pr-feats li.no::before { content: "\2715"; color: #7a8798; }
+  .pr-feats li.up { color: var(--muted); }
+  .pr-feats li.up::before { content: "\2191"; color: #d9a441; }
   .pr-cta { text-align: center; width: 100%; }
   .pr-note { color: var(--muted); font-size: 0.8rem; margin-top: 26px; line-height: 1.7; }
   .pr-addon-price { color: var(--cyan); font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; letter-spacing: 1px; margin: 0 0 10px; }
@@ -707,7 +730,9 @@
      on narrow screens, where sticky positioning is a hindrance.
      ══════════════════════════════════════════════════════════════ */
   .journey { display: grid; grid-template-columns: 340px 1fr; gap: 56px; margin-top: 46px; align-items: start; }
-  @media (max-width: 900px) { .journey { grid-template-columns: 1fr; gap: 28px; } }
+  @media (max-width: 900px) { .journey { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+  /* minmax(0,1fr) not 1fr: an fr track keeps min-width:auto, so the widest
+     child sets the track and the column grew past its own container. */
 
   .jr-sticky { position: sticky; top: 120px; }
   @media (max-width: 900px) { .jr-sticky { position: static; } }
@@ -2890,7 +2915,10 @@
   color: var(--white); }
 .sq-check:last-of-type { border-bottom: 0; }
 .sq-check input { width: 22px; height: 22px; accent-color: #00d4ff; flex: none; margin-top: 1px; }
-.sq-check b { color: var(--cyan); font-weight: 600; white-space: nowrap; }
+.sq-check b { color: var(--cyan); font-weight: 600; white-space: normal; }
+/* was nowrap: on a 375px screen the phones add-on price line ran 353px
+   wide inside a 336px box and pushed the whole page sideways
+   (Travis 2026-08-31: "certain things don't fit in the box"). */
 .sq-check i { display: block; font-style: normal; font-size: .8rem; color: var(--muted); }
 .sq-out { background: var(--card); border: 1px solid rgba(0,212,255,.35); padding: 30px 28px;
   position: sticky; top: 96px; }
@@ -2991,3 +3019,37 @@
     .vendor-track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; }
     .vendor-set[aria-hidden="true"] { display: none; }
   }
+
+  /* Pricing lead points + overflow guards (Travis 2026-08-31: "certain
+     things don't fit in the box" on mobile). Long unbroken strings such as
+     prices, domains and "5 users x $25" were pushing past their cards. */
+  .lead-points {
+    list-style: none; padding: 0; margin: 18px 0 22px;
+    display: grid; gap: 10px;
+  }
+  .lead-points li {
+    position: relative; padding-left: 26px; line-height: 1.55;
+    color: var(--muted);
+  }
+  .lead-points li::before {
+    content: '¹3'; position: absolute; left: 0; top: 0;
+    color: var(--cyan); font-weight: 700;
+  }
+  .lead-points strong { color: var(--white); }
+  .sq, .sq-form, .sq-field, .pr-card, .sq-note, .sq-total { min-width: 0; }
+  .sq, .pr-card { overflow-wrap: anywhere; }
+  .sq-note, .lead-points li, .pr-card li { overflow-wrap: break-word; }
+  @media (max-width: 520px) {
+    .lead-points li { font-size: 0.92rem; }
+  }
+
+.sq-check, .sq-check > span { min-width: 0; overflow-wrap: anywhere; }
+
+/* Grid blowout fix: .jr-sticky sat 21px wider than its .journey parent on a
+   375px screen, which was the last thing making the page scroll sideways.
+   A grid/flex child defaults to min-width:auto, so long content refuses to
+   shrink below its intrinsic width. (Travis 2026-08-31 mobile pass.) */
+.journey, .jr-sticky, .jr-step, .jr-figure, .jr-title, .jr-eyebrow {
+  min-width: 0; max-width: 100%;
+}
+.jr-sticky { overflow-wrap: anywhere; }
