@@ -200,9 +200,20 @@
           doc.text('YOUR NOTE TO US', x, y2); y2 += 16;
           doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
           var nw = doc.splitTextToSize(q.notes, W - 2 * x);
+          // Print at most 14 lines: past that the note would push NEXT
+          // STEPS and the CTA off the page. The full text still reaches
+          // us in the emailed quote, so nothing the prospect wrote is lost.
+          if (nw.length > 14) {
+            nw = nw.slice(0, 14);
+            nw.push('... (full note sent with your quote)');
+          }
           doc.text(nw, x, y2); y2 += nw.length * 13 + 10;
         }
         y2 += 14;
+        // NEXT STEPS + the three steps + the 74pt CTA box need roughly
+        // 230pt. If the note ate the page, start a fresh one rather than
+        // drawing the call to action into the footer.
+        if (y2 > H - 250) { doc.addPage(); y2 = 70; }
         doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(INK[0], INK[1], INK[2]);
         doc.text('NEXT STEPS', x, y2); y2 += 18;
         doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
