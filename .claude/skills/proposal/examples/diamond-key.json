@@ -83,26 +83,5 @@
         "note": "5 TB per user, Vault, advanced controls."
       }
     ]
-  },
-  "packages": {
-    "title": "Gold or Platinum, our published plans",
-    "blurb": "Would rather not sort people into tiers at all? These are the same plans on our website at the same published rates: one flat number, every user gets everything. Unlimited help desk, the full security suite, and on Platinum a 24/7 security operation watching it. The one-time $200 onboarding applies here too, and the email migration credits it off the same way.",
-    "seatsDefault": 8,
-    "defaultIndex": 0,
-    "hint": "Every user on the plan gets the same full coverage. Check these rates any time at cloud-guardian.com/pricing.",
-    "options": [
-      {
-        "name": "Gold Managed IT",
-        "short": "Gold",
-        "rate": 110,
-        "note": "Full cybersecurity suite, unlimited help desk, we run everything."
-      },
-      {
-        "name": "Platinum Managed IT + SOC",
-        "short": "Platinum",
-        "rate": 130,
-        "note": "Everything in Gold, with 24/7 security operations watching it."
-      }
-    ]
   }
 }
