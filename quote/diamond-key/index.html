@@ -414,7 +414,9 @@
   /* ── build the output panel ── */
   var o = ['<span class="sq-out-label">Your estimate</span>',
     '<div class="cg-tot big"><span>Cloud Guardian, per month</span><b id="cg-monthly">$0</b></div>',
-    '<div class="cg-tot"><span>Cloud Guardian, one time</span><b id="cg-once">$0</b></div>'];
+    '<div class="sq-break" id="cg-break-m"></div>',
+    '<div class="cg-tot" id="cg-once-row"><span>Cloud Guardian, one time</span><b id="cg-once">$0</b></div>',
+    '<div class="sq-break" id="cg-break-o"></div>'];
 
   if (D.compare && D.compare.currentMonthly > 0)
     o.push('<div class="cg-tot save" id="cg-save-row"><span>Against your ' + esc(D.compare.label || 'current provider') + '</span><b id="cg-save">—</b></div>');
@@ -468,7 +470,7 @@
   }
 
   function recalc() {
-    var m = currentModel(), monthly = 0, once = 0, lic = 0, rows = [], covered = 0;
+    var m = currentModel(), monthly = 0, once = 0, lic = 0, rows = [], oRows = [], covered = 0;
 
     if ($('cg-tier-fields')) { $('cg-tier-fields').hidden = (m !== 'tiers'); $('cg-opt-tiers').classList.toggle('on', m === 'tiers'); }
     if ($('cg-package-fields')) { $('cg-package-fields').hidden = (m !== 'package'); $('cg-opt-package').classList.toggle('on', m === 'package'); }
@@ -503,17 +505,17 @@
       if ($('cg-opt-' + p.id)) $('cg-opt-' + p.id).classList.toggle('on', !!on);
       if (on && typeof p.price === 'number') {
         once += p.price;
-        rows.push([esc(p.label) + ' (one time)', p.price]);
+        oRows.push([esc(p.label), p.price]);
         if (D.onboarding && D.onboarding.creditedBy === p.id) creditSource = p.short || p.label.toLowerCase();
       } else if (on) {
-        rows.push([esc(p.label) + ' (one time)', esc(p.price)]);
+        oRows.push([esc(p.label), esc(p.price)]);
       }
     });
 
     if (D.onboarding && D.onboarding.fee && (m === 'tiers' || m === 'package')) {
       once += D.onboarding.fee;
-      rows.push(['Onboarding, one time', D.onboarding.fee]);
-      if (creditSource) { once -= D.onboarding.fee; rows.push(['Onboarding credited against your ' + esc(creditSource), -D.onboarding.fee]); }
+      oRows.push(['Onboarding', D.onboarding.fee]);
+      if (creditSource) { once -= D.onboarding.fee; oRows.push(['Onboarding credited against your ' + esc(creditSource), -D.onboarding.fee]); }
     }
 
     // Licensing is only in play when its gating project is selected.
@@ -604,10 +606,19 @@
       }
     }
 
+    function lineHtml(list) {
+      var out = '';
+      list.forEach(function (r) {
+        out += '<div class="calc-line"><span>' + r[0] + '</span><span>' +
+               (typeof r[1] === 'number' ? money(r[1]) : r[1]) + '</span></div>';
+      });
+      return out;
+    }
+    if ($('cg-break-m')) $('cg-break-m').innerHTML = lineHtml(rows);
+    if ($('cg-break-o')) $('cg-break-o').innerHTML = lineHtml(oRows);
+    if ($('cg-once-row')) $('cg-once-row').hidden = (oRows.length === 0);
+
     var html = '';
-    rows.forEach(function (r) {
-      html += '<div class="calc-line"><span>' + r[0] + '</span><span>' + (typeof r[1] === 'number' ? money(r[1]) : r[1]) + '</span></div>';
-    });
     if (m === 'hourly' && D.hourly && D.hourly.exclusionNote)
       html += '<div class="calc-flag warn">' + esc(D.hourly.exclusionNote) + '</div>';
     if ((m === 'tiers' || m === 'package') && seats && covered > 0 && covered < seats) {
@@ -639,7 +650,8 @@
     if (m === 'package' && pkg.rate) html += '<div class="calc-flag">' + esc(pkg.name) + ' is our published rate. You can check it against cloud-guardian.com/pricing before you sign anything.</div>';
 
     $('cg-break').innerHTML = html;
-    return { monthly: monthly, once: once, lic: lic, seats: seats, covered: covered, rows: rows, model: m };
+    return { monthly: monthly, once: once, lic: lic, seats: seats, covered: covered,
+             rows: rows.concat(oRows), model: m };
   }
 
   host.querySelectorAll('input[type=range]').forEach(function (el) {
