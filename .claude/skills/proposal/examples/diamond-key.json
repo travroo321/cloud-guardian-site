@@ -29,7 +29,9 @@
         "rate": 25,
         "default": 0,
         "hint": "The full security stack, no support included.",
-        "note": "If one of these people does need support, it is pay as you go at our hourly rates for that visit, unless you upgrade them to part-time or full-time. An upgrade starts on the first of the following month."
+        "note": "If one of these people does need support, it is pay as you go at our hourly rates for that visit, unless you upgrade them to part-time or full-time. An upgrade starts on the first of the following month.",
+        "separate": true,
+        "blurb": "Not a support plan. These people get the same security stack as everyone else, and nothing else."
       }
     ],
     "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Anyone who can reach your Google Workspace can reach company mail and company data, so every one of those machines carries the same protection either way. $25 is the floor for anyone with an account.",

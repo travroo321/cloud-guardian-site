@@ -66,7 +66,9 @@
     f.push('<div class="sq-field"><label>' + step + '. How do you want ongoing support handled?</label>');
 
     if (models.indexOf('tiers') > -1) {
-      var rateLine = (D.support.tiers || []).map(function (t) {
+      var inPlan = (D.support.tiers || []).filter(function (t) { return !t.separate; });
+      var aside  = (D.support.tiers || []).filter(function (t) { return t.separate; });
+      var rateLine = inPlan.map(function (t) {
         return '$' + t.rate + ' ' + esc(t.short || t.label.toLowerCase());
       }).join(' &nbsp;·&nbsp; ');
       f.push('<label class="cg-opt" id="cg-opt-tiers"><span class="cg-opt-head">' +
@@ -75,15 +77,26 @@
              '<span class="cg-opt-p">' + rateLine + ' &nbsp;<span style="color:#8fa0b4">per user / month</span></span>' +
              '<span class="cg-opt-d">' + esc(D.support.blurb || '') + '</span></span></span></label>');
       var sub = ['<div class="cg-sub" id="cg-tier-fields">'];
-      (D.support.tiers || []).forEach(function (t) {
-        sub.push('<div class="sq-field"><label for="cg-' + t.id + '">' + esc(t.label) +
+      function tierField(t) {
+        sub.push('<div class="sq-field"><label for="cg-' + t.id + '">' +
+                 esc(t.separate ? (t.sliderLabel || 'How many') : t.label) +
                  ' <span class="sq-val" id="cg-' + t.id + '-v">' + (t.default || 0) + '</span></label>' +
                  '<input type="range" class="sq-range" id="cg-' + t.id + '" min="0" max="' + (t.max || 60) +
                  '" value="' + (t.default || 0) + '" step="1" />' +
                  '<span class="sq-hint">$' + t.rate + ' each per month. ' + esc(t.hint || '') + '</span>' +
                  (t.note ? '<p class="cg-note" style="margin-top:8px">' + esc(t.note) + '</p>' : '') +
                  '</div>');
-      });
+      }
+      inPlan.forEach(tierField);
+      if (aside.length) {
+        sub.push('<div class="cg-aside">');
+        aside.forEach(function (t) {
+          sub.push('<p class="cg-aside-h">' + esc(t.label) + ' &nbsp;<span>$' + t.rate + ' per user / month</span></p>');
+          if (t.blurb) sub.push('<p class="cg-note" style="margin-top:0">' + esc(t.blurb) + '</p>');
+          tierField(t);
+        });
+        sub.push('</div>');
+      }
       sub.push('<div id="cg-coverage" class="cg-cov"></div>');
       if (D.support.note) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Why everyone is on the list.</strong> ' + esc(D.support.note) + '</p>');
       if (D.support.escalation) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Moving people between tiers.</strong> ' + esc(D.support.escalation) + '</p>');
