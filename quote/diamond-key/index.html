@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Estimate Builder for Diamond Key | Cloud Guardian</title>
+<meta name="description" content="A private estimate builder prepared for Diamond Key. Pick the support model and services you want and send the estimate back to Cloud Guardian." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/cg.css?v=20260831caps" />
+<style>
+  .dk-opt{display:block;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:border-color .18s,background .18s}
+  .dk-opt:hover{border-color:rgba(0,212,255,.45)}
+  .dk-opt.on{border-color:var(--cyan);background:rgba(0,212,255,.06)}
+  .dk-opt-head{display:flex;align-items:flex-start;gap:12px}
+  .dk-opt-head input{margin-top:5px;flex:0 0 auto;accent-color:var(--cyan);width:17px;height:17px}
+  .dk-opt-t{font-weight:700;font-size:1.02rem;display:block}
+  .dk-opt-p{color:var(--cyan);font-family:'IBM Plex Mono',monospace;font-size:.9rem;display:block;margin-top:3px}
+  .dk-opt-d{color:#93a3b8;font-size:.88rem;display:block;margin-top:6px;line-height:1.5}
+  .dk-sub{margin:14px 0 2px;padding:14px 0 2px 29px;border-top:1px dashed rgba(255,255,255,.14)}
+  .dk-sub[hidden]{display:none}
+  .dk-note{color:#93a3b8;font-size:.85rem;line-height:1.6;margin:10px 0 0}
+  .dk-excl{border:1px solid rgba(232,163,61,.35);background:rgba(232,163,61,.07);border-radius:12px;padding:14px 16px;margin:18px 0 0;color:#e8d5b5;font-size:.9rem;line-height:1.6}
+  .dk-excl b{color:#e8a33d}
+  .dk-tot-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+  .dk-tot-row:last-of-type{border-bottom:0}
+  .dk-tot-row span:first-child{color:#c3ced9;font-size:.93rem}
+  .dk-tot-row b{font-family:'IBM Plex Mono',monospace;font-size:1.15rem;color:#fff;white-space:nowrap}
+  .dk-tot-row.big b{font-size:1.5rem;color:var(--cyan)}
+  .dk-tot-row.lic b{color:#e8a33d}
+  .dk-lic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0 4px}
+  .dk-lic{border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:12px;text-align:left;background:none;color:inherit;font:inherit;cursor:pointer}
+  .dk-lic:hover{border-color:rgba(0,212,255,.45)}
+  .dk-lic.on{border-color:var(--cyan);background:rgba(0,212,255,.07)}
+  .dk-lic b{display:block;font-size:.95rem}
+  .dk-lic i{display:block;font-style:normal;color:var(--cyan);font-family:'IBM Plex Mono',monospace;font-size:1.05rem;margin:5px 0 3px}
+  .dk-lic small{display:block;color:#8fa0b4;font-size:.78rem;line-height:1.45}
+  @media print{
+    nav,.mobile-menu,footer,.fab-wrap,.cgc,.crumbs,.dk-noprint{display:none!important}
+    body{background:#fff!important;color:#111!important}
+    .sq-out,.sq-form,.dk-opt,.dk-excl{background:#fff!important;color:#111!important;border-color:#bbb!important}
+    .dk-opt-d,.dk-note,.sq-note{color:#444!important}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/" aria-label="Cloud Guardian home">
+    <img src="/assets/cg-logo-nav.png?v=20260831d" alt="Cloud Guardian" style="height:72px;width:auto;display:block;" />
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <div class="has-dropdown">
+      <a href="/services/itservices/">Services</a>
+      <div class="nav-dropdown">
+        <a href="/services/itservices/">Managed IT Services</a>
+        <a href="/pricing/">Small Business Plan</a>
+        <a href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
+        <a href="/services/business-technology/">Business Technology & vCIO</a>
+        <a href="/services/digital-presence/">Website & AI Search Visibility</a>
+        <a href="/services/vcio/">vCIO & Fractional IT Leadership</a>
+        <a href="/services/it-consulting/">IT Cost Consulting</a>
+        <a href="/services/ai-support-agent/">AI Support Agent</a>
+        <a href="/services/iso-42001/">ISO/IEC 42001 AIMS</a>
+        <a href="/services/structured-cabling/">Structured Cabling</a>
+        <a href="/services/voip/">VoIP Phone Systems</a>
+        <a href="/services/wireless-site-survey/">Wireless Site Survey</a>
+        <a href="/services/email-migrations/">Email & Cloud Migrations</a>
+        <a href="/services/managed-security-soc/">24/7 SOC & MSSP</a>
+      </div>
+    </div>
+    <div class="has-dropdown">
+      <a href="/industries/">Industries</a>
+      <div class="nav-dropdown">
+        <a href="/industries/"><strong>All Industries</strong></a>
+        <a href="/industries/law-firms/">Law Firms &amp; Legal</a>
+        <a href="/industries/healthcare/">Healthcare &amp; Dental</a>
+        <a href="/industries/accounting-finance/">Accounting &amp; Financial</a>
+        <a href="/industries/construction/">Construction &amp; Trades</a>
+        <a href="/industries/manufacturing-warehouse/">Manufacturing &amp; Warehouse</a>
+        <a href="/industries/real-estate/">Real Estate &amp; Property</a>
+        <a href="/industries/nonprofits/">Nonprofits &amp; Associations</a>
+        <a href="/industries/education/">Schools &amp; Education</a>
+        <a href="/industries/local-government/">Local Government &amp; Public Sector</a>
+        <a href="/industries/hospitality-retail/">Hospitality &amp; Retail</a>
+      </div>
+    </div>
+    <a href="/pricing/" class="active">Pricing</a>
+    <a href="/service-areas/">Locations</a>
+    <div class="has-dropdown">
+      <a href="/support/">Support</a>
+      <div class="nav-dropdown">
+        <a href="/support/">Support Portal</a>
+        <a href="/free-assessment/">Free Assessment</a>
+        <a href="/blog/">Blog &amp; Insights</a>
+      </div>
+    </div>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </div>
+  <a class="nav-cta" href="tel:+17327435472">(732) 743-5472</a>
+  <button class="nav-burger" aria-label="Open menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">Home</a>
+  <a href="/about/">About Us</a>
+  <div class="mm-label">Services</div>
+  <a class="mm-sub" href="/services/itservices/">Managed IT Services</a>
+  <a class="mm-sub" href="/pricing/">Small Business Plan</a>
+  <a class="mm-sub" href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
+  <a class="mm-sub" href="/services/business-technology/">Business Technology & vCIO</a>
+  <a class="mm-sub" href="/services/digital-presence/">Website & AI Search Visibility</a>
+  <a class="mm-sub" href="/services/vcio/">vCIO & Fractional IT Leadership</a>
+  <a class="mm-sub" href="/services/it-consulting/">IT Cost Consulting</a>
+  <a class="mm-sub" href="/services/ai-support-agent/">AI Support Agent</a>
+  <a class="mm-sub" href="/services/iso-42001/">ISO/IEC 42001 AIMS</a>
+  <a class="mm-sub" href="/services/structured-cabling/">Structured Cabling</a>
+  <a class="mm-sub" href="/services/voip/">VoIP Phone Systems</a>
+  <a class="mm-sub" href="/services/wireless-site-survey/">Wireless Site Survey</a>
+  <a class="mm-sub" href="/services/email-migrations/">Email & Cloud Migrations</a>
+  <a class="mm-sub" href="/services/managed-security-soc/">24/7 SOC & MSSP</a>
+  <div class="mm-label">Industries</div>
+  <a class="mm-sub" href="/industries/">All Industries</a>
+  <a class="mm-sub" href="/industries/law-firms/">Law Firms &amp; Legal</a>
+  <a class="mm-sub" href="/industries/healthcare/">Healthcare &amp; Dental</a>
+  <a class="mm-sub" href="/industries/accounting-finance/">Accounting &amp; Financial</a>
+  <a class="mm-sub" href="/industries/construction/">Construction &amp; Trades</a>
+  <a class="mm-sub" href="/industries/manufacturing-warehouse/">Manufacturing &amp; Warehouse</a>
+  <a class="mm-sub" href="/industries/real-estate/">Real Estate &amp; Property</a>
+  <a class="mm-sub" href="/industries/nonprofits/">Nonprofits &amp; Associations</a>
+  <a class="mm-sub" href="/industries/education/">Schools &amp; Education</a>
+  <a class="mm-sub" href="/industries/local-government/">Local Government &amp; Public Sector</a>
+  <a class="mm-sub" href="/industries/hospitality-retail/">Hospitality &amp; Retail</a>
+  <div class="mm-label">Support</div>
+  <a class="mm-sub" href="/support/">Support Portal</a>
+  <a class="mm-sub" href="/free-assessment/">Free Assessment</a>
+  <a class="mm-sub" href="/blog/">Blog &amp; Insights</a>
+  <a href="/pricing/" class="active">Pricing</a>
+  <a href="/service-areas/">Locations</a>
+  <a href="/contact/">Contact</a>
+  <a href="tel:+17327435472" style="color:var(--cyan)">📞 (732) 743-5472</a>
+</div>
+
+<section class="hero" style="min-height:auto; padding-bottom: 24px;">
+  <div class="hero-grid"></div>
+  <div class="hero-inner" style="grid-template-columns: 1fr;">
+    <div class="hero-single">
+      <div class="hero-tag"><span class="tag-emoji">🔑</span> Prepared for Diamond Key · Private estimate</div>
+      <h1>BUILD YOUR <span>ESTIMATE.</span></h1>
+      <p class="hero-sub" style="max-width: 780px;">
+        These are the rates we discussed, laid out so you can pick what you actually want and see the number move. Nothing here is a commitment. Choose your options, add any questions for our follow-up meeting, and send it back to us.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="estimate" class="vs-band">
+  <div class="section-inner">
+    <span class="section-tag reveal">Your Options</span>
+    <h2 class="reveal">PICK WHAT<br/><span style="color:var(--cyan)">YOU NEED.</span></h2>
+
+    <div class="sq reveal" id="dk">
+      <div class="sq-form">
+
+        <div class="sq-field">
+          <label for="dk-biz">Company name</label>
+          <input type="text" id="dk-biz" value="Diamond Key" autocomplete="organization" />
+        </div>
+
+        <div class="sq-field">
+          <label>1. How do you want ongoing support handled?</label>
+
+          <label class="dk-opt" id="dk-opt-unl">
+            <span class="dk-opt-head">
+              <input type="radio" name="dk-model" value="unlimited" id="dk-m-unl" checked />
+              <span>
+                <span class="dk-opt-t">Unlimited IT support</span>
+                <span class="dk-opt-p">$100 per full-time user / month &nbsp;·&nbsp; $50 per part-time user / month</span>
+                <span class="dk-opt-d">Flat monthly number. Call as often as you need, no clock running, no per-ticket charges.</span>
+              </span>
+            </span>
+          </label>
+
+          <div class="dk-sub" id="dk-unl-fields">
+            <div class="sq-field">
+              <label for="dk-ft">Full-time users <span class="sq-val" id="dk-ft-v">8</span></label>
+              <input type="range" class="sq-range" id="dk-ft" min="0" max="40" value="8" step="1" />
+              <span class="sq-hint">$100 each per month.</span>
+            </div>
+            <div class="sq-field">
+              <label for="dk-pt">Part-time users <span class="sq-val" id="dk-pt-v">0</span></label>
+              <input type="range" class="sq-range" id="dk-pt" min="0" max="40" value="0" step="1" />
+              <span class="sq-hint">$50 each per month.</span>
+            </div>
+          </div>
+
+          <label class="dk-opt" id="dk-opt-payg">
+            <span class="dk-opt-head">
+              <input type="radio" name="dk-model" value="payg" id="dk-m-payg" />
+              <span>
+                <span class="dk-opt-t">Pay as you go, hourly</span>
+                <span class="dk-opt-p">Onsite $125 / hour &nbsp;·&nbsp; Remote break/fix $125 / hour</span>
+                <span class="dk-opt-d">No monthly fee. Onsite visits carry a one-hour minimum, then bill hourly. Remote break/fix bills in 30-minute increments, so a half hour is $62.50.</span>
+              </span>
+            </span>
+          </label>
+
+          <div class="dk-sub" id="dk-payg-fields" hidden>
+            <div class="sq-field">
+              <label for="dk-visits">Onsite visits in a typical month <span class="sq-val" id="dk-visits-v">1</span></label>
+              <input type="range" class="sq-range" id="dk-visits" min="0" max="12" value="1" step="1" />
+            </div>
+            <div class="sq-field">
+              <label for="dk-vhrs">Hours per onsite visit <span class="sq-val" id="dk-vhrs-v">2</span></label>
+              <input type="range" class="sq-range" id="dk-vhrs" min="1" max="8" value="2" step="1" />
+              <span class="sq-hint">One-hour minimum per visit at $125 an hour.</span>
+            </div>
+            <div class="sq-field">
+              <label for="dk-rem">Remote break/fix hours in a typical month <span class="sq-val" id="dk-rem-v">2</span></label>
+              <input type="range" class="sq-range" id="dk-rem" min="0" max="20" value="2" step="0.5" />
+              <span class="sq-hint">Billed in 30-minute increments, $62.50 a block.</span>
+            </div>
+          </div>
+
+          <label class="dk-opt" id="dk-opt-none">
+            <span class="dk-opt-head">
+              <input type="radio" name="dk-model" value="undecided" id="dk-m-none" />
+              <span>
+                <span class="dk-opt-t">Not sure yet</span>
+                <span class="dk-opt-p">Let's work it out on the call</span>
+                <span class="dk-opt-d">Leave support out of the estimate for now. We will walk through both models with you.</span>
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <div class="sq-field">
+          <label>2. One-time project</label>
+          <label class="dk-opt" id="dk-opt-mig">
+            <span class="dk-opt-head">
+              <input type="checkbox" id="dk-mig" />
+              <span>
+                <span class="dk-opt-t">Migrate Outlook / Microsoft 365 to Google Workspace</span>
+                <span class="dk-opt-p">$1,000 one time, for up to 8 mailboxes</span>
+                <span class="dk-opt-d">Mail, contacts and calendars moved across, mailboxes rebuilt on the Google side, users set up on their devices. Nothing cuts over until it has been tested. More than 8 mailboxes, we confirm the number with you first.</span>
+              </span>
+            </span>
+          </label>
+          <div class="dk-sub" id="dk-mig-fields" hidden>
+            <div class="sq-field">
+              <label for="dk-boxes">Mailboxes to move <span class="sq-val" id="dk-boxes-v">8</span></label>
+              <input type="range" class="sq-range" id="dk-boxes" min="1" max="40" value="8" step="1" />
+              <span class="sq-hint" id="dk-boxes-hint">Covered by the $1,000 flat rate.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sq-field">
+          <label>3. Google Workspace licensing <span class="sq-opt">paid to Google, not to us</span></label>
+          <p class="dk-note" style="margin-top:0">Our pricing above excludes email licensing. These are Google's own published rates so you can see the whole picture. Pick a plan to add it to the licensing line.</p>
+          <div class="dk-lic-grid" id="dk-lic-grid">
+            <button type="button" class="dk-lic" data-plan="none" data-price="0" data-flex="0"><b>None / already have it</b><i>&mdash;</i><small>Leave licensing out</small></button>
+            <button type="button" class="dk-lic" data-plan="Business Starter" data-price="7" data-flex="8.40"><b>Business Starter</b><i>$7 / user / mo</i><small>30 GB pooled per user. $8.40 month to month.</small></button>
+            <button type="button" class="dk-lic on" data-plan="Business Standard" data-price="14" data-flex="16.80"><b>Business Standard</b><i>$14 / user / mo</i><small>2 TB per user, recording, larger meetings. $16.80 month to month.</small></button>
+            <button type="button" class="dk-lic" data-plan="Business Plus" data-price="22" data-flex="26.40"><b>Business Plus</b><i>$22 / user / mo</i><small>5 TB per user, Vault, advanced controls. $26.40 month to month.</small></button>
+          </div>
+          <div class="sq-field" id="dk-lic-fields">
+            <label for="dk-seats">Mailboxes to license <span class="sq-val" id="dk-seats-v">8</span></label>
+            <input type="range" class="sq-range" id="dk-seats" min="1" max="40" value="8" step="1" />
+            <span class="sq-hint">Prices shown are Google's annual-commitment rate. Month-to-month costs more per user, and we can set it up either way.</span>
+          </div>
+        </div>
+
+        <div class="sq-field">
+          <label for="dk-notes">4. Questions for the follow-up meeting <span class="sq-opt">optional</span></label>
+          <textarea id="dk-notes" rows="4" maxlength="2000" placeholder="Anything you want us to come prepared to answer. What is breaking, what you are paying now, timing, anything you are unsure about..."></textarea>
+        </div>
+
+      </div>
+
+      <div class="sq-out">
+        <span class="sq-out-label">Your estimate</span>
+        <div class="dk-tot-row big"><span>Cloud Guardian, per month</span><b id="dk-monthly">$800</b></div>
+        <div class="dk-tot-row"><span>Cloud Guardian, one time</span><b id="dk-once">$0</b></div>
+        <div class="dk-tot-row lic"><span>Google licensing, per month</span><b id="dk-lic">$112</b></div>
+        <div class="sq-break" id="dk-break"></div>
+
+        <div class="dk-excl">
+          <b>What this excludes.</b> Email licensing is not included in our pricing. The Google Workspace figure above is billed by Google and is shown only so you can see the full monthly cost. Hardware, cabling and any project work outside what you picked is quoted separately, always before the work happens.
+        </div>
+
+        <p class="sq-note">This is an estimate, not an invoice. Hourly work is tracked to the minute and itemized. We confirm the real number with you after a look at what you have, and nothing gets billed that you have not already seen.</p>
+
+        <div class="dk-noprint">
+          <div class="sq-contact" style="display:block">
+            <label for="dk-name">Your name</label>
+            <input type="text" id="dk-name" autocomplete="name" />
+            <label for="dk-reach">Email or phone number</label>
+            <input type="text" id="dk-reach" autocomplete="email" />
+          </div>
+          <button type="button" class="btn-primary sq-send" id="dk-send" style="width:100%">Send this estimate to Cloud Guardian</button>
+          <p class="sq-sent" id="dk-sent" hidden></p>
+          <button type="button" class="btn-outline sq-pdf" id="dk-print" style="width:100%">Save or print a copy</button>
+          <a class="phone-link" href="tel:+17327435472">&#128222; (732) 743-5472</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="foot-nap">
+    <div class="nap-block">
+      <span itemscope itemtype="https://schema.org/ProfessionalService">
+        <strong itemprop="name">Cloud Guardian LLC</strong>
+        <span class="nap-line" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+          <span itemprop="streetAddress">643 Georges Rd</span>,
+          <span itemprop="addressLocality">North Brunswick</span>,
+          <span itemprop="addressRegion">NJ</span>
+          <span itemprop="postalCode">08902</span>
+        </span>
+        <span class="nap-line">
+          <a href="tel:+17327435472" itemprop="telephone">(732) 743-5472</a>
+          &nbsp;·&nbsp;
+          <a href="mailto:sales@cloud-guardian.com" itemprop="email">sales@cloud-guardian.com</a>
+        </span>
+        <span class="nap-line">Headquarters in North Brunswick, NJ · Onsite across New Jersey, New York and the Tri-State area · Remote and dispatched field techs nationwide · 24/7/365</span>
+      </span>
+    </div>
+    <div class="hq-card">
+      <img src="/assets/hq.jpg?v=20260801b" alt="Cloud Guardian LLC headquarters at 643 Georges Rd, North Brunswick Township, New Jersey" loading="lazy" width="440" height="248" />
+      <span class="hq-cap"><span class="hq-pin">📍</span> Headquarters · 643 Georges Rd, North Brunswick, NJ 08902</span>
+    </div>
+    <div class="foot-cols">
+      <div class="foot-col">
+        <h4>Services</h4>
+        <a href="/services/itservices/">Managed IT Services</a>
+        <a href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
+        <a href="/services/business-technology/">Business Technology &amp; vCIO</a>
+        <a href="/services/digital-presence/">Website &amp; AI Search Visibility</a>
+        <a href="/services/it-consulting/">IT Cost Consulting</a>
+        <a href="/services/email-migrations/">Email &amp; Cloud Migrations</a>
+        <a href="/services/structured-cabling/">Structured Cabling</a>
+        <a href="/services/voip/">VoIP Phone Systems</a>
+        <a href="/services/wireless-site-survey/">Wireless Site Survey</a>
+      </div>
+      <div class="foot-col">
+        <h4>Industries</h4>
+        <a href="/industries/law-firms/">Law Firms</a>
+        <a href="/industries/healthcare/">Healthcare &amp; Dental</a>
+        <a href="/industries/accounting-finance/">Accounting &amp; Finance</a>
+        <a href="/industries/manufacturing-warehouse/">Manufacturing &amp; Warehouse</a>
+        <a href="/industries/local-government/">Local Government</a>
+        <a href="/industries/">All 10 Industries</a>
+      </div>
+      <div class="foot-col">
+        <h4>Service Areas</h4>
+        <a href="/service-areas/new-brunswick-nj/">New Brunswick, NJ</a>
+        <a href="/service-areas/edison-nj/">Edison, NJ</a>
+        <a href="/service-areas/piscataway-nj/">Piscataway, NJ</a>
+        <a href="/service-areas/south-brunswick-nj/">South Brunswick, NJ</a>
+        <a href="/service-areas/princeton-nj/">Princeton, NJ</a>
+        <a href="/service-areas/jersey-city-nj/">Jersey City, NJ</a>
+        <a href="/service-areas/newark-nj/">Newark, NJ</a>
+        <a href="/service-areas/">All 53 Markets &amp; Counties</a>
+      </div>
+      <div class="foot-col">
+        <h4>Support &amp; Company</h4>
+        <a href="/">Home</a>
+        <a href="/pricing/">Pricing &amp; Instant Estimate</a>
+        <a href="/support/">Client Support Portal</a>
+        <a href="/services/managed-security-soc/">24/7 SOC &amp; MSSP</a>
+        <a href="/services/business-technology/">Business Technology &amp; vCIO</a>
+        <a href="/about/">About Us</a>
+        <a href="/blog/">Blog</a>
+        <a href="/free-assessment/">Free Assessment</a>
+        <a href="/contact/">Contact</a>
+        <a href="/terms/">Terms of Service</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/agreement/">Services Agreement</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bar">
+    <p>© 2026 Cloud Guardian · IT Managed Services, Cybersecurity &amp; IT Consulting · 643 Georges Rd, North Brunswick Township, NJ 08902 · All Rights Reserved</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.getElementById('dk');
+  if (!root) return;
+
+  var RATE_FT = 100, RATE_PT = 50, RATE_HOUR = 125, MIG_FLAT = 1000, MIG_BOXES = 8;
+
+  function $(id) { return document.getElementById(id); }
+  function money(n) {
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2 });
+  }
+  function val(id, lo, hi) {
+    var v = parseFloat($(id).value);
+    if (isNaN(v)) v = lo;
+    return Math.max(lo, Math.min(hi, v));
+  }
+  function model() {
+    var r = root.querySelector('input[name="dk-model"]:checked');
+    return r ? r.value : 'undecided';
+  }
+
+  // licensing plan pills
+  var plan = { name: 'Business Standard', price: 14, flex: 16.80 };
+  [].forEach.call(root.querySelectorAll('.dk-lic'), function (b) {
+    b.addEventListener('click', function () {
+      [].forEach.call(root.querySelectorAll('.dk-lic'), function (x) { x.classList.toggle('on', x === b); });
+      plan = {
+        name: b.getAttribute('data-plan'),
+        price: parseFloat(b.getAttribute('data-price')) || 0,
+        flex: parseFloat(b.getAttribute('data-flex')) || 0
+      };
+      recalc();
+    });
+  });
+
+  function recalc() {
+    var m = model();
+    var monthly = 0, once = 0, lic = 0, rows = [];
+
+    $('dk-unl-fields').hidden = (m !== 'unlimited');
+    $('dk-payg-fields').hidden = (m !== 'payg');
+    $('dk-opt-unl').classList.toggle('on', m === 'unlimited');
+    $('dk-opt-payg').classList.toggle('on', m === 'payg');
+    $('dk-opt-none').classList.toggle('on', m === 'undecided');
+
+    if (m === 'unlimited') {
+      var ft = val('dk-ft', 0, 40), pt = val('dk-pt', 0, 40);
+      if (ft > 0) { monthly += ft * RATE_FT; rows.push(['Unlimited support, ' + ft + ' full-time x $100', ft * RATE_FT]); }
+      if (pt > 0) { monthly += pt * RATE_PT; rows.push(['Unlimited support, ' + pt + ' part-time x $50', pt * RATE_PT]); }
+      if (ft === 0 && pt === 0) rows.push(['Unlimited support, no users entered yet', 0]);
+    } else if (m === 'payg') {
+      var visits = val('dk-visits', 0, 12);
+      var vhrs = Math.max(1, val('dk-vhrs', 1, 8));
+      var rem = val('dk-rem', 0, 20);
+      if (visits > 0) {
+        var onsite = visits * vhrs * RATE_HOUR;
+        monthly += onsite;
+        rows.push(['Onsite, ' + visits + ' visit' + (visits === 1 ? '' : 's') + ' x ' + vhrs + ' hr x $125', onsite]);
+      }
+      if (rem > 0) {
+        var remote = rem * RATE_HOUR;
+        monthly += remote;
+        rows.push(['Remote break/fix, ' + rem + ' hr x $125', remote]);
+      }
+      if (visits === 0 && rem === 0) rows.push(['Hourly, nothing estimated for a typical month', 0]);
+    } else {
+      rows.push(['Ongoing support, to be decided on the call', 0]);
+    }
+
+    var migOn = $('dk-mig').checked;
+    $('dk-mig-fields').hidden = !migOn;
+    $('dk-opt-mig').classList.toggle('on', migOn);
+    if (migOn) {
+      var boxes = val('dk-boxes', 1, 40);
+      once += MIG_FLAT;
+      if (boxes <= MIG_BOXES) {
+        rows.push(['Google Workspace migration, ' + boxes + ' mailbox' + (boxes === 1 ? '' : 'es') + ' (one time)', MIG_FLAT]);
+        $('dk-boxes-hint').textContent = 'Covered by the $1,000 flat rate.';
+      } else {
+        rows.push(['Google Workspace migration, first 8 mailboxes (one time)', MIG_FLAT]);
+        rows.push(['Migration, ' + (boxes - MIG_BOXES) + ' additional mailbox' + (boxes - MIG_BOXES === 1 ? '' : 'es') + '', 'confirmed with you first']);
+        $('dk-boxes-hint').textContent = 'The $1,000 covers the first 8. We will price the rest with you before any work starts.';
+      }
+    }
+
+    var seats = val('dk-seats', 1, 40);
+    $('dk-lic-fields').hidden = (plan.price <= 0);
+    if (plan.price > 0) {
+      lic = seats * plan.price;
+      rows.push([plan.name + ', ' + seats + ' user' + (seats === 1 ? '' : 's') + ' x ' + money(plan.price) + ' (paid to Google)', lic]);
+    }
+
+    monthly = +monthly.toFixed(2); once = +once.toFixed(2); lic = +lic.toFixed(2);
+    $('dk-monthly').textContent = money(monthly);
+    $('dk-once').textContent = money(once);
+    $('dk-lic').textContent = money(lic);
+
+    var html = '';
+    for (var i = 0; i < rows.length; i++) {
+      var amt = typeof rows[i][1] === 'number' ? money(rows[i][1]) : rows[i][1];
+      html += '<div class="calc-line"><span>' + rows[i][0] + '</span><span>' + amt + '</span></div>';
+    }
+    if (plan.price > 0) {
+      html += '<div class="calc-flag">' + plan.name + ' at ' + money(plan.price) + ' per user is Google’s annual-commitment rate, ' +
+              money(seats * plan.price * 12) + ' a year for ' + seats + ' user' + (seats === 1 ? '' : 's') + '. Month to month it is ' +
+              money(plan.flex) + ' per user, ' + money(seats * plan.flex) + ' a month. We can set you up either way.</div>';
+    }
+    if (m === 'payg') html += '<div class="calc-flag">Hourly work only bills when you use it, so a quiet month costs nothing. The figure above is what a typical month would look like at the volumes you set.</div>';
+    if (m === 'unlimited') html += '<div class="calc-flag">Unlimited support is a flat number that does not move with ticket volume. It changes only when your headcount does.</div>';
+    $('dk-break').innerHTML = html;
+
+    return { monthly: monthly, once: once, lic: lic, rows: rows, seats: seats };
+  }
+
+  ['dk-ft', 'dk-pt', 'dk-visits', 'dk-vhrs', 'dk-rem', 'dk-boxes', 'dk-seats'].forEach(function (id) {
+    $(id).addEventListener('input', function () {
+      var v = $(id + '-v');
+      if (v) v.textContent = $(id).value;
+      recalc();
+    });
+  });
+  [].forEach.call(root.querySelectorAll('input[name="dk-model"]'), function (r) {
+    r.addEventListener('change', recalc);
+  });
+  $('dk-mig').addEventListener('change', recalc);
+
+  $('dk-print').addEventListener('click', function () { window.print(); });
+
+  $('dk-send').addEventListener('click', function () {
+    var msg = $('dk-sent');
+    var name = ($('dk-name').value || '').trim();
+    var reach = ($('dk-reach').value || '').trim();
+    msg.hidden = false;
+    if (!reach) {
+      msg.classList.add('err');
+      msg.textContent = 'Add an email or phone number so we can get back to you.';
+      return;
+    }
+    var q = recalc();
+    var m = model();
+    var picked = m === 'unlimited'
+      ? 'Unlimited support: ' + val('dk-ft', 0, 40) + ' full-time, ' + val('dk-pt', 0, 40) + ' part-time'
+      : m === 'payg'
+        ? 'Pay as you go: ' + val('dk-visits', 0, 12) + ' onsite visit(s) x ' + Math.max(1, val('dk-vhrs', 1, 8)) + ' hr, ' + val('dk-rem', 0, 20) + ' remote hr / month'
+        : 'Undecided, wants to discuss both models';
+    var biz = ($('dk-biz').value || 'Diamond Key').trim();
+    var body = {
+      _subject: 'DIAMOND KEY ESTIMATE - ' + biz + ' - ' + money(q.monthly) + '/mo'
+                + (q.once ? ' + ' + money(q.once) + ' one time' : ''),
+      name: name, contact: reach, company: biz,
+      support_model: picked,
+      migration: $('dk-mig').checked
+        ? 'YES - Outlook/M365 to Google Workspace, ' + val('dk-boxes', 1, 40) + ' mailbox(es), $1,000 flat for the first 8'
+        : 'no',
+      google_licensing: plan.price > 0
+        ? plan.name + ', ' + q.seats + ' user(s) at ' + money(plan.price) + '/user/mo = ' + money(q.lic) + '/mo (paid to Google)'
+        : 'none selected',
+      cloud_guardian_monthly: money(q.monthly),
+      cloud_guardian_one_time: money(q.once),
+      google_licensing_monthly: money(q.lic),
+      questions_for_the_meeting: ($('dk-notes').value || '').trim() || 'none',
+      page: 'diamond-key estimate builder'
+    };
+    msg.classList.remove('err');
+    msg.textContent = 'Sending...';
+    fetch('https://formspree.io/f/xkoezydq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      if (!r.ok) throw new Error();
+      msg.textContent = 'Sent. We have your picks and your questions, and we will come to the meeting ready for them.';
+    }).catch(function () {
+      msg.classList.add('err');
+      msg.textContent = 'That did not go through. Call (732) 743-5472 or email sales@cloud-guardian.com and we will pick it up from there.';
+    });
+  });
+
+  recalc();
+})();
+</script>
+<script src="/assets/cg.js?v=20260831caps" defer></script>
+</body>
+</html>
