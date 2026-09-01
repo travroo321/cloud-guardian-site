@@ -11,7 +11,7 @@
         "label": "Full-time users",
         "short": "full-time",
         "rate": 100,
-        "default": 3,
+        "default": 0,
         "hint": "The people who actually lean on IT and call us."
       },
       {
@@ -19,7 +19,7 @@
         "label": "Part-time users",
         "short": "part-time",
         "rate": 50,
-        "default": 5,
+        "default": 0,
         "hint": "Full security, and support there if they ever need it."
       },
       {

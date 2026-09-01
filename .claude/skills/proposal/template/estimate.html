@@ -305,6 +305,11 @@
     var cov = $('cg-coverage');
     if (cov) {
       if ((m !== 'tiers' && m !== 'package') || !seats) { cov.className = 'cg-cov'; cov.innerHTML = ''; }
+      else if (covered === 0) {
+        cov.className = 'cg-cov';
+        cov.innerHTML = '<b>Place your people.</b> Slide each bar to say how many sit on each level. ' +
+          'You have ' + seats + ' account' + (seats === 1 ? '' : 's') + ' to cover.';
+      }
       else if (covered < seats) {
         cov.className = 'cg-cov warn';
         cov.innerHTML = '<b>' + covered + ' of ' + seats + ' covered.</b> ' + (seats - covered) +
@@ -316,7 +321,7 @@
     rows.forEach(function (r) {
       html += '<div class="calc-line"><span>' + r[0] + '</span><span>' + (typeof r[1] === 'number' ? money(r[1]) : r[1]) + '</span></div>';
     });
-    if ((m === 'tiers' || m === 'package') && seats && covered < seats) {
+    if ((m === 'tiers' || m === 'package') && seats && covered > 0 && covered < seats) {
       var floor = m === 'package' ? pkg.rate
         : (D.support.tiers || []).reduce(function (a, t) { return Math.min(a, t.rate); }, Infinity);
       var fix = m === 'package'
