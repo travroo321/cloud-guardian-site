@@ -285,9 +285,7 @@
   var R = (D.support && D.support.ratio) || null;
   function maxPart(full) {
     if (!R) return Infinity;
-    if (full <= 0) return 0;
-    if (R.minFull && R.minFullFrom && full < R.minFull) return Math.max(0, R.minFullFrom - 1);
-    return full * R.partPerFull;
+    return full <= 0 ? 0 : full * R.partPerFull;
   }
   function ratioMessage(full, wanted, allowed) {
     if (!R) return '';
