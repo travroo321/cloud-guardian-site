@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>{{CLIENT_NAME}} — Cloud Guardian Proposal</title>
+<style>
+  /* Brand tokens mirror assets/cg.css so the proposal and the site match. */
+  :root{
+    --navy:#0b1120; --black:#080c12; --card:#131d2e; --border:#1e3050;
+    --cyan:#00d4ff; --cyan2:#00a8cc; --gold:#f0b429;
+    --white:#e8f0fe; --muted:#7a9bbf; --ink:#1e2a3a; --rule:#dbe3ed;
+  }
+  @page{ size:Letter; margin:0; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    color:var(--ink); background:#fff;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .page{
+    width:8.5in; height:11in; padding:0.72in 0.78in;
+    position:relative; overflow:hidden; page-break-after:always;
+  }
+  .page:last-child{ page-break-after:auto; }
+
+  /* ── dark pages ── */
+  .dark{ background:var(--navy); color:var(--white); }
+  .dark .eyebrow{ color:var(--cyan); }
+
+  .eyebrow{
+    font-size:8.5pt; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--cyan2); font-weight:700; margin-bottom:10px;
+  }
+  h1{ font-size:30pt; line-height:1.12; font-weight:800; letter-spacing:-.5px; }
+  h2{ font-size:18pt; line-height:1.2; font-weight:800; margin-bottom:6px; }
+  h3{ font-size:11.5pt; font-weight:700; margin-bottom:4px; }
+  p{ font-size:10.5pt; line-height:1.62; }
+  .lede{ font-size:11.5pt; line-height:1.6; color:#cfd9e6; }
+  .muted{ color:var(--muted); }
+
+  .rule{ height:3px; width:96px; background:var(--cyan); margin:14px 0 20px; }
+  .rule.gold{ background:var(--gold); }
+
+  /* ── cover ── */
+  .cover-logo{ width:230px; display:block; margin-bottom:52px; }
+  .cover-for{
+    margin-top:40px; padding-top:22px; border-top:1px solid rgba(255,255,255,.18);
+  }
+  .cover-client{ font-size:21pt; font-weight:800; color:#fff; margin-top:6px; }
+  .cover-meta{ font-size:9.5pt; color:var(--muted); margin-top:8px; }
+  .cover-foot{
+    position:absolute; left:0.78in; right:0.78in; bottom:0.62in;
+    display:flex; justify-content:space-between; align-items:flex-end;
+    font-size:9pt; color:var(--muted); border-top:1px solid rgba(255,255,255,.14);
+    padding-top:12px;
+  }
+  .cover-foot b{ color:var(--cyan); font-weight:700; }
+
+  /* ── content blocks ── */
+  .section{ margin-bottom:22px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px 22px; }
+  .item{ margin-bottom:11px; }
+  .item h3{ font-size:10.5pt; }
+  .item p{ font-size:9.7pt; line-height:1.5; color:#41546b; }
+  .dark .item p{ color:#a9bdd4; }
+
+  ul.checks{ list-style:none; }
+  ul.checks li{
+    font-size:10pt; line-height:1.5; padding-left:19px; position:relative; margin-bottom:7px;
+  }
+  ul.checks li::before{
+    content:""; position:absolute; left:0; top:.45em;
+    width:8px; height:8px; border-radius:50%; background:var(--cyan);
+  }
+  .dark ul.checks li::before{ background:var(--cyan); }
+
+  /* ── pricing table ── */
+  table{ width:100%; border-collapse:collapse; margin-top:6px; }
+  th{
+    text-align:left; font-size:8.5pt; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted); font-weight:700; padding:0 0 9px; border-bottom:2px solid var(--cyan);
+  }
+  th.r, td.r{ text-align:right; }
+  td{ font-size:10.5pt; padding:11px 0; border-bottom:1px solid var(--rule); }
+  tr.total td{
+    border-bottom:none; border-top:2px solid var(--ink);
+    font-size:14pt; font-weight:800; padding-top:14px;
+  }
+  tr.total td.r{ color:var(--cyan2); }
+  td.sub{ font-size:9.3pt; color:#5b6c80; }
+
+  .callout{
+    border:1px solid rgba(240,180,41,.5); background:rgba(240,180,41,.09);
+    border-radius:9px; padding:13px 15px; margin-top:16px;
+  }
+  .callout b{ color:#8a6410; }
+  .callout p{ font-size:9.7pt; line-height:1.55; color:#6b5518; }
+
+  .note{ font-size:9pt; line-height:1.55; color:#66768a; margin-top:14px; }
+
+  .footer{
+    position:absolute; left:0.78in; right:0.78in; bottom:0.5in;
+    display:flex; justify-content:space-between;
+    font-size:8.2pt; color:#8b9bb0; border-top:1px solid var(--rule); padding-top:9px;
+  }
+  .dark .footer{ color:var(--muted); border-top-color:rgba(255,255,255,.14); }
+</style>
+</head>
+<body>
+
+<!-- ═══ 1. COVER ═══ -->
+<section class="page dark">
+  <img class="cover-logo" src="{{LOGO_PATH}}" alt="Cloud Guardian" />
+  <div class="eyebrow">{{PROPOSAL_KIND}}</div>
+  <h1>{{HEADLINE}}</h1>
+  <div class="rule"></div>
+  <p class="lede">{{COVER_LEDE}}</p>
+
+  <div class="cover-for">
+    <div class="eyebrow">Prepared for</div>
+    <div class="cover-client">{{CLIENT_NAME}}</div>
+    <div class="cover-meta">{{CLIENT_META}}</div>
+    <div class="cover-meta">{{DATE}} &nbsp;·&nbsp; Estimate valid 30 days</div>
+  </div>
+
+  <div class="cover-foot">
+    <div>
+      <b>Cloud Guardian LLC</b><br />
+      643 Georges Rd, North Brunswick, NJ 08902
+    </div>
+    <div style="text-align:right">
+      (732) 743-5472<br />
+      sales@cloud-guardian.com
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 2. WHAT YOU GET ═══ -->
+<section class="page">
+  <div class="eyebrow">The Program</div>
+  <h2>{{PROGRAM_TITLE}}</h2>
+  <div class="rule"></div>
+  <p class="lede" style="color:#41546b">{{PROGRAM_LEDE}}</p>
+
+  <div class="section" style="margin-top:26px">
+    <h3 style="font-size:12pt; margin-bottom:12px">What is included</h3>
+    <ul class="checks">
+      {{INCLUDED_LIST}}
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3 style="font-size:12pt; margin-bottom:12px">How the first 60 days go</h3>
+    <div class="grid2">
+      <div class="item"><h3>1 · The assessment</h3><p>A full inventory of devices, accounts, licensing and exposure, an external check of what is reachable from the internet, and a search for your credentials in breach data. Free, and the findings are yours either way.</p></div>
+      <div class="item"><h3>2 · The findings</h3><p>A written report prioritised by what would actually hurt, not by what is easiest to sell. It names the gaps, the wasted spend, and what each fix costs.</p></div>
+      <div class="item"><h3>3 · Remediation</h3><p>We close the worst gaps first, in the order the report set out. Cutovers happen outside your hours. Nothing changes without you knowing what and why.</p></div>
+      <div class="item"><h3>4 · We run it</h3><p>Monitoring, help desk, patching and security operations become ours. A named engineer who knows your environment, and documentation kept current because it was always yours.</p></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>{{CLIENT_NAME}} · Proposal</span><span>Page 2</span></div>
+</section>
+
+<!-- ═══ 3. SECURITY ═══ -->
+<section class="page dark">
+  <div class="eyebrow">Security</div>
+  <h2>{{SECURITY_TITLE}}</h2>
+  <div class="rule"></div>
+  <p class="lede">{{SECURITY_LEDE}}</p>
+
+  <div class="section" style="margin-top:26px">
+    <div class="grid2">
+      {{SECURITY_ITEMS}}
+    </div>
+  </div>
+
+  <div class="section">
+    <h3 style="font-size:12pt; margin-bottom:12px; color:#fff">{{COMPLIANCE_TITLE}}</h3>
+    <p style="color:#a9bdd4; font-size:10pt; line-height:1.6">{{COMPLIANCE_BODY}}</p>
+  </div>
+
+  <div class="footer"><span>{{CLIENT_NAME}} · Proposal</span><span>Page 3</span></div>
+</section>
+
+<!-- ═══ 4. PRICING ═══ -->
+<section class="page">
+  <div class="eyebrow">Investment</div>
+  <h2>{{PRICING_TITLE}}</h2>
+  <div class="rule gold"></div>
+  <p class="lede" style="color:#41546b">{{PRICING_LEDE}}</p>
+
+  <table style="margin-top:22px">
+    <thead>
+      <tr><th>Line</th><th class="r">Amount</th></tr>
+    </thead>
+    <tbody>
+      {{PRICING_ROWS}}
+    </tbody>
+  </table>
+
+  {{PRICING_CALLOUT}}
+
+  <div class="section" style="margin-top:20px">
+    <h3 style="font-size:11pt; margin-bottom:8px">Terms</h3>
+    <ul class="checks">
+      {{TERMS_LIST}}
+    </ul>
+  </div>
+
+  <p class="note">{{EXCLUSIONS}}</p>
+  <p class="note">This is a proposal, not an invoice. The final number is confirmed after the free assessment of your actual environment. You will not find a line on an invoice you have not already seen.</p>
+
+  <div class="footer"><span>Prepared by {{PREPARED_BY}} · {{DATE}}</span><span>Page 4</span></div>
+</section>
+
+</body>
+</html>

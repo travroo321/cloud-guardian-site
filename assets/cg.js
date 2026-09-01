@@ -156,7 +156,7 @@
         if (q.server) flags.push('Server: $50.00 per month.');
         if (q.staff) flags.push('Looking to help or replace existing IT staff: we do both, and will cover it on the call.');
         if (q.isp) flags.push('Business Internet bundle: you asked us to look into it. Not included in the figure above - we check what is available at your address and quote the bundle separately, starting at $50 a month.');
-        flags.push('Included every month: 15 minutes of tech time for every user, and any call under 5 minutes is free. Past that, support is $90 per hour billed in 15 minute blocks, so $22.50 a block, tracked to the minute and itemized. You get a live person in the queue, not a callback. Most issues are done in about 7 minutes.')
+        flags.push('Included every month: 15 minutes of tech time for every user, and anything resolved in under five minutes is free, by phone or through the ticket system. Those five minutes are hands-on tech time, not response time, so the clock starts only after a tech has spent five minutes on the issue. Past that, support is $90 per hour billed in 15-minute blocks, so $22.50 a block, tracked to the minute and itemized. You get a live person in the queue, not a callback. Most issues are done in about seven minutes.')
         for (var f = 0; f < flags.length; f++) {
           var wr = doc.splitTextToSize(flags[f], W - 2 * x - 12);
           doc.text(wr, x + 6, iy); iy += wr.length * 11 + 5;
@@ -185,7 +185,7 @@
           'Cybersecurity protections: phishing and impersonation defense, SPF, DKIM and DMARC enforced',
           'Name-brand tools with automated patching and updates for your machines',
           'Monitoring and alerting for the threats that actually hit small businesses',
-          'Support billed in 15 minute increments, $22.50 per 15 minutes, and calls under 5 minutes are free',
+          'Support billed in 15-minute increments at $22.50 per 15 minutes, and calls and tickets resolved in under five minutes are free',
           'No contract, cancel any month',
           'Step up to Gold or Platinum whenever you are ready'
         ];
