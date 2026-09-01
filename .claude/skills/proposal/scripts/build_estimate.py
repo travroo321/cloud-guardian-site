@@ -164,6 +164,14 @@ STYLES = """
   .cg-tot.lic b{color:#e8a33d}
   .cg-tot.save b{color:#c3ced9}
   .cg-tot.save.good b{color:#00e676}
+  .cg-google{margin:18px 0 0;padding:14px 16px 12px;border-radius:12px;
+    border:1px solid rgba(232,163,61,.42);background:rgba(232,163,61,.07)}
+  .cg-google-h{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:#e8a33d;font-weight:700;margin:0 0 8px}
+  .cg-google .cg-tot{border-bottom:1px solid rgba(232,163,61,.28);padding-top:0}
+  .cg-google .cg-tot span:first-child{color:#e8d5b5}
+  .cg-google .calc-line{color:#cbb894}
+  .cg-google-f{margin:10px 0 0;font-size:.8rem;line-height:1.55;color:#c2ab86}
   .cg-lic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0 4px}
   .cg-lic{border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:12px;text-align:left;background:none;color:inherit;font:inherit;cursor:pointer}
   .cg-lic:hover{border-color:rgba(0,212,255,.45)}

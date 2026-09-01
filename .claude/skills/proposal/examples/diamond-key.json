@@ -87,6 +87,8 @@
       }
     ],
     "requiresProject": "mig",
-    "seatsLabel": "How many licenses"
+    "seatsLabel": "How many licenses",
+    "vendor": "Google",
+    "footnote": "This never appears on a Cloud Guardian invoice. You pay Google directly for the seats, and we show it here only so you can see your whole monthly cost in one place."
   }
 }

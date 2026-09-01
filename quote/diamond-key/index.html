@@ -59,6 +59,14 @@
   .cg-tot.lic b{color:#e8a33d}
   .cg-tot.save b{color:#c3ced9}
   .cg-tot.save.good b{color:#00e676}
+  .cg-google{margin:18px 0 0;padding:14px 16px 12px;border-radius:12px;
+    border:1px solid rgba(232,163,61,.42);background:rgba(232,163,61,.07)}
+  .cg-google-h{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:#e8a33d;font-weight:700;margin:0 0 8px}
+  .cg-google .cg-tot{border-bottom:1px solid rgba(232,163,61,.28);padding-top:0}
+  .cg-google .cg-tot span:first-child{color:#e8d5b5}
+  .cg-google .calc-line{color:#cbb894}
+  .cg-google-f{margin:10px 0 0;font-size:.8rem;line-height:1.55;color:#c2ab86}
   .cg-lic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0 4px}
   .cg-lic{border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:12px;text-align:left;background:none;color:inherit;font:inherit;cursor:pointer}
   .cg-lic:hover{border-color:rgba(0,212,255,.45)}
@@ -176,7 +184,9 @@
       }
     ],
     "requiresProject": "mig",
-    "seatsLabel": "How many licenses"
+    "seatsLabel": "How many licenses",
+    "vendor": "Google",
+    "footnote": "This never appears on a Cloud Guardian invoice. You pay Google directly for the seats, and we show it here only so you can see your whole monthly cost in one place."
   }
 }
 </script>
@@ -399,11 +409,12 @@
   var o = ['<span class="sq-out-label">Your estimate</span>',
     '<div class="cg-tot big"><span>Cloud Guardian, per month</span><b id="cg-monthly">$0</b></div>',
     '<div class="cg-tot"><span>Cloud Guardian, one time</span><b id="cg-once">$0</b></div>'];
-  if (D.licensing && D.licensing.enabled !== false)
-    o.push('<div class="cg-tot lic"><span>' + esc(D.licensing.payeeShort || 'Licensing') + ', per month</span><b id="cg-lic-tot">$0</b></div>');
+
   if (D.compare && D.compare.currentMonthly > 0)
     o.push('<div class="cg-tot save" id="cg-save-row"><span>Against your ' + esc(D.compare.label || 'current provider') + '</span><b id="cg-save">—</b></div>');
   o.push('<div class="sq-break" id="cg-break"></div>');
+  if (D.licensing && D.licensing.enabled !== false)
+    o.push('<div class="cg-google" id="cg-google" hidden></div>');
   o.push('<div class="cg-excl"><b>What this excludes.</b> ' + esc(D.excludes ||
     'Third-party email licensing is not included in our pricing. Hardware, cabling and any project work outside what you picked is quoted separately, always before the work happens.') + '</div>');
   o.push('<p class="sq-note">This is an estimate, not an invoice. Hourly work is tracked to the minute and itemized. We confirm the real number with you after a free look at what you have, and nothing gets billed that you have not already seen.</p>');
@@ -511,17 +522,38 @@
       $('cg-seats-hint').textContent = D.licensing ? (D.licensing.hint || '') : '';
     }
     if (licOpen && plan.price > 0) {
-      lic = seats * plan.price;
-      rows.push([esc(plan.name) + ', ' + seats + ' user' + (seats === 1 ? '' : 's') + ' x ' + money(plan.price), lic]);
+      lic = seats * plan.price;   // billed by the vendor — never mixed into our rows
     }
 
     monthly = +monthly.toFixed(2); once = +once.toFixed(2); lic = +lic.toFixed(2);
     $('cg-monthly').textContent = money(monthly);
     $('cg-once').textContent = money(once);
-    if ($('cg-lic-tot')) {
-      $('cg-lic-tot').textContent = money(lic);
-      var licRow = $('cg-lic-tot').parentNode;
-      if (licRow) licRow.hidden = !licOpen;
+
+    // The vendor's bill is not ours. It gets its own block, its own colour and
+    // its own total, so nobody reads $112 of Google licensing as money paid to
+    // Cloud Guardian.
+    var gb = $('cg-google');
+    if (gb) {
+      var showG = licOpen && plan.price > 0 && seats > 0;
+      gb.hidden = !showG;
+      if (showG) {
+        var vendor = esc(D.licensing.vendor || 'Google');
+        var g = '<p class="cg-google-h">Billed by ' + vendor + ', not by us</p>' +
+                '<div class="cg-tot lic"><span>' + esc(D.licensing.payeeShort || 'Licensing') +
+                ', per month</span><b id="cg-lic-tot">' + money(lic) + '</b></div>' +
+                '<div class="calc-line"><span>' + esc(plan.name) + ', ' + seats + ' user' +
+                (seats === 1 ? '' : 's') + ' x ' + money(plan.price) + '</span><span>' + money(lic) + '</span></div>';
+        if (plan.flex && plan.flex !== plan.price) {
+          g += '<div class="calc-line"><span>Annual commitment, ' + seats + ' user' + (seats === 1 ? '' : 's') +
+               '</span><span>' + money(lic * 12) + ' a year</span></div>' +
+               '<div class="calc-line"><span>Month to month, ' + money(plan.flex) + ' per user</span><span>' +
+               money(seats * plan.flex) + ' a month</span></div>';
+        }
+        g += '<p class="cg-google-f">' + esc(D.licensing.footnote ||
+             ('This does not appear on a Cloud Guardian invoice. You pay ' + (D.licensing.vendor || 'Google') +
+              ' for it directly, and it is shown here only so you can see your whole monthly cost.')) + '</p>';
+        gb.innerHTML = g;
+      }
     }
 
     if ($('cg-save')) {
@@ -577,9 +609,7 @@
       }
     }
     if (m === 'package' && pkg.rate) html += '<div class="calc-flag">' + esc(pkg.name) + ' is our published rate. You can check it against cloud-guardian.com/pricing before you sign anything.</div>';
-    if (licOpen && plan.price > 0 && seats > 0 && plan.flex && plan.flex !== plan.price)
-      html += '<div class="calc-flag">' + esc(plan.name) + ' at ' + money(plan.price) + ' per user is the annual-commitment rate, ' +
-        money(seats * plan.price * 12) + ' a year. Month to month it is ' + money(plan.flex) + ' per user, ' + money(seats * plan.flex) + ' a month.</div>';
+
     $('cg-break').innerHTML = html;
     return { monthly: monthly, once: once, lic: lic, seats: seats, covered: covered, rows: rows, model: m };
   }
