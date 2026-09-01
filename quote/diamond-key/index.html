@@ -241,19 +241,12 @@
             <span class="dk-opt-head">
               <input type="checkbox" id="dk-mig" />
               <span>
-                <span class="dk-opt-t">Migrate Outlook / Microsoft 365 to Google Workspace</span>
-                <span class="dk-opt-p">$1,000 one time, for up to 8 mailboxes</span>
-                <span class="dk-opt-d">Mail, contacts and calendars moved across, mailboxes rebuilt on the Google side, users set up on their devices. Nothing cuts over until it has been tested. More than 8 mailboxes, we confirm the number with you first.</span>
+                <span class="dk-opt-t">Migrate Microsoft 365 to Google Workspace</span>
+                <span class="dk-opt-p">$1,000 flat, one time, up to 10 mailboxes</span>
+                <span class="dk-opt-d">Mail, contacts and calendars moved across, every mailbox rebuilt on the Google side, each user set up on their devices. Nothing cuts over until it has been tested. The flat $1,000 covers up to 10 mailboxes, so you are covered if your count comes in higher than we expect. Past 10 we requote with you before any work starts.</span>
               </span>
             </span>
           </label>
-          <div class="dk-sub" id="dk-mig-fields" hidden>
-            <div class="sq-field">
-              <label for="dk-boxes">Mailboxes to move <span class="sq-val" id="dk-boxes-v">8</span></label>
-              <input type="range" class="sq-range" id="dk-boxes" min="1" max="40" value="8" step="1" />
-              <span class="sq-hint" id="dk-boxes-hint">Covered by the $1,000 flat rate.</span>
-            </div>
-          </div>
         </div>
 
         <div class="sq-field">
@@ -391,7 +384,7 @@
   var root = document.getElementById('dk');
   if (!root) return;
 
-  var RATE_FT = 100, RATE_PT = 50, RATE_HOUR = 125, MIG_FLAT = 1000, MIG_BOXES = 8;
+  var RATE_FT = 100, RATE_PT = 50, RATE_HOUR = 125, MIG_FLAT = 1000, MIG_BOXES = 10;
 
   function $(id) { return document.getElementById(id); }
   function money(n) {
@@ -456,19 +449,10 @@
     }
 
     var migOn = $('dk-mig').checked;
-    $('dk-mig-fields').hidden = !migOn;
     $('dk-opt-mig').classList.toggle('on', migOn);
     if (migOn) {
-      var boxes = val('dk-boxes', 1, 40);
       once += MIG_FLAT;
-      if (boxes <= MIG_BOXES) {
-        rows.push(['Google Workspace migration, ' + boxes + ' mailbox' + (boxes === 1 ? '' : 'es') + ' (one time)', MIG_FLAT]);
-        $('dk-boxes-hint').textContent = 'Covered by the $1,000 flat rate.';
-      } else {
-        rows.push(['Google Workspace migration, first 8 mailboxes (one time)', MIG_FLAT]);
-        rows.push(['Migration, ' + (boxes - MIG_BOXES) + ' additional mailbox' + (boxes - MIG_BOXES === 1 ? '' : 'es') + '', 'confirmed with you first']);
-        $('dk-boxes-hint').textContent = 'The $1,000 covers the first 8. We will price the rest with you before any work starts.';
-      }
+      rows.push(['Microsoft 365 to Google Workspace, up to ' + MIG_BOXES + ' mailboxes (one time)', MIG_FLAT]);
     }
 
     var seats = val('dk-seats', 1, 40);
@@ -500,7 +484,7 @@
     return { monthly: monthly, once: once, lic: lic, rows: rows, seats: seats };
   }
 
-  ['dk-ft', 'dk-pt', 'dk-visits', 'dk-vhrs', 'dk-rem', 'dk-boxes', 'dk-seats'].forEach(function (id) {
+  ['dk-ft', 'dk-pt', 'dk-visits', 'dk-vhrs', 'dk-rem', 'dk-seats'].forEach(function (id) {
     $(id).addEventListener('input', function () {
       var v = $(id + '-v');
       if (v) v.textContent = $(id).value;
@@ -538,7 +522,7 @@
       name: name, contact: reach, company: biz,
       support_model: picked,
       migration: $('dk-mig').checked
-        ? 'YES - Outlook/M365 to Google Workspace, ' + val('dk-boxes', 1, 40) + ' mailbox(es), $1,000 flat for the first 8'
+        ? 'YES - Microsoft 365 to Google Workspace, $1,000 flat, up to ' + MIG_BOXES + ' mailboxes'
         : 'no',
       google_licensing: plan.price > 0
         ? plan.name + ', ' + q.seats + ' user(s) at ' + money(plan.price) + '/user/mo = ' + money(q.lic) + '/mo (paid to Google)'
