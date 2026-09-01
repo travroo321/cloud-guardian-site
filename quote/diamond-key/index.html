@@ -124,7 +124,10 @@
     "onsite": 125,
     "onsiteMin": 1,
     "remote": 125,
-    "remoteStep": 0.5
+    "remoteStep": 0.5,
+    "blurb": "Use us for whatever you want, whenever you want it \u2014 a project, sorting out your backups, a machine that will not behave, a question you need answered \u2014 and pay only for the hours it takes.",
+    "noteTitle": "Starting here and moving later",
+    "note": "Plenty of clients start here. There is nothing monthly, nothing renewing and nothing to cancel, so you can use us as much or as little as suits you and see how we work before committing to anything. When you are ready, step onto one of the monthly plans and the hourly stops \u2014 that starts on the first of the following month, same as any tier change, and there is no penalty for having waited."
   },
   "projects": [
     {
@@ -289,7 +292,8 @@
              '<input type="radio" name="cg-model" value="hourly" id="cg-m-hourly"' + (models[0] === 'hourly' ? ' checked' : '') + ' />' +
              '<span><span class="cg-opt-t">Pay as you go, hourly</span>' +
              '<span class="cg-opt-p">Onsite $' + h.onsite + ' / hour &nbsp;·&nbsp; Remote break/fix $' + h.remote + ' / hour</span>' +
-             '<span class="cg-opt-d">No monthly fee and no onboarding fee. Onsite visits carry a ' + (h.onsiteMin || 1) +
+             '<span class="cg-opt-d">' + (h.blurb ? esc(h.blurb) + ' ' : '') +
+             'No monthly fee and no onboarding fee. Onsite visits carry a ' + (h.onsiteMin || 1) +
              '-hour minimum, then bill hourly. Remote break/fix bills in ' + Math.round((h.remoteStep || 0.5) * 60) +
              '-minute increments, so ' + (h.remoteStep === 0.5 ? 'a half hour' : (h.remoteStep + ' of an hour')) +
              ' is ' + money(h.remote * (h.remoteStep || 0.5)) + '.</span></span></span></label>' +
@@ -301,7 +305,9 @@
              '<span class="sq-hint">' + (h.onsiteMin || 1) + '-hour minimum per visit at $' + h.onsite + ' an hour.</span></div>' +
              '<div class="sq-field"><label for="cg-rem">Remote hours in a typical month <span class="sq-val" id="cg-rem-v">2</span></label>' +
              '<input type="range" class="sq-range" id="cg-rem" min="0" max="20" value="2" step="' + (h.remoteStep || 0.5) + '" />' +
-             '<span class="sq-hint">Billed in ' + Math.round((h.remoteStep || 0.5) * 60) + '-minute blocks, ' + money(h.remote * (h.remoteStep || 0.5)) + ' each.</span></div></div>');
+             '<span class="sq-hint">Billed in ' + Math.round((h.remoteStep || 0.5) * 60) + '-minute blocks, ' + money(h.remote * (h.remoteStep || 0.5)) + ' each.</span></div>' +
+             (h.note ? '<p class="cg-note"><strong style="color:#c3ced9">' + esc(h.noteTitle || 'Starting here and moving later') +
+                       '.</strong> ' + esc(h.note) + '</p>' : '') + '</div>');
     }
 
     f.push('<label class="cg-opt" id="cg-opt-none"><span class="cg-opt-head">' +

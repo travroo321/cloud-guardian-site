@@ -31,7 +31,10 @@ Minimal deal.json:
         "note": "Support scales down, security does not...",
         "escalation": "Bill that visit hourly, or move them up..."
       },
-      "hourly": {"onsite": 125, "onsiteMin": 1, "remote": 125, "remoteStep": 0.5},
+      "hourly": {"onsite": 125, "onsiteMin": 1, "remote": 125, "remoteStep": 0.5,
+                 "blurb": "Use us for whatever you want, whenever you want it...",
+                 "noteTitle": "Starting here and moving later",
+                 "note": "Nothing monthly, nothing renewing. Step onto a plan when ready..."},
       "packages": {
         "title": "Gold or Platinum, our published plans",
         "blurb": "One flat number, every user gets everything...",
