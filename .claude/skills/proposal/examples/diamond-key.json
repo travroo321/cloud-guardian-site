@@ -34,8 +34,9 @@
         "blurb": "Not a support plan. These people get the same security stack as everyone else, and nothing else."
       }
     ],
-    "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Anyone who can reach your Google Workspace can reach company mail and company data, so every one of those machines carries the same protection either way. $25 is the floor for anyone with an account.",
-    "escalation": "Move people between the three bars whenever you like. Changes take effect on the first of the following month, and that works in both directions \u2014 people come down a tier, or off entirely, as freely as they go up, and you are never locked into a headcount. The one thing that does not work is moving someone up for a fix and straight back down the week after; a tier has to hold for the month it covers."
+    "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Every computer and every mailbox is protected to the same Gold standard regardless of tier \u2014 anyone who can reach your Google Workspace can reach company mail and company data, so all of those machines carry the same protection. $25 is the floor for anyone with an account.",
+    "escalation": "Move people between the three bars whenever you like. Changes take effect on the first of the following month, and that works in both directions \u2014 people come down a tier, or off entirely, as freely as they go up, and you are never locked into a headcount. The one thing that does not work is moving someone up for a fix and straight back down the week after; a tier has to hold for the month it covers.",
+    "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on."
   },
   "hourly": {
     "onsite": 125,
@@ -89,6 +90,7 @@
     "requiresProject": "mig",
     "seatsLabel": "How many licenses",
     "vendor": "Google",
-    "footnote": "This never appears on a Cloud Guardian invoice. You pay Google directly for the seats, and we show it here only so you can see your whole monthly cost in one place."
+    "footnote": "This never appears on a Cloud Guardian invoice. You pay Google directly for the seats, and we show it here only so you can see your whole monthly cost in one place.",
+    "followsUsers": true
   }
 }

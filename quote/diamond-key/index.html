@@ -131,8 +131,9 @@
         "blurb": "Not a support plan. These people get the same security stack as everyone else, and nothing else."
       }
     ],
-    "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Anyone who can reach your Google Workspace can reach company mail and company data, so every one of those machines carries the same protection either way. $25 is the floor for anyone with an account.",
-    "escalation": "Move people between the three bars whenever you like. Changes take effect on the first of the following month, and that works in both directions \u2014 people come down a tier, or off entirely, as freely as they go up, and you are never locked into a headcount. The one thing that does not work is moving someone up for a fix and straight back down the week after; a tier has to hold for the month it covers."
+    "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Every computer and every mailbox is protected to the same Gold standard regardless of tier \u2014 anyone who can reach your Google Workspace can reach company mail and company data, so all of those machines carry the same protection. $25 is the floor for anyone with an account.",
+    "escalation": "Move people between the three bars whenever you like. Changes take effect on the first of the following month, and that works in both directions \u2014 people come down a tier, or off entirely, as freely as they go up, and you are never locked into a headcount. The one thing that does not work is moving someone up for a fix and straight back down the week after; a tier has to hold for the month it covers.",
+    "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on."
   },
   "hourly": {
     "onsite": 125,
@@ -186,7 +187,8 @@
     "requiresProject": "mig",
     "seatsLabel": "How many licenses",
     "vendor": "Google",
-    "footnote": "This never appears on a Cloud Guardian invoice. You pay Google directly for the seats, and we show it here only so you can see your whole monthly cost in one place."
+    "footnote": "This never appears on a Cloud Guardian invoice. You pay Google directly for the seats, and we show it here only so you can see your whole monthly cost in one place.",
+    "followsUsers": true
   }
 }
 </script>
@@ -362,6 +364,9 @@
                '<b>' + esc(pl.name) + '</b><i>' + money(pl.price) + ' / user / mo</i><small>' + esc(pl.note || '') + '</small></button>');
     });
     out.push('</div>');
+    out.push('<div class="sq-field" id="cg-lic-locked" hidden>' +
+             '<label>Mailboxes to license <span class="sq-val" id="cg-seats-locked">0</span></label>' +
+             '<span class="sq-hint" id="cg-locked-hint"></span></div>');
     out.push('<div class="sq-field" id="cg-lic-fields"><label for="cg-seats">' +
              esc(L.seatsLabel || 'Mailboxes to license') +
              ' <span class="sq-val" id="cg-seats-v">' + (L.seatsDefault || 8) + '</span></label>' +
@@ -513,9 +518,23 @@
     // Licensing is only in play when its gating project is selected.
     var licOpen = !licGate || !!($('cg-p-' + licGate) && $('cg-p-' + licGate).checked);
     if ($('cg-lic-sub')) $('cg-lic-sub').hidden = !licOpen;
-    var seats = (licOpen && $('cg-seats')) ? num('cg-seats', 1, 60) : 0;
-    if ($('cg-lic-fields')) $('cg-lic-fields').hidden = (plan.price <= 0);
-    if (licOpen && $('cg-seats-hint') && plan.price > 0) {
+    // Every person placed above has a mailbox, and every mailbox has to be
+    // licensed, so the seat count is not a separate guess — it follows the
+    // headcount rather than letting the two drift apart.
+    var followsUsers = !!(D.licensing && D.licensing.followsUsers) && (m === 'tiers' || m === 'package');
+    var seats = 0;
+    if (licOpen) seats = followsUsers ? covered : ($('cg-seats') ? num('cg-seats', 1, 60) : 0);
+    if ($('cg-lic-fields')) $('cg-lic-fields').hidden = (plan.price <= 0) || followsUsers;
+    if ($('cg-lic-locked')) {
+      $('cg-lic-locked').hidden = !(followsUsers && plan.price > 0);
+      if (followsUsers && plan.price > 0) {
+        $('cg-seats-locked').textContent = seats;
+        $('cg-locked-hint').textContent = seats > 0
+          ? 'One licence for each of the ' + seats + ' people you placed above. Every account needs a mailbox, so this follows your headcount rather than being set separately.'
+          : 'Place your people above and the licence count follows.';
+      }
+    }
+    if (licOpen && !followsUsers && $('cg-seats-hint') && plan.price > 0) {
       $('cg-seats-hint').textContent = seats + ' user' + (seats === 1 ? '' : 's') + ' at ' + money(plan.price) +
         ' each is ' + money(seats * plan.price) + ' a month, billed by the vendor. ' + (D.licensing.hint || '');
     } else if ($('cg-seats-hint')) {
@@ -575,7 +594,11 @@
         cov.className = 'cg-cov warn';
         cov.innerHTML = '<b>' + covered + ' of ' + seats + ' covered.</b> ' + (seats - covered) +
           ' account' + (seats - covered === 1 ? '' : 's') + ' with no protection on them.';
-      } else { cov.className = 'cg-cov ok'; cov.innerHTML = '<b>All ' + covered + ' covered.</b> Every account with access is on the security stack.'; }
+      } else {
+        cov.className = 'cg-cov ok';
+        cov.innerHTML = '<b>All ' + covered + ' covered.</b> ' +
+          esc(D.support.coveredNote || 'Every computer and every mailbox is protected to the same standard, whichever tier the person sits on.');
+      }
     }
 
     var html = '';
