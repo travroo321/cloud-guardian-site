@@ -367,9 +367,24 @@
         ' but covering ' + covered + '. That leaves ' + (seats - covered) + ' machine' + (seats - covered === 1 ? '' : 's') +
         ' that can reach company mail with nothing protecting it. ' + fix + '</div>';
     }
-    if (creditSource && m === 'tiers') html += '<div class="calc-flag">Your ' + money(D.onboarding.fee) + ' onboarding is credited off in full. ' + esc(D.onboarding.creditNote || '') + '</div>';
+    // The onboarding fee should never sit on the estimate unexplained. Either it
+    // has been credited off and we say why, or it is still payable and we say
+    // what removes it — the prospect should be able to see the saving on offer
+    // without having to discover it by ticking things.
+    var onboardShown = D.onboarding && D.onboarding.fee && (m === 'tiers' || m === 'package');
+    if (onboardShown && creditSource) {
+      html += '<div class="calc-flag">Your ' + money(D.onboarding.fee) + ' onboarding is credited off in full. ' +
+              esc(D.onboarding.creditNote || '') + '</div>';
+    } else if (onboardShown && D.onboarding.creditedBy) {
+      var cp = (D.projects || []).filter(function (x) { return x.id === D.onboarding.creditedBy; })[0];
+      if (cp) {
+        html += '<div class="calc-flag">The ' + money(D.onboarding.fee) + ' onboarding applies because you have not taken the ' +
+                esc(cp.short || cp.label.toLowerCase()) + '. Tick it above and this line is credited off in full — ' +
+                esc(D.onboarding.creditNote || 'a good deal of the setup is the same work.') + '</div>';
+      }
+    }
     if (m === 'package' && pkg.rate) html += '<div class="calc-flag">' + esc(pkg.name) + ' is our published rate. You can check it against cloud-guardian.com/pricing before you sign anything.</div>';
-    if (plan.price > 0 && plan.flex && plan.flex !== plan.price)
+    if (licOpen && plan.price > 0 && seats > 0 && plan.flex && plan.flex !== plan.price)
       html += '<div class="calc-flag">' + esc(plan.name) + ' at ' + money(plan.price) + ' per user is the annual-commitment rate, ' +
         money(seats * plan.price * 12) + ' a year. Month to month it is ' + money(plan.flex) + ' per user, ' + money(seats * plan.flex) + ' a month.</div>';
     $('cg-break').innerHTML = html;
