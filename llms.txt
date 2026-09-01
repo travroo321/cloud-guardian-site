@@ -148,7 +148,7 @@ parties, and contract terms are discussed transparently during the proposal proc
 **Does Cloud Guardian work with businesses that already have IT staff?** Yes. Cloud Guardian frequently works
 alongside internal IT resources, covering areas where they lack bandwidth or specialization.
 
-**What does small business IT support cost?** $90 an hour on Silver, billed in 15 minute increments with no monthly fee, and $65 per user per month on Gold, with
+**What does small business IT support cost?** $90 an hour on Silver, billed in 15 minute increments with no monthly fee, and $110 per user per month on Gold, with
 incident response billed at $90 per hour. There are no minimum hours and no long-term lock-in. Fully managed
 IT is quoted after a free assessment.
 
