@@ -61,8 +61,8 @@
     "payeeShort": "Google licensing",
     "seatsDefault": 8,
     "defaultIndex": 1,
-    "blurb": "Our pricing above excludes email licensing. These are Google's own published rates so you can see the whole picture.",
-    "hint": "Prices shown are Google's annual-commitment rate. Month to month costs more per user, and we can set it up either way.",
+    "blurb": "Moving to Google means Google seats. These are Google's own published rates, billed by them and not by us, shown so you can see the whole monthly picture.",
+    "hint": "Annual-commitment rate. Month to month costs more per user, and we can set it up either way.",
     "plans": [
       {
         "name": "Business Starter",
@@ -82,6 +82,8 @@
         "flex": 26.4,
         "note": "5 TB per user, Vault, advanced controls."
       }
-    ]
+    ],
+    "requiresProject": "mig",
+    "seatsLabel": "How many licenses"
   }
 }

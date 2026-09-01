@@ -143,6 +143,39 @@
     f.push('</div>');
   }
 
+
+  // Licensing controls. When D.licensing.requiresProject names a project, these
+  // are nested under that project's checkbox instead of standing as their own
+  // step: Google seats only matter once you have chosen to move to Google.
+  function licensingControls() {
+    var L = D.licensing, out = [];
+    if (L.blurb) out.push('<p class="cg-note" style="margin-top:0">' + esc(L.blurb) + '</p>');
+    out.push('<div class="cg-lic-grid" id="cg-lic-grid">');
+    out.push('<button type="button" class="cg-lic" data-plan="none" data-price="0" data-flex="0">' +
+             '<b>None / already have it</b><i>&mdash;</i><small>Leave licensing out</small></button>');
+    (L.plans || []).forEach(function (pl, i) {
+      out.push('<button type="button" class="cg-lic' + (i === (L.defaultIndex == null ? 1 : L.defaultIndex) ? ' on' : '') +
+               '" data-plan="' + esc(pl.name) + '" data-price="' + pl.price + '" data-flex="' + (pl.flex || pl.price) + '">' +
+               '<b>' + esc(pl.name) + '</b><i>' + money(pl.price) + ' / user / mo</i><small>' + esc(pl.note || '') + '</small></button>');
+    });
+    out.push('</div>');
+    out.push('<div class="sq-field" id="cg-lic-fields"><label for="cg-seats">' +
+             esc(L.seatsLabel || 'Mailboxes to license') +
+             ' <span class="sq-val" id="cg-seats-v">' + (L.seatsDefault || 8) + '</span></label>' +
+             '<input type="range" class="sq-range" id="cg-seats" min="1" max="60" value="' + (L.seatsDefault || 8) + '" step="1" />' +
+             '<span class="sq-hint" id="cg-seats-hint">' + esc(L.hint || '') + '</span></div>');
+    return out.join('');
+  }
+
+  var licGate = (D.licensing && D.licensing.enabled !== false) ? (D.licensing.requiresProject || null) : null;
+
+  if (D.licensing && D.licensing.enabled !== false && !licGate) {
+    step++;
+    f.push('<div class="sq-field"><label>' + step + '. ' + esc(D.licensing.title || 'Email licensing') +
+           ' <span class="sq-opt">' + esc(D.licensing.payee || 'paid to the vendor, not to us') + '</span></label>' +
+           licensingControls() + '</div>');
+  }
+
   if (D.projects && D.projects.length) {
     step++;
     f.push('<div class="sq-field"><label>' + step + '. One-time work</label>');
@@ -153,25 +186,15 @@
              '<span class="cg-opt-p">' + (typeof p.price === 'number' ? money(p.price) + ' one time' : esc(p.price)) +
              (p.scope ? ', ' + esc(p.scope) : '') + '</span>' +
              '<span class="cg-opt-d">' + esc(p.blurb || '') + '</span></span></span></label>');
+      if (licGate === p.id) {
+        f.push('<div class="cg-sub" id="cg-lic-sub"' + (p.checked ? '' : ' hidden') + '>' +
+               '<p class="cg-note" style="margin-top:0;margin-bottom:4px"><strong style="color:#c3ced9">' +
+               esc(D.licensing.title || 'Licensing') + '.</strong> <span class="sq-opt">' +
+               esc(D.licensing.payee || 'paid to the vendor, not to us') + '</span></p>' +
+               licensingControls() + '</div>');
+      }
     });
     f.push('</div>');
-  }
-
-  if (D.licensing && D.licensing.enabled !== false) {
-    step++;
-    f.push('<div class="sq-field"><label>' + step + '. ' + esc(D.licensing.title || 'Email licensing') +
-           ' <span class="sq-opt">' + esc(D.licensing.payee || 'paid to the vendor, not to us') + '</span></label>' +
-           '<p class="cg-note" style="margin-top:0">' + esc(D.licensing.blurb || '') + '</p><div class="cg-lic-grid" id="cg-lic-grid">' +
-           '<button type="button" class="cg-lic" data-plan="none" data-price="0" data-flex="0"><b>None / already have it</b><i>&mdash;</i><small>Leave licensing out</small></button>');
-    (D.licensing.plans || []).forEach(function (pl, i) {
-      f.push('<button type="button" class="cg-lic' + (i === (D.licensing.defaultIndex == null ? 1 : D.licensing.defaultIndex) ? ' on' : '') +
-             '" data-plan="' + esc(pl.name) + '" data-price="' + pl.price + '" data-flex="' + (pl.flex || pl.price) + '">' +
-             '<b>' + esc(pl.name) + '</b><i>' + money(pl.price) + ' / user / mo</i><small>' + esc(pl.note || '') + '</small></button>');
-    });
-    f.push('</div><div class="sq-field" id="cg-lic-fields"><label for="cg-seats">Mailboxes to license ' +
-           '<span class="sq-val" id="cg-seats-v">' + (D.licensing.seatsDefault || 8) + '</span></label>' +
-           '<input type="range" class="sq-range" id="cg-seats" min="1" max="60" value="' + (D.licensing.seatsDefault || 8) + '" step="1" />' +
-           '<span class="sq-hint">' + esc(D.licensing.hint || '') + '</span></div></div>');
   }
 
   step++;
@@ -283,9 +306,18 @@
       if (creditSource) { once -= D.onboarding.fee; rows.push(['Onboarding credited against your ' + esc(creditSource), -D.onboarding.fee]); }
     }
 
-    var seats = $('cg-seats') ? num('cg-seats', 1, 60) : 0;
+    // Licensing is only in play when its gating project is selected.
+    var licOpen = !licGate || !!($('cg-p-' + licGate) && $('cg-p-' + licGate).checked);
+    if ($('cg-lic-sub')) $('cg-lic-sub').hidden = !licOpen;
+    var seats = (licOpen && $('cg-seats')) ? num('cg-seats', 1, 60) : 0;
     if ($('cg-lic-fields')) $('cg-lic-fields').hidden = (plan.price <= 0);
-    if (plan.price > 0) {
+    if (licOpen && $('cg-seats-hint') && plan.price > 0) {
+      $('cg-seats-hint').textContent = seats + ' user' + (seats === 1 ? '' : 's') + ' at ' + money(plan.price) +
+        ' each is ' + money(seats * plan.price) + ' a month, billed by the vendor. ' + (D.licensing.hint || '');
+    } else if ($('cg-seats-hint')) {
+      $('cg-seats-hint').textContent = D.licensing ? (D.licensing.hint || '') : '';
+    }
+    if (licOpen && plan.price > 0) {
       lic = seats * plan.price;
       rows.push([esc(plan.name) + ', ' + seats + ' user' + (seats === 1 ? '' : 's') + ' x ' + money(plan.price), lic]);
     }
@@ -293,7 +325,11 @@
     monthly = +monthly.toFixed(2); once = +once.toFixed(2); lic = +lic.toFixed(2);
     $('cg-monthly').textContent = money(monthly);
     $('cg-once').textContent = money(once);
-    if ($('cg-lic-tot')) $('cg-lic-tot').textContent = money(lic);
+    if ($('cg-lic-tot')) {
+      $('cg-lic-tot').textContent = money(lic);
+      var licRow = $('cg-lic-tot').parentNode;
+      if (licRow) licRow.hidden = !licOpen;
+    }
 
     if ($('cg-save')) {
       var theirs = D.compare.currentMonthly, ours = monthly + (D.compare.includeLicensing ? lic : 0);
@@ -363,7 +399,7 @@
       name: ($('cg-name').value || '').trim(), contact: reach, company: ($('cg-biz').value || D.client).trim(),
       support: picked.join('; '), one_time: proj.length ? proj.join('; ') : 'none',
       onboarding: (D.onboarding && (q.model === 'tiers' || q.model === 'package')) ? ('$' + D.onboarding.fee + (proj.length && D.onboarding.creditedBy ? ', credited off' : '')) : 'n/a',
-      licensing: plan.price > 0 ? plan.name + ', ' + q.seats + ' users = ' + money(q.lic) + '/mo' : 'none selected',
+      licensing: (q.lic > 0) ? plan.name + ', ' + q.seats + ' users = ' + money(q.lic) + '/mo' : 'none selected',
       coverage: q.model === 'tiers' && q.seats ? q.covered + ' of ' + q.seats + ' accounts covered' : 'n/a',
       monthly: money(q.monthly), one_time_total: money(q.once), licensing_monthly: money(q.lic),
       questions_for_the_meeting: ($('cg-notes').value || '').trim() || 'none',

@@ -53,6 +53,7 @@ Minimal deal.json:
       "licensing": {
         "title": "Google Workspace licensing", "payee": "paid to Google, not to us",
         "payeeShort": "Google licensing", "seatsDefault": 8, "defaultIndex": 2,
+        "requiresProject": "mig", "seatsLabel": "How many licenses",
         "blurb": "Our pricing excludes email licensing...",
         "plans": [
           {"name": "Business Starter",  "price": 7,  "flex": 8.40,  "note": "30 GB pooled per user."},
@@ -70,6 +71,12 @@ just the address and contact details. A prospect on a quote page should not be
 one click from the blog. Set it to "full" to keep the whole site nav and footer.
 
 Omit any block to leave that section off the page.
+
+"licensing.requiresProject" nests the licensing controls under that project's
+checkbox instead of giving them their own step, and keeps them out of the
+totals until it is ticked. Google seats are only a question once the prospect
+has chosen to move to Google, so gate them on the migration rather than asking
+about them unconditionally.
 """
 
 import io
