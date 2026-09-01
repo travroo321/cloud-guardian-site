@@ -32,6 +32,17 @@ Minimal deal.json:
         "escalation": "Bill that visit hourly, or move them up..."
       },
       "hourly": {"onsite": 125, "onsiteMin": 1, "remote": 125, "remoteStep": 0.5},
+      "packages": {
+        "title": "Gold or Platinum, our published plans",
+        "blurb": "One flat number, every user gets everything...",
+        "seatsDefault": 8, "defaultIndex": 0,
+        "options": [
+          {"name": "Gold Managed IT", "short": "Gold", "rate": 110,
+           "note": "Full suite, unlimited help desk."},
+          {"name": "Platinum Managed IT + SOC", "short": "Platinum", "rate": 130,
+           "note": "Gold plus 24/7 security operations."}
+        ]
+      },
       "projects": [
         {"id": "mig", "label": "Migrate Microsoft 365 to Google Workspace",
          "short": "migration",

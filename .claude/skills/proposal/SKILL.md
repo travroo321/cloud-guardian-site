@@ -143,6 +143,12 @@ Things worth configuring per deal:
 
 - **`support.tiers`** — any number of per-user tiers. The cheapest tier is
   treated as the security floor.
+- **`packages`** — the published plans (Gold, Platinum) as a one-number
+  alternative beside the tiers, for a prospect who would rather not sort
+  people at all. **Take the rates from `rates.py`, never from memory** — they
+  must match the website, and the page tells the prospect to check them there.
+  Onboarding applies to packages the same as tiers, and the migration credit
+  works the same way.
 - **`compare.currentMonthly`** — what they pay today, if discovery gave you a
   real figure. Adds a savings line. Omit it rather than guessing; a wrong
   savings claim is worse than none.

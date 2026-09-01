@@ -243,6 +243,27 @@
         "note": "5 TB per user, Vault, advanced controls."
       }
     ]
+  },
+  "packages": {
+    "title": "Gold or Platinum, our published plans",
+    "blurb": "Would rather not sort people into tiers at all? These are the same plans on our website at the same published rates: one flat number, every user gets everything. Unlimited help desk, the full security suite, and on Platinum a 24/7 security operation watching it. The one-time $200 onboarding applies here too, and the email migration credits it off the same way.",
+    "seatsDefault": 8,
+    "defaultIndex": 0,
+    "hint": "Every user on the plan gets the same full coverage. Check these rates any time at cloud-guardian.com/pricing.",
+    "options": [
+      {
+        "name": "Gold Managed IT",
+        "short": "Gold",
+        "rate": 110,
+        "note": "Full cybersecurity suite, unlimited help desk, we run everything."
+      },
+      {
+        "name": "Platinum Managed IT + SOC",
+        "short": "Platinum",
+        "rate": 130,
+        "note": "Everything in Gold, with 24/7 security operations watching it."
+      }
+    ]
   }
 }
 </script>
@@ -299,6 +320,7 @@
 
   var models = [];
   if (D.support && D.support.enabled !== false) models.push('tiers');
+  if (D.packages && (D.packages.options || []).length) models.push('package');
   if (D.hourly && D.hourly.enabled !== false) models.push('hourly');
 
   if (models.length) {
@@ -310,7 +332,7 @@
         return '$' + t.rate + ' ' + esc(t.short || t.label.toLowerCase());
       }).join(' &nbsp;·&nbsp; ');
       f.push('<label class="cg-opt" id="cg-opt-tiers"><span class="cg-opt-head">' +
-             '<input type="radio" name="cg-model" value="tiers" id="cg-m-tiers" checked />' +
+             '<input type="radio" name="cg-model" value="tiers" id="cg-m-tiers"' + (models[0] === 'tiers' ? ' checked' : '') + ' />' +
              '<span><span class="cg-opt-t">' + esc(D.support.title || 'Unlimited IT support') + '</span>' +
              '<span class="cg-opt-p">' + rateLine + ' &nbsp;<span style="color:#8fa0b4">per user / month</span></span>' +
              '<span class="cg-opt-d">' + esc(D.support.blurb || '') + '</span></span></span></label>');
@@ -327,6 +349,31 @@
       if (D.support.escalation) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Moving people between tiers.</strong> ' + esc(D.support.escalation) + '</p>');
       sub.push('</div>');
       f.push(sub.join(''));
+    }
+
+    if (models.indexOf('package') > -1) {
+      var P = D.packages;
+      var pkLine = (P.options || []).map(function (o) {
+        return '$' + o.rate + ' ' + esc(o.short || o.name);
+      }).join(' &nbsp;&middot;&nbsp; ');
+      f.push('<label class="cg-opt" id="cg-opt-package"><span class="cg-opt-head">' +
+             '<input type="radio" name="cg-model" value="package" id="cg-m-package"' + (models[0] === 'package' ? ' checked' : '') + ' />' +
+             '<span><span class="cg-opt-t">' + esc(P.title || 'Published plan, everyone covered') + '</span>' +
+             '<span class="cg-opt-p">' + pkLine + ' &nbsp;<span style="color:#8fa0b4">per user / month</span></span>' +
+             '<span class="cg-opt-d">' + esc(P.blurb || '') + '</span></span></span></label>');
+      var ps = ['<div class="cg-sub" id="cg-package-fields"' + (models[0] === 'package' ? '' : ' hidden') + '>'];
+      ps.push('<div class="cg-lic-grid" id="cg-pkg-grid">');
+      (P.options || []).forEach(function (o, i) {
+        ps.push('<button type="button" class="cg-lic' + (i === (P.defaultIndex || 0) ? ' on' : '') +
+                '" data-name="' + esc(o.name) + '" data-rate="' + o.rate + '">' +
+                '<b>' + esc(o.name) + '</b><i>$' + o.rate + ' / user / mo</i><small>' + esc(o.note || '') + '</small></button>');
+      });
+      ps.push('</div>');
+      ps.push('<div class="sq-field"><label for="cg-pkgu">Users on the plan <span class="sq-val" id="cg-pkgu-v">' + (P.seatsDefault || 8) + '</span></label>' +
+              '<input type="range" class="sq-range" id="cg-pkgu" min="0" max="60" value="' + (P.seatsDefault || 8) + '" step="1" />' +
+              '<span class="sq-hint">' + esc(P.hint || 'Every user on the plan gets the same full coverage.') + '</span></div>');
+      ps.push('</div>');
+      f.push(ps.join(''));
     }
 
     if (models.indexOf('hourly') > -1) {
@@ -430,6 +477,20 @@
     });
   }
 
+  var pkg = { name: '', rate: 0 };
+  var pg = $('cg-pkg-grid');
+  if (pg) {
+    var pon = pg.querySelector('.cg-lic.on');
+    if (pon) pkg = { name: pon.dataset.name, rate: +pon.dataset.rate };
+    [].forEach.call(pg.querySelectorAll('.cg-lic'), function (b) {
+      b.addEventListener('click', function () {
+        [].forEach.call(pg.querySelectorAll('.cg-lic'), function (x) { x.classList.toggle('on', x === b); });
+        pkg = { name: b.dataset.name, rate: +b.dataset.rate };
+        recalc();
+      });
+    });
+  }
+
   function currentModel() {
     var r = host.querySelector('input[name="cg-model"]:checked');
     return r ? r.value : 'undecided';
@@ -439,6 +500,7 @@
     var m = currentModel(), monthly = 0, once = 0, lic = 0, rows = [], covered = 0;
 
     if ($('cg-tier-fields')) { $('cg-tier-fields').hidden = (m !== 'tiers'); $('cg-opt-tiers').classList.toggle('on', m === 'tiers'); }
+    if ($('cg-package-fields')) { $('cg-package-fields').hidden = (m !== 'package'); $('cg-opt-package').classList.toggle('on', m === 'package'); }
     if ($('cg-hourly-fields')) { $('cg-hourly-fields').hidden = (m !== 'hourly'); $('cg-opt-hourly').classList.toggle('on', m === 'hourly'); }
     if ($('cg-opt-none')) $('cg-opt-none').classList.toggle('on', m === 'undecided');
 
@@ -449,6 +511,11 @@
         if (n > 0) { monthly += n * t.rate; rows.push([esc(t.label) + ', ' + n + ' x $' + t.rate, n * t.rate]); }
       });
       if (covered === 0) rows.push(['No users entered yet', 0]);
+    } else if (m === 'package') {
+      var pu = num('cg-pkgu', 0, 60);
+      covered = pu;
+      if (pu > 0) { monthly += pu * pkg.rate; rows.push([esc(pkg.name) + ', ' + pu + ' user' + (pu === 1 ? '' : 's') + ' x $' + pkg.rate, pu * pkg.rate]); }
+      else rows.push(['No users on the plan yet', 0]);
     } else if (m === 'hourly') {
       var h = D.hourly;
       var visits = num('cg-visits', 0, 12), vhrs = Math.max(h.onsiteMin || 1, num('cg-vhrs', 1, 8)), rem = num('cg-rem', 0, 20);
@@ -472,7 +539,7 @@
       }
     });
 
-    if (D.onboarding && D.onboarding.fee && m === 'tiers') {
+    if (D.onboarding && D.onboarding.fee && (m === 'tiers' || m === 'package')) {
       once += D.onboarding.fee;
       rows.push(['Onboarding, one time', D.onboarding.fee]);
       if (creditSource) { once -= D.onboarding.fee; rows.push(['Onboarding credited against your ' + esc(creditSource), -D.onboarding.fee]); }
@@ -499,7 +566,7 @@
 
     var cov = $('cg-coverage');
     if (cov) {
-      if (m !== 'tiers' || !seats) { cov.className = 'cg-cov'; cov.innerHTML = ''; }
+      if ((m !== 'tiers' && m !== 'package') || !seats) { cov.className = 'cg-cov'; cov.innerHTML = ''; }
       else if (covered < seats) {
         cov.className = 'cg-cov warn';
         cov.innerHTML = '<b>' + covered + ' of ' + seats + ' covered.</b> ' + (seats - covered) +
@@ -511,14 +578,18 @@
     rows.forEach(function (r) {
       html += '<div class="calc-line"><span>' + r[0] + '</span><span>' + (typeof r[1] === 'number' ? money(r[1]) : r[1]) + '</span></div>';
     });
-    if (m === 'tiers' && seats && covered < seats) {
-      var floor = (D.support.tiers || []).reduce(function (a, t) { return Math.min(a, t.rate); }, Infinity);
+    if ((m === 'tiers' || m === 'package') && seats && covered < seats) {
+      var floor = m === 'package' ? pkg.rate
+        : (D.support.tiers || []).reduce(function (a, t) { return Math.min(a, t.rate); }, Infinity);
+      var fix = m === 'package'
+        ? 'Sliding users up to ' + seats + ' covers them at $' + floor + ' each, another ' + money((seats - covered) * floor) + ' a month.'
+        : '$' + floor + ' a user is the floor for those, which would add ' + money((seats - covered) * floor) + ' a month.';
       html += '<div class="calc-flag warn">You are licensing ' + seats + ' mailbox' + (seats === 1 ? '' : 'es') +
         ' but covering ' + covered + '. That leaves ' + (seats - covered) + ' machine' + (seats - covered === 1 ? '' : 's') +
-        ' that can reach company mail with nothing protecting it. $' + floor + ' a user is the floor for those, which would add ' +
-        money((seats - covered) * floor) + ' a month.</div>';
+        ' that can reach company mail with nothing protecting it. ' + fix + '</div>';
     }
     if (creditSource && m === 'tiers') html += '<div class="calc-flag">Your ' + money(D.onboarding.fee) + ' onboarding is credited off in full. ' + esc(D.onboarding.creditNote || '') + '</div>';
+    if (m === 'package' && pkg.rate) html += '<div class="calc-flag">' + esc(pkg.name) + ' is our published rate. You can check it against cloud-guardian.com/pricing before you sign anything.</div>';
     if (plan.price > 0 && plan.flex && plan.flex !== plan.price)
       html += '<div class="calc-flag">' + esc(plan.name) + ' at ' + money(plan.price) + ' per user is the annual-commitment rate, ' +
         money(seats * plan.price * 12) + ' a year. Month to month it is ' + money(plan.flex) + ' per user, ' + money(seats * plan.flex) + ' a month.</div>';
@@ -540,6 +611,7 @@
     if (!reach) { msg.classList.add('err'); msg.textContent = 'Add an email or phone number so we can get back to you.'; return; }
     var q = recalc(), picked = [];
     if (q.model === 'tiers') (D.support.tiers || []).forEach(function (t) { picked.push(num('cg-' + t.id, 0, t.max || 60) + ' x ' + t.label + ' ($' + t.rate + ')'); });
+    else if (q.model === 'package') picked.push(pkg.name + ': ' + num('cg-pkgu', 0, 60) + ' users x $' + pkg.rate);
     else if (q.model === 'hourly') picked.push('Pay as you go: ' + num('cg-visits', 0, 12) + ' visit(s) x ' + num('cg-vhrs', 1, 8) + ' hr onsite, ' + num('cg-rem', 0, 20) + ' remote hr');
     else picked.push('Undecided');
     var proj = (D.projects || []).filter(function (p) { return $('cg-p-' + p.id) && $('cg-p-' + p.id).checked; }).map(function (p) { return p.label; });
@@ -547,7 +619,7 @@
       _subject: 'ESTIMATE - ' + (($('cg-biz').value || D.client).trim()) + ' - ' + money(q.monthly) + '/mo' + (q.once ? ' + ' + money(q.once) + ' one time' : ''),
       name: ($('cg-name').value || '').trim(), contact: reach, company: ($('cg-biz').value || D.client).trim(),
       support: picked.join('; '), one_time: proj.length ? proj.join('; ') : 'none',
-      onboarding: (D.onboarding && q.model === 'tiers') ? ('$' + D.onboarding.fee + (proj.length && D.onboarding.creditedBy ? ', credited off' : '')) : 'n/a',
+      onboarding: (D.onboarding && (q.model === 'tiers' || q.model === 'package')) ? ('$' + D.onboarding.fee + (proj.length && D.onboarding.creditedBy ? ', credited off' : '')) : 'n/a',
       licensing: plan.price > 0 ? plan.name + ', ' + q.seats + ' users = ' + money(q.lic) + '/mo' : 'none selected',
       coverage: q.model === 'tiers' && q.seats ? q.covered + ' of ' + q.seats + ' accounts covered' : 'n/a',
       monthly: money(q.monthly), one_time_total: money(q.once), licensing_monthly: money(q.lic),
