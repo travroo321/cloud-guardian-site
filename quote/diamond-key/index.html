@@ -82,6 +82,20 @@
   .cg-lic i{display:block;font-style:normal;color:var(--cyan);font-family:'IBM Plex Mono',monospace;font-size:1.05rem;margin:5px 0 3px}
   .cg-lic small{display:block;color:#8fa0b4;font-size:.78rem;line-height:1.45}
   .calc-flag.warn{border-color:rgba(232,163,61,.4)!important;background:rgba(232,163,61,.08)!important;color:#e8d5b5!important}
+  .cg-client{font-family:'Syne',sans-serif;font-weight:700;font-size:1.35rem;color:var(--white);
+    letter-spacing:.01em;padding:10px 14px;border:1px solid var(--border);border-left:3px solid var(--cyan);
+    border-radius:8px;background:rgba(0,212,255,.05)}
+  .cg-prep{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4}
+  .cg-dl{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4;text-align:center}
+  /* btn-primary and btn-outline were written for links; on a <button> the
+     browser's own white background bleeds through, so both are painted here.
+     Sending the estimate back is the loud action, downloading is the quiet one. */
+  .sq-send{background:var(--cyan);border:none;color:var(--black);font-weight:800;
+    cursor:pointer;font-family:inherit;letter-spacing:1.2px}
+  .sq-send:hover{background:var(--white);color:var(--black)}
+  .sq-pdf{background:transparent;border:1px solid rgba(0,212,255,.5);color:var(--white);
+    cursor:pointer;font-family:inherit}
+  .sq-pdf:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.07)}
   @media print{
     nav,.mobile-menu,footer,.fab-wrap,.cgc,.crumbs,.cg-noprint{display:none!important}
     body{background:#fff!important;color:#111!important}
@@ -89,6 +103,7 @@
     .cg-opt-d,.cg-note,.sq-note{color:#444!important}
   }
 </style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -257,8 +272,10 @@
 
   /* ── build the form ── */
   var f = [], step = 0;
-  f.push('<div class="sq-field"><label for="cg-biz">Company name</label>' +
-         '<input type="text" id="cg-biz" value="' + esc(D.client) + '" autocomplete="organization" /></div>');
+  f.push('<div class="sq-field"><label>Prepared for</label>' +
+         '<div class="cg-client" id="cg-biz">' + esc(D.client) + '</div>' +
+         '<p class="cg-prep">This proposal is prepared for ' + esc(D.client) + ' at the rates below, and the ' +
+         'downloadable copy carries that name. If it should read differently, tell us and we will send a corrected link.</p></div>');
 
   var models = [];
   if (D.support && D.support.enabled !== false) models.push('tiers');
@@ -450,7 +467,8 @@
     '<label for="cg-reach">Email or phone number</label><input type="text" id="cg-reach" autocomplete="email" /></div>' +
     '<button type="button" class="btn-primary sq-send" id="cg-send" style="width:100%">Send this estimate to Cloud Guardian</button>' +
     '<p class="sq-sent" id="cg-sent" hidden></p>' +
-    '<button type="button" class="btn-outline sq-pdf" id="cg-print" style="width:100%">Save or print a copy</button>' +
+    '<button type="button" class="btn-outline sq-pdf" id="cg-print" style="width:100%">Download this proposal (PDF)</button>' +
+    '<p class="cg-dl">A dated PDF made out to ' + esc(D.client) + ', with whatever you have picked above on it.</p>' +
     '<a class="phone-link" href="tel:+17327435472">&#128222; (732) 743-5472</a></div>');
   $('cg-out').innerHTML = o.join('');
 
@@ -703,7 +721,7 @@
 
     $('cg-break').innerHTML = html;
     return { monthly: monthly, once: once, lic: lic, seats: seats, covered: covered,
-             rows: rows.concat(oRows), model: m };
+             rows: rows.concat(oRows), mRows: rows, oRows: oRows, model: m };
   }
 
   var ratioMsg = '';
@@ -721,21 +739,192 @@
   host.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function (el) {
     el.addEventListener('change', recalc);
   });
-  $('cg-print').addEventListener('click', function () { window.print(); });
+  function pickedList(q) {
+    var picked = [];
+    if (q.model === 'tiers') (D.support.tiers || []).forEach(function (t) { picked.push(num('cg-' + t.id, 0, t.max || 60) + ' x ' + t.label + ' ($' + t.rate + ')'); });
+    else if (q.model === 'package') picked.push(pkg.name + ': ' + num('cg-pkgu', 0, 60) + ' users x $' + pkg.rate);
+    else if (q.model === 'hourly') picked.push('Pay as you go: ' + num('cg-visits', 0, 12) + ' visit(s) x ' + num('cg-vhrs', 1, 8) + ' hr onsite, ' + num('cg-rem', 0, 20) + ' remote hr');
+    else picked.push('Undecided');
+    return picked;
+  }
+  function pickedProjects() {
+    return (D.projects || []).filter(function (p) { return $('cg-p-' + p.id) && $('cg-p-' + p.id).checked; })
+                             .map(function (p) { return p.label; });
+  }
+
+  /* ── the downloadable proposal ──
+     One document, made out to the client named in the deal. The numbers on it
+     are whatever the bars are set to when the button is pressed. If the PDF
+     library did not load we hand the reader the print dialog instead, which
+     the print stylesheet already tidies up. */
+  var NAVY = [10, 18, 32], CYAN = [0, 212, 255], AMBER = [232, 163, 61];
+  var INK = [30, 42, 58], BODY = [64, 78, 94];
+  var logoData;
+  function getLogo(cb) {
+    if (logoData !== undefined) return cb(logoData);
+    fetch('/assets/cg-logo.png').then(function (r) { return r.blob(); }).then(function (bl) {
+      var fr = new FileReader();
+      fr.onload = function () { logoData = fr.result; cb(logoData); };
+      fr.readAsDataURL(bl);
+    }).catch(function () { logoData = null; cb(null); });
+  }
+
+  function buildPdf() {
+    var J = window.jspdf && window.jspdf.jsPDF;
+    if (!J) { window.print(); return; }
+    var q = recalc();
+    var notes = ($('cg-notes').value || '').trim();
+
+    getLogo(function (logo) {
+      var doc = new J({ unit: 'pt', format: 'letter' });
+      function A(t) {
+        return String(t == null ? '' : t)
+          .replace(/[\u2212\u2013\u2014]/g, '-').replace(/[\u2018\u2019]/g, "'")
+          .replace(/[\u201C\u201D]/g, '"').replace(/\u2026/g, '...').replace(/\u00a0/g, ' ');
+      }
+      var rawText = doc.text.bind(doc), rawSplit = doc.splitTextToSize.bind(doc);
+      doc.text = function (t) {
+        var a = [].slice.call(arguments);
+        a[0] = Array.isArray(t) ? t.map(A) : A(t);
+        return rawText.apply(doc, a);
+      };
+      doc.splitTextToSize = function (t) {
+        var a = [].slice.call(arguments); a[0] = A(t);
+        return rawSplit.apply(doc, a);
+      };
+      var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+      var x = 58, cx = W / 2;
+      var today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      function foot(dark) {
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        doc.setTextColor(dark ? 160 : 120, dark ? 172 : 132, dark ? 188 : 148);
+        doc.text('(732) 743-5472    |    cloud-guardian.com    |    sales@cloud-guardian.com', cx, H - 46, { align: 'center' });
+      }
+
+      /* ── cover: navy, the client's name, and the estimate itself ── */
+      doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
+      doc.rect(0, 0, W, H, 'F');
+      if (logo) doc.addImage(logo, 'PNG', cx - 105, 40, 210, 87);
+      var y = 158;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(24); doc.setTextColor(255, 255, 255);
+      doc.text('MANAGED IT SERVICES', cx, y, { align: 'center' }); y += 29;
+      doc.setTextColor(CYAN[0], CYAN[1], CYAN[2]);
+      doc.text('PROPOSAL & ESTIMATE', cx, y, { align: 'center' }); y += 30;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(CYAN[0], CYAN[1], CYAN[2]);
+      doc.text('P R E P A R E D   F O R', cx, y, { align: 'center' }); y += 20;
+      doc.setFontSize(16); doc.setTextColor(255, 255, 255);
+      doc.text(D.client, cx, y, { align: 'center' }); y += 17;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(168, 180, 196);
+      doc.text(today + '   |   Estimate valid 30 days', cx, y, { align: 'center' });
+
+      var modelName = q.model === 'tiers' ? ((D.support && D.support.title) || 'Monthly support')
+                    : q.model === 'package' ? (pkg.name || 'Managed plan')
+                    : q.model === 'hourly' ? 'Pay as you go, billed hourly'
+                    : 'Support model not decided yet';
+      var lines = q.mRows.length + q.oRows.length;
+      var py = y + 30, ph = 81 + 22 + 14 + (lines ? 0 : 18) + q.mRows.length * 17 +
+               (q.oRows.length ? q.oRows.length * 17 + 22 : 0) + (q.lic > 0 ? 58 : 0);
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(x - 12, py, W - 2 * x + 24, ph, 8, 8, 'F');
+      var iy = py + 32;
+
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(INK[0], INK[1], INK[2]);
+      doc.text('YOUR ESTIMATE', x - 2, iy); iy += 9;
+      doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(2);
+      doc.line(x - 2, iy, x + 88, iy); iy += 20;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(BODY[0], BODY[1], BODY[2]);
+      doc.text(modelName, x - 2, iy); iy += 20;
+      if (!lines) { doc.text('Nothing picked yet — the bars on the page were left at zero.', x - 2, iy); iy += 18; }
+
+      function row(label, val, bold, big) {
+        doc.setFont('helvetica', bold ? 'bold' : 'normal');
+        doc.setFontSize(big ? 12.5 : 10.5);
+        doc.setTextColor(bold ? INK[0] : BODY[0], bold ? INK[1] : BODY[1], bold ? INK[2] : BODY[2]);
+        doc.text(label, x - 2, iy);
+        if (bold && big) doc.setTextColor(0, 150, 190);
+        doc.text(val, W - x + 2, iy, { align: 'right' });
+        iy += bold ? 22 : 17;
+      }
+      q.mRows.forEach(function (r) { row(r[0], typeof r[1] === 'number' ? money(r[1]) : r[1], false); });
+      doc.setDrawColor(224, 230, 238); doc.setLineWidth(1);
+      doc.line(x - 2, iy - 11, W - x + 2, iy - 11);
+      row('Cloud Guardian, per month', money(q.monthly), true, true);
+      if (q.oRows.length) {
+        q.oRows.forEach(function (r) { row(r[0], typeof r[1] === 'number' ? money(r[1]) : r[1], false); });
+        doc.setDrawColor(224, 230, 238); doc.setLineWidth(1);
+        doc.line(x - 2, iy - 11, W - x + 2, iy - 11);
+        row('Cloud Guardian, one time', money(q.once), true, true);
+      }
+      if (q.lic > 0) {
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+        var licLines = doc.splitTextToSize(
+          plan.name + ', ' + q.seats + ' license' + (q.seats === 1 ? '' : 's') + ' at $' + plan.price +
+          ' each, ' + money(q.lic) + ' a month paid direct to ' + ((D.licensing && D.licensing.vendor) || 'the vendor') +
+          '. It never appears on a Cloud Guardian invoice.', W - 2 * x - 12);
+        var lh = 26 + licLines.length * 13;
+        doc.setFillColor(253, 247, 235);
+        doc.roundedRect(x - 2, iy - 6, W - 2 * x + 4, lh, 5, 5, 'F');
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(AMBER[0], AMBER[1], AMBER[2]);
+        doc.text('BILLED BY ' + String((D.licensing && D.licensing.vendor) || 'THE VENDOR').toUpperCase() + ', NOT BY US', x + 8, iy + 9);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.setTextColor(120, 100, 66);
+        doc.text(licLines, x + 8, iy + 24);
+        iy += lh + 6;
+      }
+      foot(true);
+
+      /* ── page two: the terms behind those numbers ── */
+      var py2 = 0;
+      function head2(title) {
+        doc.addPage();
+        doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]); doc.rect(0, 0, W, 84, 'F');
+        if (logo) doc.addImage(logo, 'PNG', W - x - 120, 16, 120, 50);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(255, 255, 255);
+        doc.text(title, x, 50);
+        py2 = 120;
+        foot(false);
+      }
+      function block(title, text) {
+        if (!text) return;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+        var wrapped = doc.splitTextToSize(String(text), W - 2 * x);
+        if (py2 + 34 + wrapped.length * 12 > H - 74) head2('PREPARED FOR ' + D.client.toUpperCase());
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(10.5); doc.setTextColor(INK[0], INK[1], INK[2]);
+        doc.text(title.toUpperCase(), x, py2); py2 += 8;
+        doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(2);
+        doc.line(x, py2, x + 40, py2); py2 += 18;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(BODY[0], BODY[1], BODY[2]);
+        doc.text(wrapped, x, py2); py2 += wrapped.length * 12 + 18;
+      }
+
+      head2('WHAT THIS COVERS');
+      block('What every user gets', D.includes);
+      if (D.support) {
+        block('How the tiers work', D.support.note);
+        block('Adding people, and moving them', D.support.escalation);
+      }
+      if (D.hourly && D.hourly.exclusionNote) block('Pay as you go', D.hourly.exclusionNote);
+      block('What this excludes', D.excludes);
+      block('Your questions for the meeting', notes || null);
+      block('What happens next', 'Nothing here is signed and nothing is sold. We look at what you have, free, and the ' +
+        'findings are yours either way. Hourly work is tracked to the minute and itemized, and you will not find a ' +
+        'line on an invoice you have not already seen. No minimum seat count, no three-year term, no charge to leave.');
+
+      doc.save(D.client.replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '') + '_Cloud_Guardian_Proposal.pdf');
+    });
+  }
+
+  $('cg-print').addEventListener('click', buildPdf);
 
   $('cg-send').addEventListener('click', function () {
     var msg = $('cg-sent'), reach = ($('cg-reach').value || '').trim();
     msg.hidden = false;
     if (!reach) { msg.classList.add('err'); msg.textContent = 'Add an email or phone number so we can get back to you.'; return; }
-    var q = recalc(), picked = [];
-    if (q.model === 'tiers') (D.support.tiers || []).forEach(function (t) { picked.push(num('cg-' + t.id, 0, t.max || 60) + ' x ' + t.label + ' ($' + t.rate + ')'); });
-    else if (q.model === 'package') picked.push(pkg.name + ': ' + num('cg-pkgu', 0, 60) + ' users x $' + pkg.rate);
-    else if (q.model === 'hourly') picked.push('Pay as you go: ' + num('cg-visits', 0, 12) + ' visit(s) x ' + num('cg-vhrs', 1, 8) + ' hr onsite, ' + num('cg-rem', 0, 20) + ' remote hr');
-    else picked.push('Undecided');
-    var proj = (D.projects || []).filter(function (p) { return $('cg-p-' + p.id) && $('cg-p-' + p.id).checked; }).map(function (p) { return p.label; });
+    var q = recalc(), picked = pickedList(q);
+    var proj = pickedProjects();
     var body = {
-      _subject: 'ESTIMATE - ' + (($('cg-biz').value || D.client).trim()) + ' - ' + money(q.monthly) + '/mo' + (q.once ? ' + ' + money(q.once) + ' one time' : ''),
-      name: ($('cg-name').value || '').trim(), contact: reach, company: ($('cg-biz').value || D.client).trim(),
+      _subject: 'ESTIMATE - ' + D.client + ' - ' + money(q.monthly) + '/mo' + (q.once ? ' + ' + money(q.once) + ' one time' : ''),
+      name: ($('cg-name').value || '').trim(), contact: reach, company: D.client,
       support: picked.join('; '), one_time: proj.length ? proj.join('; ') : 'none',
       onboarding: (D.onboarding && (q.model === 'tiers' || q.model === 'package')) ? ('$' + D.onboarding.fee + (proj.length && D.onboarding.creditedBy ? ', credited off' : '')) : 'n/a',
       licensing: (q.lic > 0) ? plan.name + ', ' + q.seats + ' users = ' + money(q.lic) + '/mo' : 'none selected',

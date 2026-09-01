@@ -187,6 +187,20 @@ STYLES = """
   .cg-lic i{display:block;font-style:normal;color:var(--cyan);font-family:'IBM Plex Mono',monospace;font-size:1.05rem;margin:5px 0 3px}
   .cg-lic small{display:block;color:#8fa0b4;font-size:.78rem;line-height:1.45}
   .calc-flag.warn{border-color:rgba(232,163,61,.4)!important;background:rgba(232,163,61,.08)!important;color:#e8d5b5!important}
+  .cg-client{font-family:'Syne',sans-serif;font-weight:700;font-size:1.35rem;color:var(--white);
+    letter-spacing:.01em;padding:10px 14px;border:1px solid var(--border);border-left:3px solid var(--cyan);
+    border-radius:8px;background:rgba(0,212,255,.05)}
+  .cg-prep{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4}
+  .cg-dl{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4;text-align:center}
+  /* btn-primary and btn-outline were written for links; on a <button> the
+     browser's own white background bleeds through, so both are painted here.
+     Sending the estimate back is the loud action, downloading is the quiet one. */
+  .sq-send{background:var(--cyan);border:none;color:var(--black);font-weight:800;
+    cursor:pointer;font-family:inherit;letter-spacing:1.2px}
+  .sq-send:hover{background:var(--white);color:var(--black)}
+  .sq-pdf{background:transparent;border:1px solid rgba(0,212,255,.5);color:var(--white);
+    cursor:pointer;font-family:inherit}
+  .sq-pdf:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,.07)}
   @media print{
     nav,.mobile-menu,footer,.fab-wrap,.cgc,.crumbs,.cg-noprint{display:none!important}
     body{background:#fff!important;color:#111!important}
@@ -254,6 +268,7 @@ def main():
 %(fonts)s
 %(css)s
 <style>%(styles)s</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 %(nav)s
