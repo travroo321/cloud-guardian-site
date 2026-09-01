@@ -177,22 +177,23 @@
               <span>
                 <span class="dk-opt-t">Unlimited IT support</span>
                 <span class="dk-opt-p">$100 per full-time user / month &nbsp;·&nbsp; $50 per part-time user / month</span>
-                <span class="dk-opt-d">Flat monthly number. Call as often as you need, no clock running, no per-ticket charges. A one-time $200 onboarding fee applies, and it is credited off in full if we are also doing your email migration.</span>
+                <span class="dk-opt-d">Flat monthly number. Call as often as you need, no clock running, no per-ticket charges. Full-time is for the handful of people who genuinely use IT; part-time is for everyone else, and it still carries the full security stack. A one-time $200 onboarding fee applies, and it is credited off in full if we are also doing your email migration.</span>
               </span>
             </span>
           </label>
 
           <div class="dk-sub" id="dk-unl-fields">
             <div class="sq-field">
-              <label for="dk-ft">Full-time users <span class="sq-val" id="dk-ft-v">8</span></label>
-              <input type="range" class="sq-range" id="dk-ft" min="0" max="40" value="8" step="1" />
-              <span class="sq-hint">$100 each per month.</span>
+              <label for="dk-ft">Full-time users <span class="sq-val" id="dk-ft-v">3</span></label>
+              <input type="range" class="sq-range" id="dk-ft" min="0" max="40" value="3" step="1" />
+              <span class="sq-hint">$100 each per month. The people who actually lean on IT and call us.</span>
             </div>
             <div class="sq-field">
-              <label for="dk-pt">Part-time users <span class="sq-val" id="dk-pt-v">0</span></label>
-              <input type="range" class="sq-range" id="dk-pt" min="0" max="40" value="0" step="1" />
-              <span class="sq-hint">$50 each per month.</span>
+              <label for="dk-pt">Part-time users <span class="sq-val" id="dk-pt-v">5</span></label>
+              <input type="range" class="sq-range" id="dk-pt" min="0" max="40" value="5" step="1" />
+              <span class="sq-hint">$50 each per month. Full security coverage, and support there if they ever need it.</span>
             </div>
+            <p class="dk-note" style="margin-top:14px"><strong style="color:#c3ced9">Why everyone is on the list.</strong> Support is the part we can scale down, and that is what the $50 tier does. Security is not. Anyone who can reach your Google Workspace can reach company mail and company data, so every one of those machines has to carry the same protection. Securing four of eight machines is not securing eight, it just moves where an attacker starts.</p>
           </div>
 
           <label class="dk-opt" id="dk-opt-payg">
@@ -417,7 +418,7 @@
 
   function recalc() {
     var m = model();
-    var monthly = 0, once = 0, lic = 0, rows = [];
+    var monthly = 0, once = 0, lic = 0, rows = [], ft = 0, pt = 0;
 
     $('dk-unl-fields').hidden = (m !== 'unlimited');
     $('dk-payg-fields').hidden = (m !== 'payg');
@@ -426,7 +427,7 @@
     $('dk-opt-none').classList.toggle('on', m === 'undecided');
 
     if (m === 'unlimited') {
-      var ft = val('dk-ft', 0, 40), pt = val('dk-pt', 0, 40);
+      ft = val('dk-ft', 0, 40); pt = val('dk-pt', 0, 40);
       if (ft > 0) { monthly += ft * RATE_FT; rows.push(['Unlimited support, ' + ft + ' full-time x $100', ft * RATE_FT]); }
       if (pt > 0) { monthly += pt * RATE_PT; rows.push(['Unlimited support, ' + pt + ' part-time x $50', pt * RATE_PT]); }
       if (ft === 0 && pt === 0) rows.push(['Unlimited support, no users entered yet', 0]);
@@ -489,6 +490,16 @@
       html += '<div class="calc-flag">' + plan.name + ' at ' + money(plan.price) + ' per user is Google’s annual-commitment rate, ' +
               money(seats * plan.price * 12) + ' a year for ' + seats + ' user' + (seats === 1 ? '' : 's') + '. Month to month it is ' +
               money(plan.flex) + ' per user, ' + money(seats * plan.flex) + ' a month. We can set you up either way.</div>';
+    }
+    if (m === 'unlimited' && plan.price > 0) {
+      var covered = ft + pt, gap = seats - covered;
+      if (gap > 0) {
+        html += '<div class="calc-flag" style="border-color:rgba(232,163,61,.4);background:rgba(232,163,61,.08);color:#e8d5b5">' +
+                'You are licensing ' + seats + ' Workspace mailbox' + (seats === 1 ? '' : 'es') + ' but covering ' + covered +
+                ' user' + (covered === 1 ? '' : 's') + '. That leaves ' + gap + ' machine' + (gap === 1 ? '' : 's') +
+                ' that can reach company mail with nothing protecting it. Part-time at $50 is the floor for those, which would add ' +
+                money(gap * RATE_PT) + ' a month.</div>';
+      }
     }
     if (onboarded && migOn) html += '<div class="calc-flag">Your $200 onboarding is credited off in full. Standing your environment up and moving your mail are largely the same work, so we are not charging you for both.</div>';
     else if (onboarded) html += '<div class="calc-flag">Onboarding is a one-time $200: documenting the environment, getting our tooling on your machines and setting up your users. It is credited off in full if we also handle your email migration.</div>';
