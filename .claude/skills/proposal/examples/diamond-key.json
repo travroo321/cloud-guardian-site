@@ -42,7 +42,8 @@
     "onsite": 125,
     "onsiteMin": 1,
     "remote": 125,
-    "remoteStep": 0.5
+    "remoteStep": 0.5,
+    "exclusionNote": "Pay as you go buys hours, not protection. There is no security stack on the machines and no mailbox protection with it \u2014 that comes with the monthly plan. Hourly is the right answer for projects and fixes, and you can move onto a plan whenever you want the coverage."
   },
   "projects": [
     {

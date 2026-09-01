@@ -397,17 +397,19 @@
 
     var cov = $('cg-coverage');
     if (cov) {
-      if ((m !== 'tiers' && m !== 'package') || !seats) { cov.className = 'cg-cov'; cov.innerHTML = ''; }
+      var hasTarget = seats > 0 && !followsUsers;   // a target only exists when seats are set independently
+      if (m !== 'tiers' && m !== 'package') { cov.className = 'cg-cov'; cov.innerHTML = ''; }
       else if (covered === 0) {
         cov.className = 'cg-cov';
-        cov.innerHTML = '<b>Place your people.</b> Slide each bar to say how many sit on each level. ' +
-          'You have ' + seats + ' account' + (seats === 1 ? '' : 's') + ' to cover.';
+        cov.innerHTML = '<b>Place your people.</b> Slide each bar to say how many sit on each level.' +
+          (hasTarget ? ' You have ' + seats + ' account' + (seats === 1 ? '' : 's') + ' to cover.' : '');
       }
-      else if (covered < seats) {
+      else if (hasTarget && covered < seats) {
         cov.className = 'cg-cov warn';
         cov.innerHTML = '<b>' + covered + ' of ' + seats + ' covered.</b> ' + (seats - covered) +
           ' account' + (seats - covered === 1 ? '' : 's') + ' with no protection on them.';
-      } else {
+      }
+      else {
         cov.className = 'cg-cov ok';
         cov.innerHTML = '<b>All ' + covered + ' covered.</b> ' +
           esc(D.support.coveredNote || 'Every computer and every mailbox is protected to the same standard, whichever tier the person sits on.');
@@ -418,6 +420,8 @@
     rows.forEach(function (r) {
       html += '<div class="calc-line"><span>' + r[0] + '</span><span>' + (typeof r[1] === 'number' ? money(r[1]) : r[1]) + '</span></div>';
     });
+    if (m === 'hourly' && D.hourly && D.hourly.exclusionNote)
+      html += '<div class="calc-flag warn">' + esc(D.hourly.exclusionNote) + '</div>';
     if ((m === 'tiers' || m === 'package') && seats && covered > 0 && covered < seats) {
       var floor = m === 'package' ? pkg.rate
         : (D.support.tiers || []).reduce(function (a, t) { return Math.min(a, t.rate); }, Infinity);
