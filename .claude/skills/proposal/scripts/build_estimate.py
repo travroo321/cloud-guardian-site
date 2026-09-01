@@ -154,6 +154,9 @@ STYLES = """
   .cg-cov.ok b{color:var(--cyan)}
   .cg-cov.warn{border-color:rgba(232,163,61,.45);background:rgba(232,163,61,.09);color:#e8d5b5}
   .cg-cov.warn b{color:#e8a33d}
+  .cg-incl{border:1px solid rgba(0,212,255,.38);background:rgba(0,212,255,.07);
+    border-radius:12px;padding:14px 16px;margin:18px 0 0;color:#bcd8e6;font-size:.9rem;line-height:1.6}
+  .cg-incl b{color:var(--cyan)}
   .cg-excl{border:1px solid rgba(232,163,61,.35);background:rgba(232,163,61,.07);border-radius:12px;padding:14px 16px;margin:18px 0 0;color:#e8d5b5;font-size:.9rem;line-height:1.6}
   .cg-excl b{color:#e8a33d}
   .cg-tot{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.1)}

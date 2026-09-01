@@ -94,5 +94,6 @@
     "footnote": "This never appears on a Cloud Guardian invoice. You pay Google directly for the seats, and we show it here only so you can see your whole monthly cost in one place.",
     "followsUsers": true
   },
-  "excludes": "Third-party email licensing is not included in our pricing. Project work outside what you picked \u2014 wiring and cabling, a server build, anything with its own scope \u2014 is quoted per project or billed at our hourly rates, and what it costs depends on the scope of the job and the skills it needs. Hardware is not included either. All of it is quoted before any work happens, so nothing arrives on an invoice you have not already seen."
+  "excludes": "Third-party email licensing \u2014 your Google Workspace or Microsoft 365 seats \u2014 is billed by the vendor, not by us. Hardware is not included. Project work outside what you picked, such as wiring and cabling or a server build, is quoted per project or billed at our hourly rates, and what it costs depends on the scope of the job and the skills it needs. All of it is quoted before any work happens, so nothing arrives on an invoice you have not already seen.",
+  "includes": "Every user on the monthly plan gets the full cybersecurity and computer protection, whichever tier they sit on \u2014 full-time, part-time or security only. The tooling and its licensing are in the per-user price, so there is nothing further to buy for it. Pay as you go is the one exception: it buys hours, not protection."
 }
