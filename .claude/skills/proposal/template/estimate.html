@@ -80,7 +80,9 @@
                  ' <span class="sq-val" id="cg-' + t.id + '-v">' + (t.default || 0) + '</span></label>' +
                  '<input type="range" class="sq-range" id="cg-' + t.id + '" min="0" max="' + (t.max || 60) +
                  '" value="' + (t.default || 0) + '" step="1" />' +
-                 '<span class="sq-hint">$' + t.rate + ' each per month. ' + esc(t.hint || '') + '</span></div>');
+                 '<span class="sq-hint">$' + t.rate + ' each per month. ' + esc(t.hint || '') + '</span>' +
+                 (t.note ? '<p class="cg-note" style="margin-top:8px">' + esc(t.note) + '</p>' : '') +
+                 '</div>');
       });
       sub.push('<div id="cg-coverage" class="cg-cov"></div>');
       if (D.support.note) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Why everyone is on the list.</strong> ' + esc(D.support.note) + '</p>');

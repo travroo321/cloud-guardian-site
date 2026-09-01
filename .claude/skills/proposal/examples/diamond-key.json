@@ -28,11 +28,12 @@
         "short": "security only",
         "rate": 25,
         "default": 0,
-        "hint": "The full security stack, no support included."
+        "hint": "The full security stack, no support included.",
+        "note": "If one of these people does need support, it is pay as you go at our hourly rates for that visit, unless you upgrade them to part-time or full-time. An upgrade starts on the first of the following month."
       }
     ],
     "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Anyone who can reach your Google Workspace can reach company mail and company data, so every one of those machines carries the same protection either way. $25 is the floor for anyone with an account.",
-    "escalation": "Say someone is on security only and something breaks. Two ways, your call at the time. Pay as you go for that one incident at our hourly rates, or move that person up to part-time or full-time. Tier changes take effect on the first of the following month, and that works in both directions \u2014 you can move people down a tier, or off entirely, as freely as you move them up, and you are never locked into a headcount. The one thing that does not work is switching someone up for a fix and straight back down the week after. A tier has to hold for the month it covers, otherwise it is just hourly work with a discount on it."
+    "escalation": "Move people between the three bars whenever you like. Changes take effect on the first of the following month, and that works in both directions \u2014 people come down a tier, or off entirely, as freely as they go up, and you are never locked into a headcount. The one thing that does not work is moving someone up for a fix and straight back down the week after; a tier has to hold for the month it covers."
   },
   "hourly": {
     "onsite": 125,
