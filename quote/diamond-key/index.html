@@ -177,7 +177,7 @@
               <span>
                 <span class="dk-opt-t">Unlimited IT support</span>
                 <span class="dk-opt-p">$100 per full-time user / month &nbsp;·&nbsp; $50 per part-time user / month</span>
-                <span class="dk-opt-d">Flat monthly number. Call as often as you need, no clock running, no per-ticket charges.</span>
+                <span class="dk-opt-d">Flat monthly number. Call as often as you need, no clock running, no per-ticket charges. A one-time $200 onboarding fee applies, and it is credited off in full if we are also doing your email migration.</span>
               </span>
             </span>
           </label>
@@ -201,7 +201,7 @@
               <span>
                 <span class="dk-opt-t">Pay as you go, hourly</span>
                 <span class="dk-opt-p">Onsite $125 / hour &nbsp;·&nbsp; Remote break/fix $125 / hour</span>
-                <span class="dk-opt-d">No monthly fee. Onsite visits carry a one-hour minimum, then bill hourly. Remote break/fix bills in 30-minute increments, so a half hour is $62.50.</span>
+                <span class="dk-opt-d">No monthly fee and no onboarding fee. Onsite visits carry a one-hour minimum, then bill hourly. Remote break/fix bills in 30-minute increments, so a half hour is $62.50.</span>
               </span>
             </span>
           </label>
@@ -243,7 +243,7 @@
               <span>
                 <span class="dk-opt-t">Migrate Microsoft 365 to Google Workspace</span>
                 <span class="dk-opt-p">$1,000 flat, one time, up to 10 mailboxes</span>
-                <span class="dk-opt-d">Mail, contacts and calendars moved across, every mailbox rebuilt on the Google side, each user set up on their devices. Nothing cuts over until it has been tested. The flat $1,000 covers up to 10 mailboxes, so you are covered if your count comes in higher than we expect. Past 10 we requote with you before any work starts.</span>
+                <span class="dk-opt-d">Mail, contacts and calendars moved across, every mailbox rebuilt on the Google side, each user set up on their devices. Nothing cuts over until it has been tested. The flat $1,000 covers up to 10 mailboxes, so you are covered if your count comes in higher than we expect. Past 10 we requote with you before any work starts. On a support plan this also credits off your $200 onboarding fee, because a good deal of it is the same work.</span>
               </span>
             </span>
           </label>
@@ -384,11 +384,12 @@
   var root = document.getElementById('dk');
   if (!root) return;
 
-  var RATE_FT = 100, RATE_PT = 50, RATE_HOUR = 125, MIG_FLAT = 1000, MIG_BOXES = 10;
+  var RATE_FT = 100, RATE_PT = 50, RATE_HOUR = 125, MIG_FLAT = 1000, MIG_BOXES = 10, ONBOARD = 200;
 
   function $(id) { return document.getElementById(id); }
   function money(n) {
-    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2 });
+    var neg = n < 0, a = Math.abs(n);
+    return (neg ? '\u2212$' : '$') + a.toLocaleString('en-US', { minimumFractionDigits: (a % 1 ? 2 : 0), maximumFractionDigits: 2 });
   }
   function val(id, lo, hi) {
     var v = parseFloat($(id).value);
@@ -455,6 +456,18 @@
       rows.push(['Microsoft 365 to Google Workspace, up to ' + MIG_BOXES + ' mailboxes (one time)', MIG_FLAT]);
     }
 
+    // Onboarding applies to any ongoing plan except pay as you go, and the
+    // migration credits it off in full because it is largely the same setup.
+    var onboarded = (m === 'unlimited');
+    if (onboarded) {
+      once += ONBOARD;
+      rows.push(['Onboarding, one time', ONBOARD]);
+      if (migOn) {
+        once -= ONBOARD;
+        rows.push(['Onboarding credited against your migration', -ONBOARD]);
+      }
+    }
+
     var seats = val('dk-seats', 1, 40);
     $('dk-lic-fields').hidden = (plan.price <= 0);
     if (plan.price > 0) {
@@ -477,6 +490,8 @@
               money(seats * plan.price * 12) + ' a year for ' + seats + ' user' + (seats === 1 ? '' : 's') + '. Month to month it is ' +
               money(plan.flex) + ' per user, ' + money(seats * plan.flex) + ' a month. We can set you up either way.</div>';
     }
+    if (onboarded && migOn) html += '<div class="calc-flag">Your $200 onboarding is credited off in full. Standing your environment up and moving your mail are largely the same work, so we are not charging you for both.</div>';
+    else if (onboarded) html += '<div class="calc-flag">Onboarding is a one-time $200: documenting the environment, getting our tooling on your machines and setting up your users. It is credited off in full if we also handle your email migration.</div>';
     if (m === 'payg') html += '<div class="calc-flag">Hourly work only bills when you use it, so a quiet month costs nothing. The figure above is what a typical month would look like at the volumes you set.</div>';
     if (m === 'unlimited') html += '<div class="calc-flag">Unlimited support is a flat number that does not move with ticket volume. It changes only when your headcount does.</div>';
     $('dk-break').innerHTML = html;
@@ -497,6 +512,13 @@
   $('dk-mig').addEventListener('change', recalc);
 
   $('dk-print').addEventListener('click', function () { window.print(); });
+
+  function onboardState() {
+    if (model() !== 'unlimited') return 'n/a, pay as you go or undecided';
+    return $('dk-mig').checked
+      ? '$200, credited off in full against the migration'
+      : '$200 one time';
+  }
 
   $('dk-send').addEventListener('click', function () {
     var msg = $('dk-sent');
@@ -527,6 +549,7 @@
       google_licensing: plan.price > 0
         ? plan.name + ', ' + q.seats + ' user(s) at ' + money(plan.price) + '/user/mo = ' + money(q.lic) + '/mo (paid to Google)'
         : 'none selected',
+      onboarding: onboardState(),
       cloud_guardian_monthly: money(q.monthly),
       cloud_guardian_one_time: money(q.once),
       google_licensing_monthly: money(q.lic),
