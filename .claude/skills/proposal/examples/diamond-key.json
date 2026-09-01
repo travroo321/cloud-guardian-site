@@ -1,0 +1,87 @@
+{
+  "client": "Diamond Key",
+  "slug": "diamond-key",
+  "intro": "These are the rates we discussed, laid out so you can pick what you actually want and see the number move. Nothing here is a commitment. Choose your options, add any questions for our follow-up meeting, and send it back to us.",
+  "support": {
+    "title": "Unlimited IT support",
+    "blurb": "Flat monthly number. Call as often as you need, no clock running, no per-ticket charges. Put each person on the tier that matches how much they actually use IT. Every tier carries the same security stack, so the only thing that changes between them is how much support is included. A one-time $200 onboarding fee applies, and it is credited off in full if we are also doing your email migration.",
+    "tiers": [
+      {
+        "id": "ft",
+        "label": "Full-time users",
+        "short": "full-time",
+        "rate": 100,
+        "default": 3,
+        "hint": "The people who actually lean on IT and call us."
+      },
+      {
+        "id": "pt",
+        "label": "Part-time users",
+        "short": "part-time",
+        "rate": 50,
+        "default": 5,
+        "hint": "Full security, and support there if they ever need it."
+      },
+      {
+        "id": "sec",
+        "label": "Security only, no support",
+        "short": "security only",
+        "rate": 25,
+        "default": 0,
+        "hint": "The full security stack, no support included."
+      }
+    ],
+    "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Anyone who can reach your Google Workspace can reach company mail and company data, so every one of those machines carries the same protection either way. $25 is the floor for anyone with an account.",
+    "escalation": "Two ways, your choice at the time. Pay for that visit hourly at our rates, or move them up to part-time at $50, which starts on the first of the following month."
+  },
+  "hourly": {
+    "onsite": 125,
+    "onsiteMin": 1,
+    "remote": 125,
+    "remoteStep": 0.5
+  },
+  "projects": [
+    {
+      "id": "mig",
+      "label": "Migrate Microsoft 365 to Google Workspace",
+      "price": 1000,
+      "scope": "up to 10 mailboxes",
+      "blurb": "Mail, contacts and calendars moved across, every mailbox rebuilt on the Google side, each user set up on their devices. Nothing cuts over until it has been tested. Past 10 mailboxes we requote with you before any work starts.",
+      "short": "migration"
+    }
+  ],
+  "onboarding": {
+    "fee": 200,
+    "creditedBy": "mig",
+    "creditNote": "Standing your environment up and moving your mail are largely the same work, so we are not charging you for both."
+  },
+  "licensing": {
+    "title": "Google Workspace licensing",
+    "payee": "paid to Google, not to us",
+    "payeeShort": "Google licensing",
+    "seatsDefault": 8,
+    "defaultIndex": 1,
+    "blurb": "Our pricing above excludes email licensing. These are Google's own published rates so you can see the whole picture.",
+    "hint": "Prices shown are Google's annual-commitment rate. Month to month costs more per user, and we can set it up either way.",
+    "plans": [
+      {
+        "name": "Business Starter",
+        "price": 7,
+        "flex": 8.4,
+        "note": "30 GB pooled per user. $8.40 month to month."
+      },
+      {
+        "name": "Business Standard",
+        "price": 14,
+        "flex": 16.8,
+        "note": "2 TB per user, recording, larger meetings."
+      },
+      {
+        "name": "Business Plus",
+        "price": 22,
+        "flex": 26.4,
+        "note": "5 TB per user, Vault, advanced controls."
+      }
+    ]
+  }
+}

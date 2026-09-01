@@ -5,8 +5,16 @@ description: Build a branded Cloud Guardian PDF proposal for a prospect from the
 
 # Cloud Guardian proposal builder
 
-Turns a prospect's website and user count into a four-page branded PDF:
-cover, program, security, pricing. A few minutes, no design work.
+Turns a prospect's website and user count into **two** things:
+
+1. A four-page branded PDF — cover, program, security, pricing.
+2. A **private interactive estimate page** at `/quote/<slug>/` where the
+   prospect moves the sliders themselves and sends their scenario back to us.
+
+The PDF is what everyone sends. The live page is the part competitors do not
+have: it turns a one-way attachment into something the prospect plays with, and
+whatever they land on arrives in our inbox with their questions attached. Build
+both unless asked for only one.
 
 **The rates are read out of `/pricing/` every time.** Never type a price from
 memory into a proposal. Gold moved from $65 to $110 in a single afternoon; a
@@ -113,7 +121,38 @@ Look for text overflowing, an empty section, a placeholder that survived, a
 broken logo, or a fifth page. Fix and re-render. Do not hand over a proposal
 you have not looked at.
 
-### 6. Hand it over
+### 6. Build the interactive estimate page
+
+Write a `deal.json` and run:
+
+```bash
+python3 .claude/skills/proposal/scripts/build_estimate.py deal.json
+```
+
+The schema is documented in that script's docstring, and
+`examples/diamond-key.json` is a real worked deal — three support tiers, an
+hourly alternative, a fixed-price migration, an onboarding fee credited off by
+that migration, and Google licensing as a separate excluded line.
+
+The page is generated entirely from the JSON: rates, tiers, projects, licensing
+plans and copy. Nav, footer and stylesheet are lifted from the live pricing page
+at build time, so a generated estimate always matches the current site. It is
+written `noindex`, kept out of the sitemap, and linked from nowhere.
+
+Things worth configuring per deal:
+
+- **`support.tiers`** — any number of per-user tiers. The cheapest tier is
+  treated as the security floor.
+- **`compare.currentMonthly`** — what they pay today, if discovery gave you a
+  real figure. Adds a savings line. Omit it rather than guessing; a wrong
+  savings claim is worse than none.
+- **`onboarding.creditedBy`** — the project id that wipes out the onboarding
+  fee. The credit shows as its own negative line so the prospect sees it.
+
+Then drive it in a browser before sending: move every slider, switch models,
+check the totals and that the coverage line and shortfall warning behave.
+
+### 7. Hand it over
 
 Name the file `<Client_Name>_IT_Proposal.pdf`. Tell the salesperson the monthly
 figure, the plan recommended, and anything left as TBD that they need to fill
@@ -138,13 +177,36 @@ before sending.
 |---|---|
 | `scripts/rates.py` | Reads live pricing out of `/pricing/`. `--json` for parsing |
 | `scripts/render.sh` | HTML → PDF via headless Chromium, no dependencies |
+| `scripts/build_estimate.py` | Generates the private interactive estimate page from a deal JSON |
 | `template/proposal.html` | The four-page branded template |
+| `template/estimate.html` | The config-driven interactive estimate template |
+| `examples/diamond-key.json` | A real worked deal, use as the starting point |
 | `reference/rate-card.md` | Rates, tiers and rules the page cannot express |
 | `reference/voice.md` | How Cloud Guardian writes, and industry framing |
 
+## What we do that a stock MSP proposal does not
+
+Worth actually putting in the proposal, because these are the differences:
+
+- **The prices are published.** A prospect can check every number against
+  cloud-guardian.com/pricing before signing. Say so in the proposal — almost no
+  MSP can.
+- **No three-year lock, no minimum seats, no exit fee.** The industry default is
+  a three-year flat-rate contract. Lead with the contrast.
+- **Support tiers by actual use.** Not one flat per-user rate for everybody.
+  A prospect with four real IT users and twelve people who just need email
+  secured pays for what they use, and the estimate page shows it moving.
+- **Security has a floor and support does not.** Everyone with an account is
+  covered; only the support level varies. The estimate page enforces this with
+  a live coverage check rather than a sentence in the terms.
+- **The assessment is free and the report is theirs** whether they hire us or
+  not.
+- **A savings comparison when we have real numbers.** Set
+  `compare.currentMonthly` from discovery. Never estimate what they pay today.
+
 ## When this is the wrong skill
 
-This builds a first-touch proposal from published rates. It does **not** do a
-side-by-side comparison against what a prospect pays their current provider —
-that needs real discovery data and is a different job. If someone asks for a
-competitive takedown or a savings breakdown, say so rather than half-doing it.
+This builds a first-touch proposal from published rates. If someone wants a
+full competitive takedown built on audited discovery of a current vendor's
+invoices, that is a bigger job than this skill does — the `compare` block gives
+you a single honest savings line, not a teardown.
