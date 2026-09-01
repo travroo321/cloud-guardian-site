@@ -36,7 +36,16 @@
     ],
     "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Every computer and every mailbox is protected to the same Gold standard regardless of tier \u2014 anyone who can reach your Google Workspace can reach company mail and company data, so all of those machines carry the same protection. $25 is the floor for anyone with an account.",
     "escalation": "Add or remove people whenever you need to. That costs nothing in itself \u2014 there is no change fee and no charge to add a user, the only thing that moves is the monthly figure. Switching someone between tiers is different: the service agreement limits tier changes to once every six months, because licensing and the work behind a switch both cost us something and we do not pass that on as a fee. Changes take effect on the first of the following month. For a one-off problem, pay as you go rather than moving someone up a tier.",
-    "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on."
+    "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on.",
+    "ratio": {
+      "fullId": "ft",
+      "partId": "pt",
+      "partPerFull": 5,
+      "minFull": 2,
+      "minFullFrom": 5,
+      "message": "Two full-time users carry up to ten part-time, and part-time cannot reach five without two full-time behind it.",
+      "noneMessage": "Part-time users ride on full-time ones, so you need at least one full-time user before adding any. Pay as you go has no such rule."
+    }
   },
   "hourly": {
     "onsite": 125,

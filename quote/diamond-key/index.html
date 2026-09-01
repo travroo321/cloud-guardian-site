@@ -42,6 +42,10 @@
   .cg-aside{margin:22px 0 0;padding:18px 0 2px;border-top:1px solid rgba(255,255,255,.14)}
   .cg-aside-h{font-weight:700;font-size:1rem;color:#e8f0fe;margin:0 0 2px}
   .cg-aside-h span{font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:.9rem;color:var(--cyan)}
+  .cg-ratio{margin:14px 0 0;padding:11px 14px;border-radius:9px;font-size:.88rem;line-height:1.5;
+    border:1px solid rgba(232,163,61,.5);background:rgba(232,163,61,.10);color:#e8d5b5}
+  .cg-ratio:empty{display:none}
+  .cg-ratio b{color:#e8a33d}
   .cg-cov{margin:16px 0 0;padding:11px 14px;border-radius:9px;font-size:.88rem;line-height:1.5;border:1px solid rgba(255,255,255,.12);color:#93a3b8}
   .cg-cov:empty{display:none}
   .cg-cov b{color:#c3ced9}
@@ -136,7 +140,16 @@
     ],
     "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Every computer and every mailbox is protected to the same Gold standard regardless of tier \u2014 anyone who can reach your Google Workspace can reach company mail and company data, so all of those machines carry the same protection. $25 is the floor for anyone with an account.",
     "escalation": "Add or remove people whenever you need to. That costs nothing in itself \u2014 there is no change fee and no charge to add a user, the only thing that moves is the monthly figure. Switching someone between tiers is different: the service agreement limits tier changes to once every six months, because licensing and the work behind a switch both cost us something and we do not pass that on as a fee. Changes take effect on the first of the following month. For a one-off problem, pay as you go rather than moving someone up a tier.",
-    "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on."
+    "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on.",
+    "ratio": {
+      "fullId": "ft",
+      "partId": "pt",
+      "partPerFull": 5,
+      "minFull": 2,
+      "minFullFrom": 5,
+      "message": "Two full-time users carry up to ten part-time, and part-time cannot reach five without two full-time behind it.",
+      "noneMessage": "Part-time users ride on full-time ones, so you need at least one full-time user before adding any. Pay as you go has no such rule."
+    }
   },
   "hourly": {
     "onsite": 125,
@@ -290,6 +303,7 @@
         });
         sub.push('</div>');
       }
+      sub.push('<div id="cg-ratio" class="cg-ratio"></div>');
       sub.push('<div id="cg-coverage" class="cg-cov"></div>');
       if (D.support.note) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Why everyone is on the list.</strong> ' + esc(D.support.note) + '</p>');
       if (D.support.escalation) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Moving people between tiers.</strong> ' + esc(D.support.escalation) + '</p>');
@@ -471,6 +485,38 @@
     });
   }
 
+  // Part-time seats ride on full-time ones: two full-time carries up to ten
+  // part-time, and part-time cannot reach the ratio's part figure without the
+  // full minimum behind it. Security only sits outside this entirely.
+  var R = (D.support && D.support.ratio) || null;
+  function maxPart(full) {
+    if (!R) return Infinity;
+    if (full <= 0) return 0;
+    if (R.minFull && R.minFullFrom && full < R.minFull) return Math.max(0, R.minFullFrom - 1);
+    return full * R.partPerFull;
+  }
+  function ratioMessage(full, wanted, allowed) {
+    if (!R) return '';
+    if (full <= 0) return R.noneMessage || 'Part-time users ride on full-time ones. Add a full-time user first.';
+    return (R.message || 'There is a ratio on part-time seats.') +
+           ' With ' + full + ' full-time you can have up to ' + allowed + ' part-time.';
+  }
+  function enforceRatio(changedId) {
+    if (!R || !$('cg-' + R.fullId) || !$('cg-' + R.partId)) return '';
+    var full = num('cg-' + R.fullId, 0, 60), part = num('cg-' + R.partId, 0, 60);
+    var allowed = maxPart(full);
+    if (part <= allowed) return '';
+    if (changedId === R.fullId) {
+      // they lowered full-time; bring part-time down with it
+      $('cg-' + R.partId).value = allowed;
+      var pv = $('cg-' + R.partId + '-v'); if (pv) pv.textContent = allowed;
+    } else {
+      $('cg-' + R.partId).value = allowed;
+      var pv2 = $('cg-' + R.partId + '-v'); if (pv2) pv2.textContent = allowed;
+    }
+    return ratioMessage(full, part, allowed);
+  }
+
   function currentModel() {
     var r = host.querySelector('input[name="cg-model"]:checked');
     return r ? r.value : 'undecided';
@@ -592,6 +638,9 @@
       $('cg-save-row').classList.toggle('good', diff > 0);
     }
 
+    var rn = $('cg-ratio');
+    if (rn) { rn.innerHTML = (m === 'tiers' && ratioMsg) ? '<b>2 to 10 ratio.</b> ' + esc(ratioMsg) : ''; }
+
     var cov = $('cg-coverage');
     if (cov) {
       var hasTarget = seats > 0 && !followsUsers;   // a target only exists when seats are set independently
@@ -661,8 +710,17 @@
              rows: rows.concat(oRows), model: m };
   }
 
+  var ratioMsg = '';
   host.querySelectorAll('input[type=range]').forEach(function (el) {
-    el.addEventListener('input', function () { var v = $(el.id + '-v'); if (v) v.textContent = el.value; recalc(); });
+    el.addEventListener('input', function () {
+      var v = $(el.id + '-v'); if (v) v.textContent = el.value;
+      ratioMsg = enforceRatio(el.id.replace(/^cg-/, ''));
+      recalc();
+      if (ratioMsg) {
+        clearTimeout(window.__cgRatioT);
+        window.__cgRatioT = setTimeout(function () { ratioMsg = ''; recalc(); }, 6000);
+      }
+    });
   });
   host.querySelectorAll('input[type=radio],input[type=checkbox]').forEach(function (el) {
     el.addEventListener('change', recalc);

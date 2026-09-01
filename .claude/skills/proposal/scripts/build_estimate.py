@@ -147,6 +147,10 @@ STYLES = """
   .cg-aside{margin:22px 0 0;padding:18px 0 2px;border-top:1px solid rgba(255,255,255,.14)}
   .cg-aside-h{font-weight:700;font-size:1rem;color:#e8f0fe;margin:0 0 2px}
   .cg-aside-h span{font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:.9rem;color:var(--cyan)}
+  .cg-ratio{margin:14px 0 0;padding:11px 14px;border-radius:9px;font-size:.88rem;line-height:1.5;
+    border:1px solid rgba(232,163,61,.5);background:rgba(232,163,61,.10);color:#e8d5b5}
+  .cg-ratio:empty{display:none}
+  .cg-ratio b{color:#e8a33d}
   .cg-cov{margin:16px 0 0;padding:11px 14px;border-radius:9px;font-size:.88rem;line-height:1.5;border:1px solid rgba(255,255,255,.12);color:#93a3b8}
   .cg-cov:empty{display:none}
   .cg-cov b{color:#c3ced9}
