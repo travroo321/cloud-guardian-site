@@ -29,13 +29,13 @@
         "rate": 25,
         "default": 0,
         "hint": "The full security stack, no support included.",
-        "note": "If one of these people does need support, it is pay as you go at our hourly rates for that visit, unless you upgrade them to part-time or full-time. An upgrade starts on the first of the following month.",
+        "note": "If one of these people needs support, pay as you go at our hourly rates for that visit. That is the normal answer and it keeps them at $25 a month. Upgrading them to part-time or full-time is there if someone's needs have genuinely changed, but tier switches are limited to once every six months, so it is worth saving for a real change rather than spending on a one-off fix.",
         "separate": true,
         "blurb": "Not a support plan. These people get the same security stack as everyone else, and nothing else."
       }
     ],
     "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Every computer and every mailbox is protected to the same Gold standard regardless of tier \u2014 anyone who can reach your Google Workspace can reach company mail and company data, so all of those machines carry the same protection. $25 is the floor for anyone with an account.",
-    "escalation": "Move people between the three bars whenever you like. Changes take effect on the first of the following month, and that works in both directions \u2014 people come down a tier, or off entirely, as freely as they go up, and you are never locked into a headcount. Adding or removing someone costs nothing in itself: there is no change fee and no charge to add a user, the only thing that moves is the monthly figure. The one thing that does not work is moving someone up for a fix and straight back down the week after; a tier has to hold for the month it covers.",
+    "escalation": "Add or remove people whenever you need to. That costs nothing in itself \u2014 there is no change fee and no charge to add a user, the only thing that moves is the monthly figure. Switching someone between tiers is different: the service agreement limits tier changes to once every six months, because licensing and the work behind a switch both cost us something and we do not pass that on as a fee. Changes take effect on the first of the following month. For a one-off problem, pay as you go rather than moving someone up a tier.",
     "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on."
   },
   "hourly": {
