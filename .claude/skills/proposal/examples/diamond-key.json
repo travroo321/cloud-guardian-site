@@ -39,10 +39,7 @@
     "onsite": 125,
     "onsiteMin": 1,
     "remote": 125,
-    "remoteStep": 0.5,
-    "blurb": "Use us for whatever you want, whenever you want it \u2014 a project, sorting out your backups, a machine that will not behave, a question you need answered \u2014 and pay only for the hours it takes.",
-    "noteTitle": "Starting here and moving later",
-    "note": "Plenty of clients start here. There is nothing monthly, nothing renewing and nothing to cancel, so you can use us as much or as little as suits you and see how we work before committing to anything. When you are ready, step onto one of the monthly plans and the hourly stops \u2014 that starts on the first of the following month, same as any tier change, and there is no penalty for having waited."
+    "remoteStep": 0.5
   },
   "projects": [
     {
