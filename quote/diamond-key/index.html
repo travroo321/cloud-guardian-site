@@ -10,6 +10,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/assets/cg.css?v=20260831caps" />
 <style>
+  .cg-head{display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:18px 6vw;border-bottom:1px solid rgba(255,255,255,.10);background:var(--black)}
+  .cg-head img{height:64px;width:auto;display:block}
+  .cg-head-tel{font-family:'IBM Plex Mono',monospace;font-size:1rem;color:var(--cyan);
+    text-decoration:none;border:1px solid rgba(0,212,255,.45);border-radius:8px;padding:9px 16px;white-space:nowrap}
+  .cg-head-tel:hover{background:rgba(0,212,255,.10)}
+  .cg-foot{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
+    padding:26px 6vw;border-top:1px solid rgba(255,255,255,.10);
+    color:#7a9bbf;font-size:.85rem;line-height:1.7;background:var(--black)}
+  .cg-foot strong{color:#c3ced9}
+  .cg-foot a{color:var(--cyan);text-decoration:none}
+  .cg-foot-r{text-align:right}
+  @media (max-width:560px){
+    .cg-head{padding:14px 5vw}
+    .cg-head img{height:48px}
+    .cg-head-tel{font-size:.85rem;padding:7px 11px}
+    .cg-foot-r{text-align:left}
+  }
   .cg-opt{display:block;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:border-color .18s,background .18s}
   .cg-opt:hover{border-color:rgba(0,212,255,.45)}
   .cg-opt.on{border-color:var(--cyan);background:rgba(0,212,255,.06)}
@@ -55,103 +73,11 @@
 </style>
 </head>
 <body>
-<nav>
-  <a class="nav-logo" href="/" aria-label="Cloud Guardian home">
-    <img src="/assets/cg-logo-nav.png?v=20260831d" alt="Cloud Guardian" style="height:72px;width:auto;display:block;" />
-  </a>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <div class="has-dropdown">
-      <a href="/services/itservices/">Services</a>
-      <div class="nav-dropdown">
-        <a href="/services/itservices/">Managed IT Services</a>
-        <a href="/pricing/">Small Business Plan</a>
-        <a href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
-        <a href="/services/business-technology/">Business Technology & vCIO</a>
-        <a href="/services/digital-presence/">Website & AI Search Visibility</a>
-        <a href="/services/vcio/">vCIO & Fractional IT Leadership</a>
-        <a href="/services/it-consulting/">IT Cost Consulting</a>
-        <a href="/services/ai-support-agent/">AI Support Agent</a>
-        <a href="/services/iso-42001/">ISO/IEC 42001 AIMS</a>
-        <a href="/services/structured-cabling/">Structured Cabling</a>
-        <a href="/services/voip/">VoIP Phone Systems</a>
-        <a href="/services/wireless-site-survey/">Wireless Site Survey</a>
-        <a href="/services/email-migrations/">Email & Cloud Migrations</a>
-        <a href="/services/managed-security-soc/">24/7 SOC & MSSP</a>
-      </div>
-    </div>
-    <div class="has-dropdown">
-      <a href="/industries/">Industries</a>
-      <div class="nav-dropdown">
-        <a href="/industries/"><strong>All Industries</strong></a>
-        <a href="/industries/law-firms/">Law Firms &amp; Legal</a>
-        <a href="/industries/healthcare/">Healthcare &amp; Dental</a>
-        <a href="/industries/accounting-finance/">Accounting &amp; Financial</a>
-        <a href="/industries/construction/">Construction &amp; Trades</a>
-        <a href="/industries/manufacturing-warehouse/">Manufacturing &amp; Warehouse</a>
-        <a href="/industries/real-estate/">Real Estate &amp; Property</a>
-        <a href="/industries/nonprofits/">Nonprofits &amp; Associations</a>
-        <a href="/industries/education/">Schools &amp; Education</a>
-        <a href="/industries/local-government/">Local Government &amp; Public Sector</a>
-        <a href="/industries/hospitality-retail/">Hospitality &amp; Retail</a>
-      </div>
-    </div>
-    <a href="/pricing/" class="active">Pricing</a>
-    <a href="/service-areas/">Locations</a>
-    <div class="has-dropdown">
-      <a href="/support/">Support</a>
-      <div class="nav-dropdown">
-        <a href="/support/">Support Portal</a>
-        <a href="/free-assessment/">Free Assessment</a>
-        <a href="/blog/">Blog &amp; Insights</a>
-      </div>
-    </div>
-    <a href="/about/">About</a>
-    <a href="/contact/">Contact</a>
-  </div>
-  <a class="nav-cta" href="tel:+17327435472">(732) 743-5472</a>
-  <button class="nav-burger" aria-label="Open menu" onclick="document.getElementById('mobileMenu').classList.toggle('open')">☰</button>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="/">Home</a>
-  <a href="/about/">About Us</a>
-  <div class="mm-label">Services</div>
-  <a class="mm-sub" href="/services/itservices/">Managed IT Services</a>
-  <a class="mm-sub" href="/pricing/">Small Business Plan</a>
-  <a class="mm-sub" href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
-  <a class="mm-sub" href="/services/business-technology/">Business Technology & vCIO</a>
-  <a class="mm-sub" href="/services/digital-presence/">Website & AI Search Visibility</a>
-  <a class="mm-sub" href="/services/vcio/">vCIO & Fractional IT Leadership</a>
-  <a class="mm-sub" href="/services/it-consulting/">IT Cost Consulting</a>
-  <a class="mm-sub" href="/services/ai-support-agent/">AI Support Agent</a>
-  <a class="mm-sub" href="/services/iso-42001/">ISO/IEC 42001 AIMS</a>
-  <a class="mm-sub" href="/services/structured-cabling/">Structured Cabling</a>
-  <a class="mm-sub" href="/services/voip/">VoIP Phone Systems</a>
-  <a class="mm-sub" href="/services/wireless-site-survey/">Wireless Site Survey</a>
-  <a class="mm-sub" href="/services/email-migrations/">Email & Cloud Migrations</a>
-  <a class="mm-sub" href="/services/managed-security-soc/">24/7 SOC & MSSP</a>
-  <div class="mm-label">Industries</div>
-  <a class="mm-sub" href="/industries/">All Industries</a>
-  <a class="mm-sub" href="/industries/law-firms/">Law Firms &amp; Legal</a>
-  <a class="mm-sub" href="/industries/healthcare/">Healthcare &amp; Dental</a>
-  <a class="mm-sub" href="/industries/accounting-finance/">Accounting &amp; Financial</a>
-  <a class="mm-sub" href="/industries/construction/">Construction &amp; Trades</a>
-  <a class="mm-sub" href="/industries/manufacturing-warehouse/">Manufacturing &amp; Warehouse</a>
-  <a class="mm-sub" href="/industries/real-estate/">Real Estate &amp; Property</a>
-  <a class="mm-sub" href="/industries/nonprofits/">Nonprofits &amp; Associations</a>
-  <a class="mm-sub" href="/industries/education/">Schools &amp; Education</a>
-  <a class="mm-sub" href="/industries/local-government/">Local Government &amp; Public Sector</a>
-  <a class="mm-sub" href="/industries/hospitality-retail/">Hospitality &amp; Retail</a>
-  <div class="mm-label">Support</div>
-  <a class="mm-sub" href="/support/">Support Portal</a>
-  <a class="mm-sub" href="/free-assessment/">Free Assessment</a>
-  <a class="mm-sub" href="/blog/">Blog &amp; Insights</a>
-  <a href="/pricing/" class="active">Pricing</a>
-  <a href="/service-areas/">Locations</a>
-  <a href="/contact/">Contact</a>
-  <a href="tel:+17327435472" style="color:var(--cyan)">📞 (732) 743-5472</a>
-</div>
 
+<header class="cg-head">
+  <img src="/assets/cg-logo-nav.png?v=20260831d" alt="Cloud Guardian" />
+  <a class="cg-head-tel" href="tel:+17327435472">(732) 743-5472</a>
+</header>
 
 <!-- CLOUD GUARDIAN PRIVATE ESTIMATE BUILDER — generated by the proposal skill.
      Everything on this page is driven by the JSON in #cg-deal below. To change
@@ -615,83 +541,18 @@
 })();
 </script>
 
-<footer>
-  <div class="foot-nap">
-    <div class="nap-block">
-      <span itemscope itemtype="https://schema.org/ProfessionalService">
-        <strong itemprop="name">Cloud Guardian LLC</strong>
-        <span class="nap-line" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-          <span itemprop="streetAddress">643 Georges Rd</span>,
-          <span itemprop="addressLocality">North Brunswick</span>,
-          <span itemprop="addressRegion">NJ</span>
-          <span itemprop="postalCode">08902</span>
-        </span>
-        <span class="nap-line">
-          <a href="tel:+17327435472" itemprop="telephone">(732) 743-5472</a>
-          &nbsp;·&nbsp;
-          <a href="mailto:sales@cloud-guardian.com" itemprop="email">sales@cloud-guardian.com</a>
-        </span>
-        <span class="nap-line">Headquarters in North Brunswick, NJ · Onsite across New Jersey, New York and the Tri-State area · Remote and dispatched field techs nationwide · 24/7/365</span>
-      </span>
-    </div>
-    <div class="hq-card">
-      <img src="/assets/hq.jpg?v=20260801b" alt="Cloud Guardian LLC headquarters at 643 Georges Rd, North Brunswick Township, New Jersey" loading="lazy" width="440" height="248" />
-      <span class="hq-cap"><span class="hq-pin">📍</span> Headquarters · 643 Georges Rd, North Brunswick, NJ 08902</span>
-    </div>
-    <div class="foot-cols">
-      <div class="foot-col">
-        <h4>Services</h4>
-        <a href="/services/itservices/">Managed IT Services</a>
-        <a href="/services/cybersecurity-audit/">Cybersecurity Audit</a>
-        <a href="/services/business-technology/">Business Technology &amp; vCIO</a>
-        <a href="/services/digital-presence/">Website &amp; AI Search Visibility</a>
-        <a href="/services/it-consulting/">IT Cost Consulting</a>
-        <a href="/services/email-migrations/">Email &amp; Cloud Migrations</a>
-        <a href="/services/structured-cabling/">Structured Cabling</a>
-        <a href="/services/voip/">VoIP Phone Systems</a>
-        <a href="/services/wireless-site-survey/">Wireless Site Survey</a>
-      </div>
-      <div class="foot-col">
-        <h4>Industries</h4>
-        <a href="/industries/law-firms/">Law Firms</a>
-        <a href="/industries/healthcare/">Healthcare &amp; Dental</a>
-        <a href="/industries/accounting-finance/">Accounting &amp; Finance</a>
-        <a href="/industries/manufacturing-warehouse/">Manufacturing &amp; Warehouse</a>
-        <a href="/industries/local-government/">Local Government</a>
-        <a href="/industries/">All 10 Industries</a>
-      </div>
-      <div class="foot-col">
-        <h4>Service Areas</h4>
-        <a href="/service-areas/new-brunswick-nj/">New Brunswick, NJ</a>
-        <a href="/service-areas/edison-nj/">Edison, NJ</a>
-        <a href="/service-areas/piscataway-nj/">Piscataway, NJ</a>
-        <a href="/service-areas/south-brunswick-nj/">South Brunswick, NJ</a>
-        <a href="/service-areas/princeton-nj/">Princeton, NJ</a>
-        <a href="/service-areas/jersey-city-nj/">Jersey City, NJ</a>
-        <a href="/service-areas/newark-nj/">Newark, NJ</a>
-        <a href="/service-areas/">All 53 Markets &amp; Counties</a>
-      </div>
-      <div class="foot-col">
-        <h4>Support &amp; Company</h4>
-        <a href="/">Home</a>
-        <a href="/pricing/">Pricing &amp; Instant Estimate</a>
-        <a href="/support/">Client Support Portal</a>
-        <a href="/services/managed-security-soc/">24/7 SOC &amp; MSSP</a>
-        <a href="/services/business-technology/">Business Technology &amp; vCIO</a>
-        <a href="/about/">About Us</a>
-        <a href="/blog/">Blog</a>
-        <a href="/free-assessment/">Free Assessment</a>
-        <a href="/contact/">Contact</a>
-        <a href="/terms/">Terms of Service</a>
-        <a href="/privacy/">Privacy Policy</a>
-        <a href="/agreement/">Services Agreement</a>
-      </div>
-    </div>
+
+<footer class="cg-foot">
+  <div>
+    <strong>Cloud Guardian LLC</strong><br />
+    643 Georges Rd, North Brunswick, NJ 08902
   </div>
-  <div class="foot-bar">
-    <p>© 2026 Cloud Guardian · IT Managed Services, Cybersecurity &amp; IT Consulting · 643 Georges Rd, North Brunswick Township, NJ 08902 · All Rights Reserved</p>
+  <div class="cg-foot-r">
+    <a href="tel:+17327435472">(732) 743-5472</a><br />
+    <a href="mailto:sales@cloud-guardian.com">sales@cloud-guardian.com</a>
   </div>
 </footer>
+
 <script src="/assets/cg.js?v=20260831caps" defer></script>
 </body>
 </html>

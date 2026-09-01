@@ -61,8 +61,13 @@ Minimal deal.json:
         ]
       },
       "compare": {"currentMonthly": 0, "label": "current provider",
-                  "includeLicensing": false}
+                  "includeLicensing": false},
+      "chrome": "minimal"
     }
+
+"chrome" defaults to "minimal": logo and phone number only, and a footer with
+just the address and contact details. A prospect on a quote page should not be
+one click from the blog. Set it to "full" to keep the whole site nav and footer.
 
 Omit any block to leave that section off the page.
 """
@@ -79,7 +84,45 @@ ROOT = os.path.abspath(os.path.join(SKILL, "..", "..", ".."))
 PRICING = os.path.join(ROOT, "pricing", "index.html")
 TEMPLATE = os.path.join(SKILL, "template", "estimate.html")
 
+MINIMAL_HEADER = """
+<header class="cg-head">
+  <img src="/assets/cg-logo-nav.png?v=20260831d" alt="Cloud Guardian" />
+  <a class="cg-head-tel" href="tel:+17327435472">(732) 743-5472</a>
+</header>
+"""
+
+MINIMAL_FOOTER = """
+<footer class="cg-foot">
+  <div>
+    <strong>Cloud Guardian LLC</strong><br />
+    643 Georges Rd, North Brunswick, NJ 08902
+  </div>
+  <div class="cg-foot-r">
+    <a href="tel:+17327435472">(732) 743-5472</a><br />
+    <a href="mailto:sales@cloud-guardian.com">sales@cloud-guardian.com</a>
+  </div>
+</footer>
+"""
+
 STYLES = """
+  .cg-head{display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:18px 6vw;border-bottom:1px solid rgba(255,255,255,.10);background:var(--black)}
+  .cg-head img{height:64px;width:auto;display:block}
+  .cg-head-tel{font-family:'IBM Plex Mono',monospace;font-size:1rem;color:var(--cyan);
+    text-decoration:none;border:1px solid rgba(0,212,255,.45);border-radius:8px;padding:9px 16px;white-space:nowrap}
+  .cg-head-tel:hover{background:rgba(0,212,255,.10)}
+  .cg-foot{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;
+    padding:26px 6vw;border-top:1px solid rgba(255,255,255,.10);
+    color:#7a9bbf;font-size:.85rem;line-height:1.7;background:var(--black)}
+  .cg-foot strong{color:#c3ced9}
+  .cg-foot a{color:var(--cyan);text-decoration:none}
+  .cg-foot-r{text-align:right}
+  @media (max-width:560px){
+    .cg-head{padding:14px 5vw}
+    .cg-head img{height:48px}
+    .cg-head-tel{font-size:.85rem;padding:7px 11px}
+    .cg-foot-r{text-align:left}
+  }
   .cg-opt{display:block;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:border-color .18s,background .18s}
   .cg-opt:hover{border-color:rgba(0,212,255,.45)}
   .cg-opt.on{border-color:var(--cyan);background:rgba(0,212,255,.06)}
@@ -152,8 +195,17 @@ def main():
     css = re.search(r'<link rel="stylesheet" href="[^"]*cg\.css[^"]*" />', live).group(0)
     fonts = re.search(r'<link href="https://fonts\.googleapis\.com[^"]*" rel="stylesheet" />', live).group(0)
     js = re.search(r'<script src="[^"]*cg\.js[^"]*" defer></script>', live).group(0)
-    nav = slab(live, r"<nav>", r"</div>\s*(?=\n<section)")
-    footer = slab(live, r"<footer>", r"</footer>")
+
+    # A private quote is not a place to advertise the rest of the site. The
+    # default strips the site nav and the footer link columns so the only ways
+    # off the page are calling us or sending the estimate back. Set
+    # "chrome": "full" in the deal to keep the whole site shell instead.
+    if deal.get("chrome") == "full":
+        nav = slab(live, r"<nav>", r"</div>\s*(?=\n<section)")
+        footer = slab(live, r"<footer>", r"</footer>")
+    else:
+        nav = MINIMAL_HEADER
+        footer = MINIMAL_FOOTER
 
     body = io.open(TEMPLATE, encoding="utf-8").read()
     body = body.replace("{{DEAL_JSON}}", json.dumps(deal, indent=2))
