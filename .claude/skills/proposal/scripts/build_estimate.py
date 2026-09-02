@@ -192,6 +192,9 @@ STYLES = """
     border-radius:8px;background:rgba(0,212,255,.05)}
   .cg-prep{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4}
   .cg-dl{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4;text-align:center}
+  /* the headline total is a big number; when it is words instead, shrink it */
+  .cg-tot.big b.cg-words{font-size:1.05rem;letter-spacing:0;line-height:1.3;text-align:right;white-space:nowrap}
+  @media (max-width:560px){.cg-tot.big b.cg-words{font-size:.92rem}}
   /* btn-primary and btn-outline were written for links; on a <button> the
      browser's own white background bleeds through, so both are painted here.
      Sending the estimate back is the loud action, downloading is the quiet one. */
