@@ -4,7 +4,7 @@
   "intro": "These are the rates we discussed, laid out so you can pick what you actually want and see the number move. Nothing here is a commitment. Choose your options, add any questions for our follow-up meeting, and send it back to us.",
   "support": {
     "title": "Monthly user unlimited support",
-    "blurb": "Flat monthly number. Call as often as you need, no clock running, no per-ticket charges. Put each person on the tier that matches how much they actually use IT. Every tier carries the same security stack, so the only thing that changes between them is how much support is included. A one-time $200 onboarding fee applies, and it is credited off in full if we are also doing your email migration.",
+    "blurb": "Flat monthly number. Call as often as you need, no clock running, no per-ticket charges. Put each person on the tier that matches how much they actually use IT. Every tier includes cybersecurity protection on all supported endpoints and email, so the only thing that changes between them is how much support is included. A one-time $200 onboarding fee applies, and it is credited off in full if we are also doing your email migration.",
     "tiers": [
       {
         "id": "ft",
@@ -20,7 +20,7 @@
         "short": "part-time",
         "rate": 50,
         "default": 0,
-        "hint": "Full security, and support there if they ever need it."
+        "hint": "Cybersecurity protection on their endpoint and their email, and support there if they ever need it."
       },
       {
         "id": "sec",
@@ -28,15 +28,15 @@
         "short": "security only",
         "rate": 25,
         "default": 0,
-        "hint": "The full security stack, no support included.",
+        "hint": "Cybersecurity protection on their endpoint and their email, no support included.",
         "note": "If one of these people needs support, pay as you go at our hourly rates for that visit. That is the normal answer and it keeps them at $25 a month. Upgrading them to part-time or full-time is there if someone's needs have genuinely changed, but tier switches are limited to once every six months, so it is worth saving for a real change rather than spending on a one-off fix.",
         "separate": true,
-        "blurb": "Not a support plan. These people get the same security stack as everyone else, and nothing else."
+        "blurb": "Not a support plan. These people get the same endpoint and email cybersecurity protection as everyone else, and nothing else."
       }
     ],
-    "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Every computer and every mailbox is protected to the same Gold standard regardless of tier \u2014 anyone who can reach your Google Workspace can reach company mail and company data, so all of those machines carry the same protection. $25 is the floor for anyone with an account.",
+    "note": "Support is the part that scales down, which is what the $50 and $25 tiers do. Security does not scale down. Every supported endpoint and every mailbox carries the same cybersecurity protection regardless of tier \u2014 anyone who can reach your Google Workspace can reach company mail and company data, so all of those machines carry the same protection. $25 is the floor for anyone with an account.",
     "escalation": "Add or remove people whenever you need to. That costs nothing in itself \u2014 there is no change fee and no charge to add a user, the only thing that moves is the monthly figure. Switching someone between tiers is different: the service agreement limits tier changes to once every six months, because licensing and the work behind a switch both cost us something and we do not pass that on as a fee. Changes take effect on the first of the following month. For a one-off problem, pay as you go rather than moving someone up a tier.",
-    "coveredNote": "Every computer and every mailbox is protected to the same Gold standard, whichever tier the person sits on.",
+    "coveredNote": "Every supported endpoint and every mailbox carries the same cybersecurity protection, whichever tier the person sits on.",
     "ratio": {
       "fullId": "ft",
       "partId": "pt",
@@ -50,7 +50,7 @@
     "onsiteMin": 1,
     "remote": 125,
     "remoteStep": 0.5,
-    "exclusionNote": "Pay as you go buys hours, not protection. There is no security stack on the machines and no mailbox protection with it \u2014 that comes with the monthly plan. Hourly is the right answer for projects and fixes, and you can move onto a plan whenever you want the coverage."
+    "exclusionNote": "Pay as you go buys hours, not protection. There is no endpoint cybersecurity protection and no email protection with it \u2014 that comes with the monthly plan. Hourly is the right answer for projects and fixes, and you can move onto a plan whenever you want the coverage."
   },
   "projects": [
     {
@@ -102,5 +102,5 @@
     "followsUsers": true
   },
   "excludes": "Third-party email licensing \u2014 your Google Workspace or Microsoft 365 seats \u2014 is billed by the vendor, not by us. Hardware is not included. Project work outside what you picked, such as wiring and cabling or a server build, is quoted per project or billed at our hourly rates, and what it costs depends on the scope of the job and the skills it needs. All of it is quoted before any work happens, so nothing arrives on an invoice you have not already seen.",
-  "includes": "Every user on the monthly plan gets the full cybersecurity and computer protection, whichever tier they sit on \u2014 full-time, part-time or security only. The tooling and its licensing are in the per-user price, so there is nothing further to buy for it. Pay as you go is the one exception: it buys hours, not protection."
+  "includes": "Every user on the monthly plan gets cybersecurity protection on their supported endpoint and on their email, whichever tier they sit on \u2014 full-time, part-time or security only. The tooling and its licensing are in the per-user price, so there is nothing further to buy for it. Pay as you go is the one exception: it buys hours, not protection."
 }
