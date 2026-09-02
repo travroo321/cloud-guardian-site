@@ -87,6 +87,15 @@
     border-radius:8px;background:rgba(0,212,255,.05)}
   .cg-prep{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4}
   .cg-dl{margin:8px 0 0;font-size:.82rem;line-height:1.55;color:#8fa0b4;text-align:center}
+  /* the long explanations fold away: header visible, body on click. Inherits the
+     site's own details styling, including the + that rotates into a cross. */
+  .cg-folds{margin:16px 0 0;border:1px solid var(--border);border-radius:10px;padding:0 14px;background:rgba(8,12,18,.4)}
+  .cg-folds details{border-bottom:1px solid var(--border);padding:13px 0}
+  .cg-folds details:last-child{border-bottom:none}
+  .cg-folds summary{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:#c3ced9}
+  .cg-folds details[open] summary{color:var(--white)}
+  .cg-folds summary:hover{color:var(--cyan)}
+  .cg-folds details p{font-size:.86rem;color:#8fa0b4;line-height:1.65;padding:10px 26px 2px 0;margin:0}
   /* the headline total is a big number; when it is words instead, shrink it */
   .cg-tot.big b.cg-words{font-size:1.05rem;letter-spacing:0;line-height:1.3;text-align:right;white-space:nowrap}
   @media (max-width:560px){.cg-tot.big b.cg-words{font-size:.92rem}}
@@ -323,8 +332,16 @@
         sub.push('</div>');
       }
       sub.push('<div id="cg-coverage" class="cg-cov"></div>');
-      if (D.support.note) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Why everyone is on the list.</strong> ' + esc(D.support.note) + '</p>');
-      if (D.support.escalation) sub.push('<p class="cg-note"><strong style="color:#c3ced9">Moving people between tiers.</strong> ' + esc(D.support.escalation) + '</p>');
+      function fold(title, body) {
+        return '<details class="cg-fold"><summary>' + esc(title) + '</summary>' +
+               '<p>' + esc(body) + '</p></details>';
+      }
+      if (D.support.note || D.support.escalation) {
+        sub.push('<div class="cg-folds">');
+        if (D.support.note) sub.push(fold('Why everyone is on the list', D.support.note));
+        if (D.support.escalation) sub.push(fold('Moving people between tiers', D.support.escalation));
+        sub.push('</div>');
+      }
       sub.push('</div>');
       f.push(sub.join(''));
     }
