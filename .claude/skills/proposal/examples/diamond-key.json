@@ -41,8 +41,8 @@
       "fullId": "ft",
       "partId": "pt",
       "partPerFull": 5,
-      "message": "Part-time seats run two full-time to ten part-time, so each full-time user carries up to five part-time.",
-      "noneMessage": "Part-time users ride on full-time ones, so you need at least one full-time user before adding any. Pay as you go has no such rule."
+      "message": "Each full-time user carries up to five part-time.",
+      "noneMessage": "Add a full-time user first. Part-time seats ride on full-time ones."
     }
   },
   "hourly": {
