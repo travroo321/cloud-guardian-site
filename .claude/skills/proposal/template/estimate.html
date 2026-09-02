@@ -239,10 +239,12 @@
   o.push('<div class="sq-break" id="cg-break"></div>');
   if (D.licensing && D.licensing.enabled !== false)
     o.push('<div class="cg-google" id="cg-google" hidden></div>');
+  // Same fold as the tier notes: the header stays, the body opens on a click.
+  // The two keep their colours so includes still reads cyan and excludes amber.
   if (D.includes)
-    o.push('<div class="cg-incl"><b>What every user gets.</b> ' + esc(D.includes) + '</div>');
-  o.push('<div class="cg-excl"><b>What this excludes.</b> ' + esc(D.excludes ||
-    'Third-party email licensing is not included in our pricing. Hardware, cabling and any project work outside what you picked is quoted separately, always before the work happens.') + '</div>');
+    o.push('<details class="cg-incl"><summary>What every user gets</summary><p>' + esc(D.includes) + '</p></details>');
+  o.push('<details class="cg-excl"><summary>What this excludes</summary><p>' + esc(D.excludes ||
+    'Third-party email licensing is not included in our pricing. Hardware, cabling and any project work outside what you picked is quoted separately, always before the work happens.') + '</p></details>');
   o.push('<p class="sq-note">This is an estimate, not an invoice. Hourly work is tracked to the minute and itemized. We confirm the real number with you after a free look at what you have, and nothing gets billed that you have not already seen.</p>');
   o.push('<div class="cg-noprint"><div class="sq-contact" style="display:block">' +
     '<label for="cg-name">Your name</label><input type="text" id="cg-name" autocomplete="name" />' +
