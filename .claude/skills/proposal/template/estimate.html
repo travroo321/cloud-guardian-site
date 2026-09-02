@@ -143,17 +143,10 @@
              '-hour minimum, then bill hourly. Remote break/fix bills in ' + Math.round((h.remoteStep || 0.5) * 60) +
              '-minute increments, so ' + (h.remoteStep === 0.5 ? 'a half hour' : (h.remoteStep + ' of an hour')) +
              ' is ' + money(h.remote * (h.remoteStep || 0.5)) + '.</span></span></span></label>' +
-             '<div class="cg-sub" id="cg-hourly-fields" hidden>' +
-             '<div class="sq-field"><label for="cg-visits">Onsite visits in a typical month <span class="sq-val" id="cg-visits-v">1</span></label>' +
-             '<input type="range" class="sq-range" id="cg-visits" min="0" max="12" value="1" step="1" /></div>' +
-             '<div class="sq-field"><label for="cg-vhrs">Hours per onsite visit <span class="sq-val" id="cg-vhrs-v">2</span></label>' +
-             '<input type="range" class="sq-range" id="cg-vhrs" min="1" max="8" value="2" step="1" />' +
-             '<span class="sq-hint">' + (h.onsiteMin || 1) + '-hour minimum per visit at $' + h.onsite + ' an hour.</span></div>' +
-             '<div class="sq-field"><label for="cg-rem">Remote hours in a typical month <span class="sq-val" id="cg-rem-v">2</span></label>' +
-             '<input type="range" class="sq-range" id="cg-rem" min="0" max="20" value="2" step="' + (h.remoteStep || 0.5) + '" />' +
-             '<span class="sq-hint">Billed in ' + Math.round((h.remoteStep || 0.5) * 60) + '-minute blocks, ' + money(h.remote * (h.remoteStep || 0.5)) + ' each.</span></div>' +
-             (h.note ? '<p class="cg-note"><strong style="color:#c3ced9">' + esc(h.noteTitle || 'Starting here and moving later') +
-                       '.</strong> ' + esc(h.note) + '</p>' : '') + '</div>');
+             (h.note ? '<div class="cg-sub" id="cg-hourly-fields" hidden>' +
+                       '<p class="cg-note" style="margin-top:0"><strong style="color:#c3ced9">' +
+                       esc(h.noteTitle || 'Starting here and moving later') + '.</strong> ' +
+                       esc(h.note) + '</p></div>' : ''));
     }
 
     f.push('<label class="cg-opt" id="cg-opt-none"><span class="cg-opt-head">' +
@@ -338,11 +331,12 @@
       if (pu > 0) { monthly += pu * pkg.rate; rows.push([esc(pkg.name) + ', ' + pu + ' user' + (pu === 1 ? '' : 's') + ' x $' + pkg.rate, pu * pkg.rate]); }
       else rows.push(['No users on the plan yet', 0]);
     } else if (m === 'hourly') {
+      // No monthly figure to compute: there is no retainer and we are not going
+      // to guess how many hours a year will need. The rates are the estimate.
       var h = D.hourly;
-      var visits = num('cg-visits', 0, 12), vhrs = Math.max(h.onsiteMin || 1, num('cg-vhrs', 1, 8)), rem = num('cg-rem', 0, 20);
-      if (visits > 0) { monthly += visits * vhrs * h.onsite; rows.push(['Onsite, ' + visits + ' visit' + (visits === 1 ? '' : 's') + ' x ' + vhrs + ' hr x $' + h.onsite, visits * vhrs * h.onsite]); }
-      if (rem > 0) { monthly += rem * h.remote; rows.push(['Remote break/fix, ' + rem + ' hr x $' + h.remote, rem * h.remote]); }
-      if (!visits && !rem) rows.push(['Nothing estimated for a typical month', 0]);
+      rows.push(['Onsite, $' + h.onsite + ' an hour, ' + (h.onsiteMin || 1) + '-hour minimum per visit', 'as used']);
+      rows.push(['Remote break/fix, $' + h.remote + ' an hour in ' +
+                 Math.round((h.remoteStep || 0.5) * 60) + '-minute blocks', 'as used']);
     } else {
       rows.push(['Ongoing support, to be decided on the call', 0]);
     }
@@ -396,7 +390,11 @@
     }
 
     monthly = +monthly.toFixed(2); once = +once.toFixed(2); lic = +lic.toFixed(2);
-    $('cg-monthly').textContent = money(monthly);
+    // Pay as you go has no monthly figure at all; "$0" would read as a claim
+    // that the month is free rather than that there is nothing on retainer.
+    var noRetainer = (m === 'hourly' && monthly === 0);
+    $('cg-monthly').textContent = noRetainer ? 'No monthly fee' : money(monthly);
+    $('cg-monthly').classList.toggle('cg-words', noRetainer);
     $('cg-once').textContent = money(once);
 
     // The vendor's bill is not ours. It gets its own block, its own colour and
@@ -524,7 +522,9 @@
     var picked = [];
     if (q.model === 'tiers') (D.support.tiers || []).forEach(function (t) { picked.push(num('cg-' + t.id, 0, t.max || 60) + ' x ' + t.label + ' ($' + t.rate + ')'); });
     else if (q.model === 'package') picked.push(pkg.name + ': ' + num('cg-pkgu', 0, 60) + ' users x $' + pkg.rate);
-    else if (q.model === 'hourly') picked.push('Pay as you go: ' + num('cg-visits', 0, 12) + ' visit(s) x ' + num('cg-vhrs', 1, 8) + ' hr onsite, ' + num('cg-rem', 0, 20) + ' remote hr');
+    else if (q.model === 'hourly') picked.push('Pay as you go: $' + D.hourly.onsite + '/hr onsite (' +
+      (D.hourly.onsiteMin || 1) + '-hour minimum), $' + D.hourly.remote + '/hr remote in ' +
+      Math.round((D.hourly.remoteStep || 0.5) * 60) + '-minute blocks. Billed as used.');
     else picked.push('Undecided');
     return picked;
   }
@@ -630,7 +630,7 @@
       q.mRows.forEach(function (r) { row(r[0], typeof r[1] === 'number' ? money(r[1]) : r[1], false); });
       doc.setDrawColor(224, 230, 238); doc.setLineWidth(1);
       doc.line(x - 2, iy - 11, W - x + 2, iy - 11);
-      row('Cloud Guardian, per month', money(q.monthly), true, true);
+      row('Cloud Guardian, per month', (q.model === 'hourly' && !q.monthly) ? 'No monthly fee' : money(q.monthly), true, true);
       if (q.oRows.length) {
         q.oRows.forEach(function (r) { row(r[0], typeof r[1] === 'number' ? money(r[1]) : r[1], false); });
         doc.setDrawColor(224, 230, 238); doc.setLineWidth(1);
@@ -704,7 +704,7 @@
     var q = recalc(), picked = pickedList(q);
     var proj = pickedProjects();
     var body = {
-      _subject: 'ESTIMATE - ' + D.client + ' - ' + money(q.monthly) + '/mo' + (q.once ? ' + ' + money(q.once) + ' one time' : ''),
+      _subject: 'ESTIMATE - ' + D.client + ' - ' + (q.model === 'hourly' && !q.monthly ? 'pay as you go' : money(q.monthly) + '/mo') + (q.once ? ' + ' + money(q.once) + ' one time' : ''),
       name: ($('cg-name').value || '').trim(), contact: reach, company: D.client,
       support: picked.join('; '), one_time: proj.length ? proj.join('; ') : 'none',
       onboarding: (D.onboarding && (q.model === 'tiers' || q.model === 'package')) ? ('$' + D.onboarding.fee + (proj.length && D.onboarding.creditedBy ? ', credited off' : '')) : 'n/a',
