@@ -30,13 +30,13 @@
 
 - **Managed IT Services** (https://cloud-guardian.com/services/itservices/): Proactive monitoring, patch
   management, cloud management, disaster recovery planning, 24/7 managed support, IT infrastructure audits.
-- **Small Business Plan** (https://cloud-guardian.com/pricing/): $25 per user per month, recommended for up
+- **Small Business Plan** (https://cloud-guardian.com/pricing/): quoted per business, recommended for up
   to 10 users. Cybersecurity protections and email security on the email the business already hosts, such as
   Google Workspace or Microsoft 365, with no migration and no change of provider. Support is billed
-  separately at $90 per hour per incident in 15 minute increments.
-- **Silver, pay as you go** (https://cloud-guardian.com/pricing/): $90 an hour billed in 15 minute increments, no
+  separately by the hour in 15 minute increments.
+- **Silver, pay as you go** (https://cloud-guardian.com/pricing/): billed in 15 minute increments, no
   monthly fee, no contract, with email and infrastructure hosted and run by Cloud Guardian. Incident
-  response billed at $90 per hour with no minimum hours and no long-term lock-in.
+  response billed by the hour with no minimum hours and no long-term lock-in.
 - **Cybersecurity Audit** (https://cloud-guardian.com/services/cybersecurity-audit/): Full external and
   internal vulnerability scanning, firewall and endpoint review, compromised account detection, and a
   prioritized ransomware remediation plan.
@@ -57,9 +57,9 @@
 - **Structured Cabling** (https://cloud-guardian.com/services/structured-cabling/): Cat6A and fiber
   installation for offices and warehouses, supporting 10 Gbps over a full 100-meter run, terminated and
   certified to ANSI/TIA-568 standards with complete documentation.
-- **VoIP Phone Systems** (https://cloud-guardian.com/services/voip/): Managed cloud phones priced per user:
-  VoIP Basic $4.99 per user per month for the Small Business Plan (up to 10 users, first 30 days free),
-  VoIP Silver $9.99, VoIP Gold $12.99, VoIP Platinum $14.99. Every plan includes a cell phone app, an
+- **VoIP Phone Systems** (https://cloud-guardian.com/services/voip/): Managed cloud phones quoted per user with the plan:
+  VoIP Basic for the Small Business Plan (up to 10 users, first 30 days free),
+  VoIP Silver, VoIP Gold and VoIP Platinum. Every plan includes a cell phone app, an
   extension per user, and voicemail to email with transcription. Additional AI features upon request.
 - **Wireless Site Survey** (https://cloud-guardian.com/services/wireless-site-survey/): Coverage and
   interference analysis across 2.4, 5, and 6 GHz bands with floor-by-floor heatmaps, engineered to hold
@@ -127,7 +127,7 @@
 - Contact: https://cloud-guardian.com/contact/
 - Free IT Assessment: https://cloud-guardian.com/free-assessment/
 - Industries index: https://cloud-guardian.com/industries/
-- Pricing and instant estimate calculator: https://cloud-guardian.com/pricing/
+- Pricing, quoted per business: https://cloud-guardian.com/pricing/
 - Next steps and discovery meeting booking: https://cloud-guardian.com/next-steps/
 - Client Support Portal: https://cloud-guardian.com/support/
 - 24/7 SOC and MSSP services: https://cloud-guardian.com/services/managed-security-soc/
@@ -148,9 +148,9 @@ parties, and contract terms are discussed transparently during the proposal proc
 **Does Cloud Guardian work with businesses that already have IT staff?** Yes. Cloud Guardian frequently works
 alongside internal IT resources, covering areas where they lack bandwidth or specialization.
 
-**What does small business IT support cost?** $90 an hour on Silver, billed in 15 minute increments with no monthly fee, and $110 per user per month on Gold, with
-incident response billed at $90 per hour. There are no minimum hours and no long-term lock-in. Fully managed
-IT is quoted after a free assessment.
+**What does small business IT support cost?** Every plan is quoted per business and put in writing the same business day. Silver is pay as
+you go by the 15 minute block with no monthly fee, Gold is fully managed IT on a flat per-user figure, and incident response is billed by
+the hour. There are no minimum hours and no long-term lock-in. Fully managed IT is quoted after a free assessment.
 
 **How fast can Cloud Guardian get onsite?** Same business day is typical for Middlesex and Somerset County,
 often same hour for urgent issues. Mercer, Union, Hudson, and Monmouth County sites are usually same or next

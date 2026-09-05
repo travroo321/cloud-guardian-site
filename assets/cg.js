@@ -2,20 +2,14 @@
   var CG_REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 
-  // ── Simple quote builder (pricing page) ──
-  // Written for somebody who does not want a spreadsheet: plain questions,
-  // one big number, and a PDF they can hold. Prices: $25 per user with an
-  // email address, $9.99 per user for integrated phones if wanted, $50 flat
-  // for server hosting. Support is hourly and deliberately NOT in the
-  // monthly number, the note under the total says so in words.
+  // ── Pricing request (pricing page) ──
+  // Pricing is quoted per business for now, so this is a request form rather
+  // than a calculator: plain questions, then the whole thing posts to the same
+  // inbox the contact form uses. Nothing is priced on the page.
   (function () {
     var root = document.getElementById('sq');
     if (!root) return;
-    var P_USER = 25, P_PHONE = 4.99, P_SERVER = 50;
     function $(id) { return document.getElementById(id); }
-    function money(n) {
-      return '$' + n.toLocaleString('en-US', { minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2 });
-    }
     function num(id, lo, hi) {
       var v = parseInt($(id).value, 10);
       if (isNaN(v)) v = lo;
@@ -28,241 +22,31 @@
         [].forEach.call(root.querySelectorAll('.sq-pill'), function (x) {
           x.classList.toggle('active', x === b);
         });
-        recalc();
       });
     });
-    function lines() {
-      var users = num('sq-users', 1, 25);
-      var out = [['Email protection, ' + users + ' user' + (users === 1 ? '' : 's') + ' x $25', users * P_USER]];
-      if ($('sq-phones').checked) out.push(['Integrated phones, ' + users + ' x $4.99, first 30 days FREE', +(users * P_PHONE).toFixed(2)]);
-      if ($('sq-server').checked) out.push(['Server hosting', P_SERVER]);
-      return out;
-    }
-    function recalc() {
-      var ls = lines();
-      var total = 0, html = '';
-      for (var k = 0; k < ls.length; k++) {
-        total += ls[k][1];
-        html += '<div class="calc-line"><span>' + ls[k][0] + '</span><span>' + money(ls[k][1]) + '</span></div>';
-      }
-      var shared = num('sq-shared', 0, 20);
-      if (shared > 0) html += '<div class="calc-line"><span>Shared mailboxes, ' + shared + '</span><span>confirmed on your quote</span></div>';
-      if ($('sq-phones').checked) html += '<div class="calc-flag">Your first 30 days of phones are FREE with our no-commit, month to month IT services. Every user gets the cell phone app, an extension, and voicemail to email with transcription.</div>';
-      if ($('sq-staff').checked) html += '<div class="calc-flag">Helping or replacing existing IT staff is normal work for us. We will ask about them on the call.</div>';
-      if ($('sq-isp').checked) html += '<div class="calc-flag">Business Internet is not in this figure. We will check what is available at your address and quote the bundle separately, starting at $50 a month.</div>';
-      total = +total.toFixed(2);
-      $('sq-total').textContent = money(total);
-      $('sq-break').innerHTML = html;
-      try { sessionStorage.setItem('cg_estimate', money(total) + ' / month, Small Business Standard'); } catch (e) {}
-      var ho = $('calcNext'); if (ho) ho.classList.add('on');
-      var lv = $('calcNextVal'); if (lv) lv.textContent = money(total) + ' / month';
-      var lk = $('calcNextLink'); if (lk) lk.href = '/next-steps/?est=' + encodeURIComponent(money(total) + ' / month');
-      return { total: total, items: ls };
-    }
     ['sq-users', 'sq-comp', 'sq-shared'].forEach(function (id) {
       $(id).addEventListener('input', function () {
         var v = $(id + '-v'); if (v) v.textContent = $(id).value;
-        recalc();
-      });
-    });
-    ['sq-server', 'sq-staff', 'sq-self', 'sq-phones', 'sq-isp'].forEach(function (id) { $(id).addEventListener('change', recalc); });
-    recalc();
-
-    // ── The quote PDF ──
-    // Styled after the Managed IT Services Proposal: navy cover page with
-    // the winged logo, white inner page, site cyan and the proposal's amber.
-    var NAVY = [10, 18, 32], CYAN = [0, 212, 255], AMBER = [232, 163, 61];
-    var INK = [30, 42, 58], MUT = [96, 110, 128];
-    var logoData = null;
-    function getLogo(cb) {
-      if (logoData) return cb(logoData);
-      fetch('/assets/cg-logo.png').then(function (r) { return r.blob(); }).then(function (bl) {
-        var fr = new FileReader();
-        fr.onload = function () { logoData = fr.result; cb(logoData); };
-        fr.readAsDataURL(bl);
-      }).catch(function () { cb(null); });
-    }
-    function quoteState() {
-      var r = recalc();
-      return {
-        items: r.items, total: r.total,
-        biz: ($('sq-biz').value || '').trim(),
-        users: num('sq-users', 1, 25), comp: num('sq-comp', 0, 25),
-        shared: num('sq-shared', 0, 20), provider: provider,
-        server: $('sq-server').checked, staff: $('sq-staff').checked,
-        self: $('sq-self').checked, phones: $('sq-phones').checked,
-        isp: $('sq-isp').checked,
-        notes: ($('sq-notes').value || '').trim()
-      };
-    }
-    function buildPdf(cb) {
-      var J = window.jspdf && window.jspdf.jsPDF;
-      if (!J) { window.print(); return; }
-      var q = quoteState();
-      getLogo(function (logo) {
-        var doc = new J({ unit: 'pt', format: 'letter' });
-        var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
-        var x = 58, cx = W / 2;
-
-        // ── page 1: the navy cover-quote ──
-        doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
-        doc.rect(0, 0, W, H, 'F');
-        if (logo) doc.addImage(logo, 'PNG', cx - 115, 46, 230, 95);
-        var y = 178;
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(27); doc.setTextColor(255, 255, 255);
-        doc.text('MANAGED IT SERVICES', cx, y, { align: 'center' }); y += 32;
-        doc.setTextColor(CYAN[0], CYAN[1], CYAN[2]);
-        doc.text('ESTIMATED QUOTE', cx, y, { align: 'center' }); y += 26;
-        doc.setFontSize(10.5); doc.setTextColor(AMBER[0], AMBER[1], AMBER[2]);
-        doc.text('ONE-STOP IT SERVICES & SOLUTIONS', cx, y, { align: 'center' }); y += 14;
-        doc.setFont('helvetica', 'normal'); doc.setTextColor(170, 182, 198);
-        doc.text('SMALL BUSINESS STANDARD PLAN', cx, y, { align: 'center' }); y += 36;
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(CYAN[0], CYAN[1], CYAN[2]);
-        doc.text('P R E P A R E D   F O R', cx, y, { align: 'center' }); y += 20;
-        doc.setFontSize(15); doc.setTextColor(255, 255, 255);
-        doc.text(q.biz || 'Your Business', cx, y, { align: 'center' }); y += 17;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(170, 182, 198);
-        var today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        doc.text(today + '   |   Estimate valid 30 days', cx, y, { align: 'center' });
-
-        // white quote panel
-        var py = y + 34, ph = 210 + q.items.length * 26;
-        doc.setFillColor(255, 255, 255);
-        doc.roundedRect(x - 10, py, W - 2 * x + 20, ph, 8, 8, 'F');
-        var iy = py + 34;
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(INK[0], INK[1], INK[2]);
-        doc.text('YOUR MONTHLY QUOTE', x + 6, iy); iy += 10;
-        doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(2);
-        doc.line(x + 6, iy, x + 130, iy); iy += 24;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5);
-        for (var k = 0; k < q.items.length; k++) {
-          doc.setTextColor(INK[0], INK[1], INK[2]);
-          doc.text(q.items[k][0], x + 6, iy);
-          doc.text(money(q.items[k][1]), W - x - 6, iy, { align: 'right' });
-          iy += 9; doc.setDrawColor(224, 230, 238); doc.setLineWidth(1);
-          doc.line(x + 6, iy, W - x - 6, iy); iy += 17;
-        }
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
-        doc.text('Estimated total per month', x + 6, iy);
-        doc.setTextColor(0, 150, 190);
-        doc.text(money(q.total), W - x - 6, iy, { align: 'right' }); iy += 24;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
-        var envline = 'Email users: ' + q.users + '   |   Computer users: ' + q.comp
-          + (q.shared ? '   |   Shared mailboxes: ' + q.shared + ' (confirmed on your quote)' : '')
-          + (q.provider ? '   |   ' + q.provider : '');
-        doc.text(doc.splitTextToSize(envline, W - 2 * x - 12), x + 6, iy); iy += 26;
-        var flags = [];
-        if (q.phones) flags.push('Phones: first 30 days FREE, then $4.99 per user per month. Cell phone app, extension, voicemail to email with transcription for every user.');
-        if (q.server) flags.push('Server: $50.00 per month.');
-        if (q.staff) flags.push('Looking to help or replace existing IT staff: we do both, and will cover it on the call.');
-        if (q.isp) flags.push('Business Internet bundle: you asked us to look into it. Not included in the figure above - we check what is available at your address and quote the bundle separately, starting at $50 a month.');
-        flags.push('Included every month: 15 minutes of tech time for every user, and anything resolved in under five minutes is free, by phone or through the ticket system. Those five minutes are hands-on tech time, not response time, so the clock starts only after a tech has spent five minutes on the issue. Past that, support is $90 per hour billed in 15-minute blocks, so $22.50 a block, tracked to the minute and itemized. You get a live person in the queue, not a callback. Most issues are done in about seven minutes.')
-        for (var f = 0; f < flags.length; f++) {
-          var wr = doc.splitTextToSize(flags[f], W - 2 * x - 12);
-          doc.text(wr, x + 6, iy); iy += wr.length * 11 + 5;
-        }
-
-        doc.setFontSize(9.5); doc.setTextColor(170, 182, 198);
-        doc.text('(732) 743-5472    |    cloud-guardian.com    |    sales@cloud-guardian.com', cx, H - 64, { align: 'center' });
-        doc.setTextColor(120, 132, 148);
-        doc.text('North Brunswick, NJ  ·  Onsite across the Tri-State area  ·  Remote support globally', cx, H - 48, { align: 'center' });
-
-        // ── page 2: white, what is covered + next steps ──
-        doc.addPage();
-        doc.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
-        doc.rect(0, 0, W, 84, 'F');
-        if (logo) doc.addImage(logo, 'PNG', W - x - 133, 14, 133, 55);
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.setTextColor(255, 255, 255);
-        doc.text('WHAT YOUR PLAN COVERS', x, 50);
-        var y2 = 122;
-        doc.setFontSize(11); doc.setTextColor(INK[0], INK[1], INK[2]);
-        doc.text('SMALL BUSINESS STANDARD PLAN - $25 PER USER / MONTH', x, y2); y2 += 8;
-        doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(2);
-        doc.line(x, y2, x + 200, y2); y2 += 20;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5);
-        var covered = [
-          'Security for the email you host today, Google Workspace or Microsoft 365, with no migration and no change of provider',
-          'Cybersecurity protections: phishing and impersonation defense, SPF, DKIM and DMARC enforced',
-          'Name-brand tools with automated patching and updates for your machines',
-          'Monitoring and alerting for the threats that actually hit small businesses',
-          'Support billed in 15-minute increments at $22.50 per 15 minutes, and calls and tickets resolved in under five minutes are free',
-          'No contract, cancel any month',
-          'Step up to Gold or Platinum whenever you are ready'
-        ];
-        for (var c = 0; c < covered.length; c++) {
-          doc.setFillColor(0, 150, 190); doc.circle(x + 3, y2 - 3, 2.6, 'F');
-          doc.setTextColor(INK[0], INK[1], INK[2]);
-          var cw = doc.splitTextToSize(covered[c], W - 2 * x - 18);
-          doc.text(cw, x + 16, y2); y2 += cw.length * 13 + 8;
-        }
-        if (q.notes) {
-          y2 += 8; doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
-          doc.text('YOUR NOTE TO US', x, y2); y2 += 16;
-          doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
-          var nw = doc.splitTextToSize(q.notes, W - 2 * x);
-          // Print at most 14 lines: past that the note would push NEXT
-          // STEPS and the CTA off the page. The full text still reaches
-          // us in the emailed quote, so nothing the prospect wrote is lost.
-          if (nw.length > 14) {
-            nw = nw.slice(0, 14);
-            nw.push('... (full note sent with your quote)');
-          }
-          doc.text(nw, x, y2); y2 += nw.length * 13 + 10;
-        }
-        y2 += 14;
-        // NEXT STEPS + the three steps + the 74pt CTA box need roughly
-        // 230pt. If the note ate the page, start a fresh one rather than
-        // drawing the call to action into the footer.
-        if (y2 > H - 250) { doc.addPage(); y2 = 70; }
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(INK[0], INK[1], INK[2]);
-        doc.text('NEXT STEPS', x, y2); y2 += 18;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
-        var steps = [
-          '01  Send us this quote, or call. We reply the same business day.',
-          '02  A free look at what you have. No obligation, nothing is signed.',
-          '03  Your final quote, confirmed in writing. Protection usually starts within days.'
-        ];
-        for (var s = 0; s < steps.length; s++) { doc.text(steps[s], x, y2); y2 += 17; }
-        y2 += 16;
-        doc.setDrawColor(CYAN[0], CYAN[1], CYAN[2]); doc.setLineWidth(1.5);
-        doc.roundedRect(x, y2, W - 2 * x, 74, 6, 6, 'S');
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(INK[0], INK[1], INK[2]);
-        doc.text('READY TO GET STARTED?', cx, y2 + 28, { align: 'center' });
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); doc.setTextColor(0, 150, 190);
-        doc.text('(732) 743-5472       sales@cloud-guardian.com       cloud-guardian.com', cx, y2 + 50, { align: 'center' });
-        doc.setFontSize(8.5); doc.setTextColor(150, 158, 170);
-        doc.text('This is an estimate, not a binding quote. Getting a quote carries no obligation to use our services.', cx, H - 46, { align: 'center' });
-        doc.text('Cloud Guardian LLC  ·  North Brunswick, NJ', cx, H - 33, { align: 'center' });
-        cb(doc, q);
-      });
-    }
-    $('sq-pdf').addEventListener('click', function () {
-      buildPdf(function (doc, q) {
-        var fname = (q.biz ? q.biz.replace(/[^A-Za-z0-9 ]/g, '').trim().replace(/ +/g, '-') + '-' : '') + 'Cloud-Guardian-Quote.pdf';
-        doc.save(fname);
       });
     });
 
-    // ── Send the quote in. First click reveals name + contact, second click
-    // posts the whole quote to the same inbox the contact form uses. ──
     $('sq-send').addEventListener('click', function () {
-      var box = $('sq-contact'), msg = $('sq-sent');
-      if (box.hidden) { box.hidden = false; $('sq-name').focus(); return; }
+      var msg = $('sq-sent');
       var name = ($('sq-name').value || '').trim();
       var reach = ($('sq-reach').value || '').trim();
+      var biz = ($('sq-biz').value || '').trim();
       if (!reach) { msg.hidden = false; msg.classList.add('err');
-        msg.textContent = 'Add an email or phone number so we can reply to you.'; return; }
-      var q = quoteState();
+        msg.textContent = 'Add an email or phone number so we can reply to you.'; $('sq-reach').focus(); return; }
       var body = {
-        _subject: 'SIMPLE QUOTE - ' + (q.biz || name || 'website visitor') + ' - ' + money(q.total) + '/mo',
-        name: name, contact: reach, business: q.biz,
-        email_users: q.users, computer_users: q.comp, shared_mailboxes: q.shared,
-        provider: q.provider || 'not chosen',
-        server: q.server ? 'yes (+$50/mo)' : 'no',
-        help_or_replace_it_staff: q.staff ? 'yes' : 'no', no_existing_it: q.self ? 'yes' : 'no',
-        phones: q.phones ? 'yes (+$4.99/user, first 30 days free)' : 'no',
-        business_internet_bundle: q.isp ? 'YES - wants a Business Internet bundle quote (line check needed)' : 'no',
-        estimated_total: money(q.total) + ' / month', notes: q.notes
+        _subject: 'PRICING REQUEST - ' + (biz || name || 'website visitor'),
+        name: name, contact: reach, business: biz,
+        email_users: num('sq-users', 1, 25), computer_users: num('sq-comp', 0, 25), shared_mailboxes: num('sq-shared', 0, 20),
+        provider: provider || 'not chosen',
+        server: $('sq-server').checked ? 'yes' : 'no',
+        help_or_replace_it_staff: $('sq-staff').checked ? 'yes' : 'no', no_existing_it: $('sq-self').checked ? 'yes' : 'no',
+        phones: $('sq-phones').checked ? 'yes' : 'no',
+        business_internet_bundle: $('sq-isp').checked ? 'YES - wants a Business Internet bundle quote (line check needed)' : 'no',
+        notes: ($('sq-notes').value || '').trim()
       };
       msg.hidden = false; msg.classList.remove('err'); msg.textContent = 'Sending...';
       fetch('https://formspree.io/f/xkoezydq', {
@@ -270,14 +54,13 @@
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(body)
       }).then(function (r) {
-        if (r.ok) { msg.textContent = 'Sent. We reply the same business day. Your PDF copy is one click away above.'; }
+        if (r.ok) { msg.textContent = 'Sent. A person reads it, and you get pricing in writing the same business day.'; }
         else { throw new Error(); }
       }).catch(function () {
         msg.classList.add('err');
         msg.textContent = 'That did not go through. Call (732) 743-5472 or email sales@cloud-guardian.com and we will take it from there.';
       });
     });
-
   })();
 
   // ── Scroll reveal, with stagger inside a grid so cards arrive in sequence ──
