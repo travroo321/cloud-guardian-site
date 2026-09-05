@@ -54,6 +54,9 @@
 - **ISO/IEC 42001 AIMS Certification Support** (https://cloud-guardian.com/services/iso-42001/): Gap
   assessment, implementation, and certification audit support for ISO/IEC 42001:2023, the first international
   standard for an Artificial Intelligence Management System.
+- **NJ Cyber JIF Readiness** (https://cloud-guardian.com/services/cyber-jif/): Gap assessment, remediation,
+  evidence and attestation support for New Jersey municipalities, authorities and public entities meeting the
+  NJ Cyber JIF cyber controls. Quoted per entity.
 - **Structured Cabling** (https://cloud-guardian.com/services/structured-cabling/): Cat6A and fiber
   installation for offices and warehouses, supporting 10 Gbps over a full 100-meter run, terminated and
   certified to ANSI/TIA-568 standards with complete documentation.
